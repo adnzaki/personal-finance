@@ -12,31 +12,12 @@ class InitialTables extends Migration
 
         // tb_sumber_dana
         $this->forge->addField([
-            'id' => [
-                'type' => 'INT',
-                'constraint' => 11,
-                'unsigned' => true,
-                'auto_increment' => true
-            ],
-            'nama' => [
-                'type' => 'VARCHAR',
-                'constraint' => 255
-            ],
-            'jumlah' => [
-                'type' => 'BIGINT',
-            ],
-            'deleted' => [
-                'type' => 'TINYINT',
-                'constraint' => 1
-            ],
-            'created' => [
-                'type' => 'DATETIME',
-                'null' => true
-            ],
-            'modified' => [
-                'type' => 'DATETIME',
-                'null' => true
-            ],
+            'id' => ['type' => 'INT', 'constraint' => 11, 'unsigned' => true, 'auto_increment' => true],
+            'nama' => ['type' => 'VARCHAR', 'constraint' => 255],
+            'jumlah' => ['type' => 'BIGINT'],
+            'deleted' => ['type' => 'TINYINT', 'constraint' => 1],
+            'created' => ['type' => 'DATETIME', 'null' => true],
+            'modified' => ['type' => 'DATETIME', 'null' => true],
         ]);
 
         $this->forge->addPrimaryKey('id');
@@ -45,33 +26,12 @@ class InitialTables extends Migration
 
         // tb_kepemilikan_dana
         $this->forge->addField([
-            'id' => [
-                'type' => 'INT',
-                'constraint' => 11,
-                'unsigned' => true,
-                'auto_increment' => true
-            ],
-            'id_sumber_dana' => [
-                'type' => 'INT',
-                'constraint' => 11,
-                'unsigned' => true,
-            ],
-            'kepemilikan' => [
-                'type' => 'VARCHAR',
-                'constraint' => 255
-            ],
-            'deleted' => [
-                'type' => 'TINYINT',
-                'constraint' => 1
-            ],
-            'created' => [
-                'type' => 'DATETIME',
-                'null' => true
-            ],
-            'modified' => [
-                'type' => 'DATETIME',
-                'null' => true
-            ],
+            'id' => ['type' => 'INT', 'constraint' => 11, 'unsigned' => true, 'auto_increment' => true],
+            'id_sumber_dana' => ['type' => 'INT', 'constraint' => 11, 'unsigned' => true],
+            'kepemilikan' => [ 'type' => 'VARCHAR', 'constraint' => 255],
+            'deleted' => ['type' => 'TINYINT', 'constraint' => 1],
+            'created' => ['type' => 'DATETIME', 'null' => true],
+            'modified' => ['type' => 'DATETIME', 'null' => true],
         ]);
 
         $this->forge->addPrimaryKey('id');
@@ -81,45 +41,15 @@ class InitialTables extends Migration
 
         // tb_transaksi
         $this->forge->addField([
-            'id' => [
-                'type' => 'INT',
-                'constraint' => 11,
-                'unsigned' => true,
-                'auto_increment' => true
-            ],
-            'id_sumber_dana' => [
-                'type' => 'INT',
-                'constraint' => 11,
-                'unsigned' => true,
-            ],
-            'id_kepemilikan' => [
-                'type' => 'INT',
-                'constraint' => 11,
-                'unsigned' => true,
-            ],
-            'jenis_transaksi' => [
-                'type' => 'ENUM',
-                'constraint' => ['income', 'expense'],
-            ],
-            'deskripsi' => [
-                'type' => 'VARCHAR',
-                'constraint' => 255
-            ],
-            'nominal' => [
-                'type' => 'BIGINT',
-            ],
-            'deleted' => [
-                'type' => 'TINYINT',
-                'constraint' => 1
-            ],
-            'created' => [
-                'type' => 'DATETIME',
-                'null' => true
-            ],
-            'modified' => [
-                'type' => 'DATETIME',
-                'null' => true
-            ],
+            'id' => ['type' => 'INT', 'constraint' => 11, 'unsigned' => true, 'auto_increment' => true],
+            'id_sumber_dana' => ['type' => 'INT', 'constraint' => 11, 'unsigned' => true],
+            'id_kepemilikan' => ['type' => 'INT', 'constraint' => 11, 'unsigned' => true],
+            'jenis_transaksi' => ['type' => 'ENUM', 'constraint' => ['income', 'expense']],
+            'deskripsi' => ['type' => 'VARCHAR', 'constraint' => 255],
+            'nominal' => ['type' => 'BIGINT'],
+            'deleted' => ['type' => 'TINYINT', 'constraint' => 1],
+            'created' => ['type' => 'DATETIME', 'null' => true],
+            'modified' => ['type' => 'DATETIME', 'null' => true],
         ]);
 
         $this->forge->addPrimaryKey('id');
