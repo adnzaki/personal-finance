@@ -1,13 +1,27 @@
+import { validatePage } from './http'
+
 const routes = [
   {
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: 'dashboard', component: () => import('pages/IndexPage.vue') },
+      {
+        path: '',
+        redirect: 'dashboard',
+      },
+      {
+        path: 'dashboard',
+        component: () => import('pages/IndexPage.vue'),
+        beforeEnter: () => validatePage(),
+      },
     ],
   },
-  { path: '/login', component: () => import('layouts/LoginPage.vue') },
-  { path: '/register', component: () => import('layouts/RegisterPage.vue') },
+  {
+    path: '/login',
+    component: () => import('layouts/LoginPage.vue'),
+    beforeEnter: () => validatePage(true),
+  },
+  // { path: '/register', component: () => import('layouts/RegisterPage.vue') },
 
   // Always leave this as last one,
   // but you can also remove it
