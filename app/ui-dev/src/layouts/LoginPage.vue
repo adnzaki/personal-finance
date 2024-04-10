@@ -4,7 +4,9 @@
       <div class="q-pa-md q-mt-md row items-start q-gutter-md">
         <q-card class="login-card col-md-4 col-sm-8 offset-md-4 offset-sm-2">
           <q-card-section>
-            <div class="text-h6 text-center">Login SisaUang</div>
+            <div class="text-h6 text-center">
+              Login <strong>SisaUang</strong>
+            </div>
             <div class="q-gutter-lg q-mt-lg">
               <q-input outlined v-model="username" label="Username" />
               <q-input outlined v-model="password" label="Password" />
@@ -24,14 +26,14 @@
               class="full-width q-mt-lg"
             />
 
-            <q-btn
+            <!-- <q-btn
               color="blue"
               size="md"
               icon="r_person_add"
               label="Sign Up"
               class="full-width q-mt-md"
               to="/register"
-            />
+            /> -->
           </q-card-section>
         </q-card>
       </div>
