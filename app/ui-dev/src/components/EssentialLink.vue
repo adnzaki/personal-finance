@@ -1,5 +1,11 @@
 <template>
-  <q-item clickable tag="a" target="_blank" :href="props.link">
+  <q-item
+    clickable
+    v-ripple
+    :to="props.link"
+    active-class="bg-red-2"
+    class="su-menu-item"
+  >
     <q-item-section v-if="props.icon" avatar>
       <q-icon :name="props.icon" />
     </q-item-section>
@@ -12,8 +18,8 @@
 
 <script setup>
 defineOptions({
-  name: "EssentialLink",
-});
+  name: 'EssentialLink',
+})
 
 const props = defineProps({
   title: {
@@ -23,12 +29,12 @@ const props = defineProps({
 
   link: {
     type: String,
-    default: "#",
+    default: '#',
   },
 
   icon: {
     type: String,
-    default: "",
+    default: '',
   },
-});
+})
 </script>

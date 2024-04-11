@@ -18,7 +18,7 @@
     </q-header>
 
     <q-drawer v-model="leftDrawerOpen" show-if-above bordered>
-      <q-list>
+      <q-list class="q-px-sm">
         <q-item-label header> User Name </q-item-label>
 
         <EssentialLink
@@ -55,22 +55,22 @@ const linksList = [
   {
     title: 'Dashboard',
     icon: 'r_dashboard',
-    link: '#',
+    link: '/dashboard',
   },
   {
     title: 'Sumber Dana',
     icon: 'r_storage',
-    link: '#',
+    link: '/sumber-dana',
   },
   {
     title: 'Transaksi',
     icon: 'r_sync_alt',
-    link: '#',
+    link: '/transaksi',
   },
   {
     title: 'Pengaturan',
     icon: 'r_settings',
-    link: '#',
+    link: '/pengaturan',
   },
 ]
 
