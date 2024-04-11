@@ -127,7 +127,7 @@ class Auth extends ShieldAuth
      * The Authenticator to use when none is specified.
      * Uses the $key from the $authenticators array above.
      */
-    public string $defaultAuthenticator = 'tokens';
+    public string $defaultAuthenticator = 'session';
 
     /**
      * --------------------------------------------------------------------
@@ -280,7 +280,7 @@ class Auth extends ShieldAuth
      */
     public array $validFields = [
         'email',
-        // 'username',
+        'username',
     ];
 
     /**

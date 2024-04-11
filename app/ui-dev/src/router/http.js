@@ -104,4 +104,4 @@ function runLoadingBar(options) {
   LoadingBar.increment(0.22)
 }
 
-export { api, validatePage, createFormData, conf, runLoadingBar }
+export { api, axios, validatePage, createFormData, conf, runLoadingBar }
