@@ -1,4 +1,7 @@
 // app global css in Sass form
+// body
+//   font-family: 'Product Sans Regular'
+
 .q-btn
   border-radius: 1rem !important
 
@@ -11,10 +14,27 @@
 .login-card
   border-radius: 1rem
   padding: 1rem
-  box-shadow: 6px 17px 35px -16px rgba(178,168,168,0.75) !important
-  -webkit-box-shadow: 6px 17px 35px -16px rgba(178,168,168,0.75) !important
-  -moz-box-shadow: 6px 17px 35px -16px rgba(178,168,168,0.75) !important
+  box-shadow: $light-shadow
+  -webkit-box-shadow: $webkit-light-shadow
+  -moz-box-shadow: $moz-light-shadow
 
+.content-card
+  box-shadow: $light-shadow-1
+  -webkit-box-shadow: $webkit-light-shadow-1
+  -moz-box-shadow: $moz-light-shadow-1
 
 .su-menu-item
   border-radius: 0.75rem
+  // letter-spacing: 0.5px
+
+.force-elevated
+  z-index: 999 !important
+
+.justify-data-options
+  padding-right: 0
+
+@media (min-width: 1023px)
+  .justify-data-options
+    padding-right: 10px
+
+

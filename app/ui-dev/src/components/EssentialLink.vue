@@ -3,7 +3,7 @@
     clickable
     v-ripple
     :to="props.link"
-    active-class="bg-red-2"
+    active-class="bg-red-1"
     class="su-menu-item"
   >
     <q-item-section v-if="props.icon" avatar>

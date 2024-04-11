@@ -14,7 +14,7 @@ export default configure((ctx) => {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli-vite/boot-files
-    boot: ['i18n', 'axios'],
+    boot: ['i18n', 'axios', 'register-component'],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#css
     css: ['app.sass', 'fonts/style.css'],
@@ -29,7 +29,7 @@ export default configure((ctx) => {
       // 'line-awesome',
       // 'roboto-font-latin-ext', // this or either 'roboto-font', NEVER both!
 
-      //"roboto-font", // optional, you are not bound to it
+      'roboto-font', // optional, you are not bound to it
       'material-icons', // optional, you are not bound to it
       'material-icons-round',
     ],

@@ -14,6 +14,11 @@ const routes = [
         component: () => import('pages/IndexPage.vue'),
         beforeEnter: () => validatePage(),
       },
+      {
+        path: 'sumber-dana',
+        component: () => import('pages/sumber-dana/MainView.vue'),
+        beforeEnter: () => validatePage(),
+      },
     ],
   },
   {
