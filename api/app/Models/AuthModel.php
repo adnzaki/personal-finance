@@ -18,7 +18,7 @@ class AuthModel extends UserModel
             auth()->logout();
         }
         
-        $loginAttempt = auth()->attempt($credentials);
+        $loginAttempt = auth('session')->attempt($credentials);
 
         if ($loginAttempt->isOK()) {
             $user = new UserModel();

@@ -38,6 +38,15 @@ class Auth extends BaseController
         }
     }
 
+    public function logout()
+    {
+        if(auth()->loggedIn()) {
+            auth()->logout();
+        }
+
+        return $this->response->setJSON(['status' => 'success']);
+    }
+
     public function validatePageRequest()
     {
         $status = valid_access() ? 200 : 503;

@@ -32,6 +32,7 @@
             style="width: 100%"
             icon="r_logout"
             label="Logout"
+            @click="logout"
           />
         </q-item>
       </q-list>
@@ -45,11 +46,30 @@
 
 <script setup>
 import { ref } from 'vue'
+import { useQuasar } from 'quasar'
+import { api, conf } from 'src/router/http'
 import EssentialLink from 'components/EssentialLink.vue'
 
 defineOptions({
   name: 'MainLayout',
 })
+
+const $q = useQuasar()
+
+const logout = () => {
+  api
+    .get('logout-user', {
+      headers: {
+        Authorization: `Bearer ${$q.cookies.get(conf.cookieName)}`,
+      },
+    })
+    .then(({ data }) => {
+      if (data.status === 'success') {
+        $q.cookies.remove(conf.cookieName)
+        window.location.href = conf.loginUrl()
+      }
+    })
+}
 
 const linksList = [
   {

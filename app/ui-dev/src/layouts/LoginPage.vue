@@ -63,7 +63,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import { conf, axios, createFormData } from 'src/router/http'
+import { conf, api, createFormData } from 'src/router/http'
 import { useQuasar } from 'quasar'
 
 const $q = useQuasar()
@@ -91,8 +91,8 @@ const validate = () => {
     }
 
     msg.value = 'Memroses autentikasi...'
-    axios
-      .post(`${conf.apiPublicPath}validate-login`, postData, {
+    api
+      .post('validate-login', postData, {
         transformRequest: [(data) => createFormData(data)],
       })
       .then(({ data }) => {
