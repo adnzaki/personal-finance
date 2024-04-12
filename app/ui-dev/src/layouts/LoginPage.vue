@@ -2,7 +2,12 @@
   <q-layout view="hHh lpR fFf" class="login-layout">
     <q-page-container>
       <div class="q-pa-md q-mt-xl row items-start q-gutter-md">
-        <q-card class="login-card col-md-4 col-sm-8 offset-md-4 offset-sm-2">
+        <q-card
+          :class="[
+            'login-card col-md-4 col-sm-8 offset-md-4 offset-sm-2',
+            cardMobileSize,
+          ]"
+        >
           <q-card-section>
             <div class="text-h6 text-center">
               Login <strong>SisaUang</strong>
@@ -42,7 +47,7 @@
               size="lg"
               icon="r_login"
               label="Sign In"
-              class="full-width q-mt-xl"
+              class="full-width q-mt-xl custom-round"
               @click="validate"
             />
 
@@ -62,7 +67,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { conf, api, createFormData } from 'src/router/http'
 import { useQuasar } from 'quasar'
 
@@ -74,6 +79,7 @@ const rememberMe = ref(true)
 const showMsg = ref(false)
 const msg = ref('')
 const msgClass = ref('black')
+const cardMobileSize = computed(() => ($q.screen.lt.sm ? 'col-12 q-ml-sm' : ''))
 
 const validate = () => {
   msg.value = ''
