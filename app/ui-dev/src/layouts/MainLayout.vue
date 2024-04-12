@@ -29,6 +29,7 @@
         <q-item>
           <q-btn
             color="negative"
+            class="custom-round"
             style="width: 100%"
             icon="r_logout"
             label="Logout"
@@ -76,6 +77,11 @@ const linksList = [
     title: 'Dashboard',
     icon: 'r_dashboard',
     link: '/dashboard',
+  },
+  {
+    title: 'Kepemilikan',
+    icon: 'r_groups',
+    link: '/kepemilikan',
   },
   {
     title: 'Sumber Dana',

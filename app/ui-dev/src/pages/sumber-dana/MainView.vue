@@ -14,6 +14,7 @@
           <search-box :label="$t('mapel_cari')" class="q-mt-sm" /> -->
         </div>
       </q-card-section>
+      <DataTable />
       <!-- Main content goes here -->
     </q-card>
   </div>
@@ -23,6 +24,7 @@
 import { ref } from 'vue'
 import { wrapperPadding, titleSpacing } from 'src/composables/screen.js'
 import ButtonGroup from './ButtonGroup.vue'
+import DataTable from './DataTable.vue'
 
 const cardTitle = ref('Sumber Dana')
 </script>

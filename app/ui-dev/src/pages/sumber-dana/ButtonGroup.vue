@@ -3,7 +3,7 @@
     <div class="q-gutter-xs mobile-hide">
       <q-btn
         icon="add"
-        class="q-pl-sm"
+        class="q-pl-sm custom-round"
         unelevated
         color="primary"
         label="Tambah"
@@ -12,7 +12,7 @@
 
     <!-- FAB -->
     <q-page-sticky position="bottom-right" :offset="fabPos" class="mobile-only">
-      <q-btn fab icon="add" color="primary" />
+      <q-btn fab icon="add" class="custom-round" color="primary" />
     </q-page-sticky>
   </div>
 </template>
