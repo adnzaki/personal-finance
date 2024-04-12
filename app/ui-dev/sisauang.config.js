@@ -1,12 +1,10 @@
 /**
- * Configuration for Actudent User Interface
+ * Configuration for SisaUang User Interface
  *
  * @author  Adnan Zaki | Wolestech DevTeam
  */
 
 import { mode, host, uiPath, baseUrl } from './build.config'
-
-const uiPort = 9200
 
 export default {
   // API Url for admin section
@@ -16,16 +14,16 @@ export default {
   apiPublicPath: `${baseUrl()}`,
 
   // This URL will be used to redirect from
-  // YesStudy authentication page into main
+  // SisaUang authentication page into main
   // application page
   homeUrl: () => {
     return mode === 'development'
-      ? `http://localhost:${uiPort}/#/dashboard`
-      : `${uiPath()}app`
+      ? `${uiPath()}#/dashboard`
+      : `${uiPath()}app/#/dashboard`
   },
   loginUrl: () => {
     return mode === 'development'
-      ? `http://localhost:${uiPort}/#/login`
+      ? `${uiPath()}#/login`
       : `${uiPath()}app/#/login`
   },
 

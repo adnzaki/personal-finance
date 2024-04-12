@@ -25,7 +25,9 @@
 // ----- Switch to "production" mode first before create -----------
 // ----- build setup for production server/cloud hosting, ----------
 // ----- as the bundler will use this mode for bundling the UI files. --
-const port = ''
+const apiPort = ''
+
+const uiPort = ':9200'
 
 const mode = 'development' // development, build, production
 
@@ -40,7 +42,7 @@ const host = () => {
 
   const protocol = mode === 'production' ? 'https' : 'http'
 
-  return `${protocol}://${path}${port}/`
+  return `${protocol}://${path}`
 }
 
 /**
@@ -49,7 +51,14 @@ const host = () => {
  * @returns string
  */
 const uiPath = () => {
-  return mode === 'production' ? host() : `${host()}personal-finance/`
+  switch (mode) {
+    case 'production': // production mode using available web server in the cloud hosting
+      return `${host()}/`
+    case 'development': // development mode using Node.js
+      return `${host()}${uiPort}/`
+    case 'build': // build mode using Apache or Nginx
+      return `${host()}${apiPort}/personal-finance/`
+  }
 }
 
 /**
@@ -60,7 +69,7 @@ const uiPath = () => {
 const baseUrl = () => {
   return mode === 'production'
     ? `${host()}api/public/`
-    : `${host()}personal-finance/api/public/`
+    : `${host()}${apiPort}/personal-finance/api/public/`
 }
 
-export { mode, host, uiPath, baseUrl }
+export { mode, host, uiPath, uiPort, baseUrl }
