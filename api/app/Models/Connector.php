@@ -12,7 +12,7 @@ class Connector
     /**
      * @var \CodeIgniter\Database\BaseConnection
      */
-    protected $db;
+    public $db;
 
     /**
      * @var string
