@@ -16,13 +16,7 @@
         class="custom-round"
         color="negative"
       />
-      <q-btn
-        unelevated
-        label="Simpan"
-        icon="r_save"
-        class="save-btn"
-        color="primary"
-      />
+      <q-btn unelevated label="Simpan" class="save-btn" color="primary" />
     </q-card-actions>
   </div>
 </template>
