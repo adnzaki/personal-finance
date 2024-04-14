@@ -18,6 +18,7 @@
                 v-model="username"
                 label="Username"
                 @keyup.enter="validate"
+                class="rounded-field"
               />
               <q-input
                 outlined
@@ -25,6 +26,7 @@
                 label="Password"
                 type="password"
                 @keyup.enter="validate"
+                class="rounded-field"
               />
             </div>
             <!-- <q-checkbox
