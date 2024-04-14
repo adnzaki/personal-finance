@@ -15,6 +15,16 @@ const routes = [
         beforeEnter: () => validatePage(),
       },
       {
+        path: 'kepemilikan',
+        component: () => import('pages/kepemilikan/MainView.vue'),
+        beforeEnter: () => validatePage(),
+      },
+      {
+        path: 'kepemilikan/add',
+        component: () => import('pages/kepemilikan/AddFormPage.vue'),
+        beforeEnter: () => validatePage(),
+      },
+      {
         path: 'sumber-dana',
         component: () => import('pages/sumber-dana/MainView.vue'),
         beforeEnter: () => validatePage(),

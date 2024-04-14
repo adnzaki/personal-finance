@@ -8,11 +8,11 @@
  */
 
 import SearchBox from 'components/SearchBox.vue'
+import DataNavigator from 'components/DataNavigator.vue'
 // import RowDropdown from 'components/RowDropdown.vue'
 // import DeleteConfirm from 'components/DeleteConfirm.vue'
 // import SortIcon from 'components/SortIcon.vue'
 // import ErrorMsg from 'src/components/ErrorMessage.vue'
-// import SSPaging from 'components/SSPaging.vue'
 // import EmployeePhoto from 'src/pages/employee/EmployeePhoto.vue'
 // import DropdownSearch from 'components/DropdownSearch.vue'
 // import BtnTooltip from 'components/BtnTooltip.vue'
@@ -20,11 +20,11 @@ import SearchBox from 'components/SearchBox.vue'
 
 export default ({ app }) => {
   app.component('search-box', SearchBox)
+  app.component('data-nav', DataNavigator)
   // app.component('row-dropdown', RowDropdown)
   // app.component('delete-confirm', DeleteConfirm)
   // app.component('sort-icon', SortIcon)
   // app.component('ac-error', ErrorMsg)
-  // app.component('ss-paging', SSPaging)
   // app.component('employee-photo', EmployeePhoto)
   // app.component('dropdown-search', DropdownSearch)
   // app.component('btn-tooltip', BtnTooltip)

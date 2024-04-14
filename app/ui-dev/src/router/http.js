@@ -80,7 +80,7 @@ function createFormData(obj) {
 
 function runLoadingBar(options) {
   const defaultOptions = {
-    color: 'pink-6',
+    color: 'info',
     size: '4px',
     position: 'top',
   }

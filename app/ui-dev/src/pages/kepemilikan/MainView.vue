@@ -8,26 +8,30 @@
         >
           {{ cardTitle }}
         </div>
-        <div class="text-h6 text-capitalize" v-else>{{ cardTitle }}</div>
+        <div class="text-h6 text-capitalize" v-else>
+          {{ cardTitle }}
+        </div>
         <div :class="['row', titleSpacing()]">
           <ButtonGroup />
-          <search-box label="Cari sumber dana..." />
+          <search-box label="Cari pemilik..." />
           <!-- <main-button class="q-mt-sm" />
           <row-dropdown class="q-mt-sm" />
           <search-box :label="$t('mapel_cari')" class="q-mt-sm" /> -->
         </div>
       </q-card-section>
-      <DataTable />
       <!-- Main content goes here -->
+      <DataTable />
+      <AddFormDialog />
     </q-card>
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue'
-import { wrapperPadding, titleSpacing } from 'src/composables/screen.js'
+import { wrapperPadding, titleSpacing } from 'src/composables/screen'
 import ButtonGroup from './ButtonGroup.vue'
 import DataTable from './DataTable.vue'
+import AddFormDialog from './AddFormDialog.vue'
 
-const cardTitle = ref('Sumber Dana')
+const cardTitle = ref('Kepemilikan')
 </script>

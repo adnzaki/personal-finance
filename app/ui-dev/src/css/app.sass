@@ -3,14 +3,26 @@
 //   font-family: 'Product Sans Regular'
 
 .q-btn.custom-round,
-.q-btn-group.custom-round
+.q-btn-group.custom-round,
+.save-btn
   border-radius: 1rem !important
+
+.save-btn
+  padding-left: 1rem !important
+  padding-right: 1rem !important
+
+@media(max-width: $breakpoint-sm-min)
+  .save-btn
+    padding-top: 1rem !important
+    padding-bottom: 1rem !important
 
 .login-layout
   background: #f0f4f9
   // margin-top: -15px
   overflow: hidden
 
+.rounded-field .q-field__control
+  border-radius: 15px !important
 
 .login-card
   border-radius: 1rem

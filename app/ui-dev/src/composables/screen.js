@@ -20,15 +20,20 @@ const maximizedDialog = () => {
   return Screen.lt.sm ? true : false
 }
 
-const cardDialog = () => {
+const dialogSize = () => {
   return Screen.lt.sm ? {} : { width: '700px', maxWidth: '80vw' }
+}
+
+const dense = () => {
+  return Screen.lt.sm ? false : true
 }
 
 export {
   maximizedDialog,
-  cardDialog,
+  dialogSize,
   checkColWidth,
   wrapperPadding,
   menuWidth,
   titleSpacing,
+  dense,
 }
