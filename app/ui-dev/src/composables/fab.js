@@ -3,7 +3,7 @@ import { Screen } from 'quasar'
 
 const singlePos = Screen.lt.sm ? 18 : 25
 
-const fabPos = ref([20, 35])
+const fabPos = ref([20, 20])
 const draggingFab = ref(false)
 
 const moveFab = (ev) => {

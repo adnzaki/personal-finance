@@ -29,6 +29,11 @@ const routes = [
         component: () => import('pages/sumber-dana/MainView.vue'),
         beforeEnter: () => validatePage(),
       },
+      {
+        path: 'pengaturan',
+        component: () => import('pages/settings/MainView.vue'),
+        beforeEnter: () => validatePage(),
+      },
     ],
   },
   {

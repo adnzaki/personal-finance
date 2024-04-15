@@ -1,6 +1,6 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
+    <q-header elevated :reveal="$q.screen.lt.sm ? true : false">
       <q-toolbar>
         <q-btn
           flat
@@ -9,6 +9,7 @@
           icon="menu"
           aria-label="Menu"
           @click="toggleLeftDrawer"
+          class="mobile-hide"
         />
 
         <q-toolbar-title> SisaUang </q-toolbar-title>
@@ -16,6 +17,41 @@
         <div>Quasar v{{ $q.version }}</div>
       </q-toolbar>
     </q-header>
+    <q-footer elevated v-if="$q.screen.lt.sm">
+      <q-tabs align="center" v-model="activeMobileMenu" class="text-white">
+        <q-route-tab
+          name="dashboard"
+          class="text-capitalize"
+          icon="r_dashboard"
+          to="/dashboard"
+        />
+
+        <q-route-tab
+          to="/sumber-dana"
+          name="sumber-dana"
+          class="text-capitalize"
+          icon="r_storage"
+        />
+        <q-route-tab
+          to="/transaksi"
+          name="transaksi"
+          class="text-capitalize main-feature"
+          icon="r_sync_alt"
+        />
+        <q-route-tab
+          to="/kepemilikan"
+          name="kepemilikan"
+          class="text-capitalize"
+          icon="r_groups"
+        />
+        <q-route-tab
+          to="/pengaturan"
+          name="pengaturan"
+          class="text-capitalize"
+          icon="r_settings"
+        />
+      </q-tabs>
+    </q-footer>
 
     <q-drawer v-model="leftDrawerOpen" show-if-above bordered>
       <q-list class="q-px-sm">
@@ -56,6 +92,8 @@ defineOptions({
 })
 
 const $q = useQuasar()
+
+const activeMobileMenu = ref('dashboard')
 
 const logout = () => {
   api
