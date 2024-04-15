@@ -121,9 +121,7 @@ const validate = () => {
             exp = new Date(expMs),
             cookieOptions = {
               expires: exp.toUTCString(),
-              path: '/',
-              sameSite: 'None',
-              secure: conf.mode === 'production' ? true : false,
+              secure: conf.mode === 'development' ? false : true,
             }
 
           $q.cookies.set(conf.cookieName, data.token, cookieOptions)

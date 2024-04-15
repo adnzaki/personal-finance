@@ -56,11 +56,9 @@ function redirect() {
     console.log(event)
     window.location.href = conf.loginUrl()
   }
-
   // just go back to login page
   window.location.href = conf.loginUrl()
   window.location.reload()
-
   // and we use this way for SPA routing,
   // because the entire page has been fully loaded
   if (document.readyState === 'complete') {
