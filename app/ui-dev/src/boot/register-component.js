@@ -9,9 +9,9 @@
 
 import SearchBox from 'components/SearchBox.vue'
 import DataNavigator from 'components/DataNavigator.vue'
+import LogoutButton from 'components/LogoutButton.vue'
 // import RowDropdown from 'components/RowDropdown.vue'
 // import DeleteConfirm from 'components/DeleteConfirm.vue'
-// import SortIcon from 'components/SortIcon.vue'
 // import ErrorMsg from 'src/components/ErrorMessage.vue'
 // import EmployeePhoto from 'src/pages/employee/EmployeePhoto.vue'
 // import DropdownSearch from 'components/DropdownSearch.vue'
@@ -21,9 +21,9 @@ import DataNavigator from 'components/DataNavigator.vue'
 export default ({ app }) => {
   app.component('search-box', SearchBox)
   app.component('data-nav', DataNavigator)
+  app.component('logout-btn', LogoutButton)
   // app.component('row-dropdown', RowDropdown)
   // app.component('delete-confirm', DeleteConfirm)
-  // app.component('sort-icon', SortIcon)
   // app.component('ac-error', ErrorMsg)
   // app.component('employee-photo', EmployeePhoto)
   // app.component('dropdown-search', DropdownSearch)

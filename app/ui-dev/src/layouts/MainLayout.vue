@@ -63,14 +63,7 @@
           v-bind="link"
         />
         <q-item>
-          <q-btn
-            color="negative"
-            class="custom-round"
-            style="width: 100%"
-            icon="r_logout"
-            label="Logout"
-            @click="logout"
-          />
+          <logout-btn />
         </q-item>
       </q-list>
     </q-drawer>
@@ -84,7 +77,6 @@
 <script setup>
 import { ref } from 'vue'
 import { useQuasar } from 'quasar'
-import { api, conf } from 'src/router/http'
 import EssentialLink from 'components/EssentialLink.vue'
 
 defineOptions({
@@ -94,21 +86,6 @@ defineOptions({
 const $q = useQuasar()
 
 const activeMobileMenu = ref('dashboard')
-
-const logout = () => {
-  api
-    .get('logout-user', {
-      headers: {
-        Authorization: `Bearer ${$q.cookies.get(conf.cookieName)}`,
-      },
-    })
-    .then(({ data }) => {
-      if (data.status === 'success') {
-        $q.cookies.remove(conf.cookieName)
-        window.location.href = conf.loginUrl()
-      }
-    })
-}
 
 const linksList = [
   {

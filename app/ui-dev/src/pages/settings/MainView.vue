@@ -12,14 +12,7 @@
           {{ cardTitle }}
         </div>
         <div :class="['row', titleSpacing()]">
-          <q-btn
-            color="negative"
-            class="custom-round mobile-only"
-            style="width: 100%"
-            icon="r_logout"
-            label="Logout"
-            @click="logout"
-          />
+          <logout-btn class="mobile-only" />
         </div>
       </q-card-section>
       <!-- Main content goes here -->
