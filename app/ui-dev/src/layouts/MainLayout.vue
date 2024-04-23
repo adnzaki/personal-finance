@@ -17,7 +17,7 @@
         <div>Quasar v{{ $q.version }}</div>
       </q-toolbar>
     </q-header>
-    <q-footer elevated v-if="$q.screen.lt.sm">
+    <q-footer v-if="$q.screen.lt.sm" class="su-box-shadow">
       <q-tabs
         align="center"
         v-model="activeMobileMenu"
