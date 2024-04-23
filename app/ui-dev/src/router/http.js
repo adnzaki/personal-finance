@@ -3,10 +3,12 @@ import axios from 'axios'
 import router from '.'
 import { Cookies, LoadingBar } from 'quasar'
 
-const api = axios.create({ baseURL: conf.apiPublicPath })
-const msgPrefix = '[SisaUang] '
+export const api = axios.create({ baseURL: conf.apiPublicPath })
+export const msgPrefix = '[SisaUang] '
+export const timeout = 3500
+export const bearerToken = `Bearer ${Cookies.get(conf.cookieName)}`
 
-const validatePage = (isLoginPage = false) => {
+export const validatePage = (isLoginPage = false) => {
   runLoadingBar()
   if (Cookies.has(conf.cookieName)) {
     const doValidation = () => {
@@ -49,7 +51,7 @@ const validatePage = (isLoginPage = false) => {
   }
 }
 
-function redirect() {
+export function redirect() {
   // when the page is accessed with full reload
   // we have to wait for until the entire page is fully loaded
   window.onload = (event) => {
@@ -66,7 +68,7 @@ function redirect() {
   }
 }
 
-function createFormData(obj) {
+export function createFormData(obj) {
   let formData = new FormData()
 
   for (let item in obj) {
@@ -76,7 +78,7 @@ function createFormData(obj) {
   return formData
 }
 
-function runLoadingBar(options) {
+export function runLoadingBar(options) {
   const defaultOptions = {
     color: 'info',
     size: '4px',
@@ -102,4 +104,4 @@ function runLoadingBar(options) {
   LoadingBar.increment(0.22)
 }
 
-export { api, axios, validatePage, createFormData, conf, runLoadingBar }
+export { axios, conf }

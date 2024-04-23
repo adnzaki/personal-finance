@@ -1,0 +1,68 @@
+<?php
+
+namespace App\Controllers;
+
+use App\Controllers\BaseController;
+use App\Models\OwnershipModel;
+
+class Ownership extends BaseController
+{
+    private $model;
+
+    public function __construct()
+    {
+        $this->model = new OwnershipModel();
+    }
+
+    public function getData($limit, $offset, $orderBy, $searchBy, $sort, $search = '')
+    {
+        $data = $this->model->getData($limit, $offset, $sort, $search);
+        $rows = $this->model->getTotalRows($search);
+
+        return $this->createResponse([
+            'container' => $data,
+            'totalRows' => $rows,
+        ]);
+    }
+
+    public function save($id = null)
+    {
+        if(valid_access()) {
+            $validation = $this->validation();
+            $data = $this->request->getPost(array_keys($validation->rules));
+    
+            if(! $this->validateData($data, $validation->rules, $validation->messages)) {
+                return $this->response->setJSON([
+                    'code'  => 500,
+                    'msg'   => $this->validator->getErrors(),
+                ]);
+            } else {
+                if($id === null) {
+                    $this->model = $this->model->insert($data);
+                    $message = 'Berhasil menambahkan data kepemilikan';
+                } else {
+                    $this->model = $this->model->update($data, $id);
+                    $message = 'Data kepemilikan berhasil diperbarui';
+                }
+    
+                return $this->response->setJSON([
+                    'code'      => 200,
+                    'msg'       => $message,
+                ]);
+            }
+        }
+    }
+
+    private function validation()
+    {
+        $rules = [
+            'kepemilikan'       => ['label' => 'kepemilikan', 'rules' => 'required'],
+        ];
+        
+        $messages = [
+            'kepemilikan'       => ['required' => $this->messages['required']],
+        ];
+
+        return (object) ['rules' => $rules, 'messages' => $messages];
+    }
+}

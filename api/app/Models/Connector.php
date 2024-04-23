@@ -5,6 +5,9 @@
  * Each model class should extend this class
  * in order to make all database-related task to run
  * 
+ * @author    : Adnan Zaki
+ * @since     : 2024-04-05
+ * 
  * @method \CodeIgniter\Database\BaseResult getNumRows()
  */
 class Connector

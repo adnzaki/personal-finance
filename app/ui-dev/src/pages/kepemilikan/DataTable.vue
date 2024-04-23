@@ -1,13 +1,18 @@
 <template>
   <div>
     <div class="q-px-md q-pb-md">
-      <q-list bordered class="rounded-borders">
+      <q-list bordered class="rounded-borders" separator>
         <!-- Desktop View -->
-        <q-item clickable class="mobile-hide">
+        <q-item
+          clickable
+          class="mobile-hide"
+          v-for="(item, index) in data"
+          :key="index"
+        >
           <q-item-section avatar><q-icon name="r_person" /></q-item-section>
           <q-item-section>
-            Pribadi
-            <q-item-label caption>Rp. 4.100.000</q-item-label>
+            {{ item.kepemilikan }}
+            <q-item-label caption>Total.......</q-item-label>
           </q-item-section>
 
           <q-item-section side>
@@ -28,9 +33,11 @@
         <q-expansion-item
           expand-separator
           icon="r_person"
-          label="Pribadi"
+          :label="item.kepemilikan"
           class="mobile-only"
-          caption="Rp. 4.100.000"
+          caption="Total ...."
+          v-for="(item, index) in data"
+          :key="index"
         >
           <q-card>
             <q-card-actions align="right">
@@ -49,9 +56,15 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { usePagingStore } from 'ss-paging-vue'
+import { useOwnershipStore } from 'stores/ownership-store'
 
 const paging = usePagingStore()
 const current = ref(1)
+
+const store = useOwnershipStore()
+store.getOwnership()
+
+const data = computed(() => paging.state.data)
 </script>

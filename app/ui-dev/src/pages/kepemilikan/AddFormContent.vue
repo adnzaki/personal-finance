@@ -3,7 +3,12 @@
     <!-- Content -->
     <q-card-section class="scroll card-section">
       <q-form class="q-gutter-xs">
-        <q-input outlined class="rounded-field" label="Nama Pemilik" />
+        <q-input
+          outlined
+          v-model="store.data.kepemilikan"
+          class="rounded-field"
+          label="Nama Pemilik"
+        />
       </q-form>
     </q-card-section>
 
@@ -16,7 +21,13 @@
         class="custom-round"
         color="negative"
       />
-      <q-btn unelevated label="Simpan" class="save-btn" color="primary" />
+      <q-btn
+        unelevated
+        label="Simpan"
+        @click="save"
+        class="save-btn"
+        color="primary"
+      />
     </q-card-actions>
   </div>
 </template>
@@ -32,6 +43,12 @@ const props = defineProps({
 })
 const store = useOwnershipStore()
 const router = useRouter()
+
+const save = () =>
+  store.save({
+    id: null,
+    afterSuccess: () => closeForm(),
+  })
 
 const closeForm = () => {
   if (props.mobile) {
