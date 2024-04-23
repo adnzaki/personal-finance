@@ -18,7 +18,11 @@
       </q-toolbar>
     </q-header>
     <q-footer elevated v-if="$q.screen.lt.sm">
-      <q-tabs align="center" v-model="activeMobileMenu" class="text-white">
+      <q-tabs
+        align="center"
+        v-model="activeMobileMenu"
+        class="bg-white text-black"
+      >
         <q-route-tab
           name="dashboard"
           class="text-capitalize"
