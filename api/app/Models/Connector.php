@@ -25,7 +25,7 @@ class Connector
     /**
      * @var string
      */
-    protected $pendapatan = 'tb_pendapatan';
+    protected $pemilikSumberDana = 'tb_kepemilikan_sumber_dana';
 
     /**
      * @var string

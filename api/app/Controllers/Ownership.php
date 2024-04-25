@@ -19,6 +19,15 @@ class Ownership extends BaseController
         $data = $this->model->getData($limit, $offset, $sort, $search);
         $rows = $this->model->getTotalRows($search);
 
+        foreach($data as $d) {
+            $totalFund = $this->model->getTotalFund($d->id);
+            if($totalFund !== null) {
+                $d->total_dana = 'Rp. '.number_format(array_sum(array_column($totalFund, 'jumlah')), 2);
+            } else {
+                $d->total_dana = 'Rp. 0.00';
+            }
+        }
+
         return $this->createResponse([
             'container' => $data,
             'totalRows' => $rows,

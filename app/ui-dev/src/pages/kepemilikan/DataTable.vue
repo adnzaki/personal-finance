@@ -12,7 +12,7 @@
           <q-item-section avatar><q-icon name="r_person" /></q-item-section>
           <q-item-section>
             {{ item.kepemilikan }}
-            <q-item-label caption>Total.......</q-item-label>
+            <q-item-label caption>{{ item.total_dana }}</q-item-label>
           </q-item-section>
 
           <q-item-section side>
@@ -35,7 +35,7 @@
           icon="r_person"
           :label="item.kepemilikan"
           class="mobile-only"
-          caption="Total ...."
+          :caption="item.total_dana"
           v-for="(item, index) in data"
           :key="index"
         >

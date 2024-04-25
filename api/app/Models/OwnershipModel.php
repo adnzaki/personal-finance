@@ -5,12 +5,24 @@ namespace App\Models;
 class OwnershipModel extends Connector
 {
     private $builder;
+
+    private $builder2; // for tb_kepemilikan_sumber_dana
     
     public function __construct()
     {
         parent::__construct();
 
         $this->builder = $this->db->table($this->kepemilikan);
+        $this->builder2 = $this->db->table($this->pemilikSumberDana);
+    }
+
+    public function getTotalFund($id)
+    {
+        $query = $this->builder2->select('jumlah')
+                ->join($this->sumberDana, "{$this->sumberDana}.id = {$this->pemilikSumberDana}.id_sumber_dana")
+                ->getWhere(['id_kepemilikan' => $id]);
+        
+        return $query->getNumRows() > 0 ? $query->getResult() : null;
     }
 
     public function getData(int $limit, int $offset, string $sort = 'ASC', string $search = ''): array
@@ -47,7 +59,7 @@ class OwnershipModel extends Connector
 
     private function search(string $searchBy, string $search)
     {
-        $select = $this->builder->select('kepemilikan, modified');
+        $select = $this->builder->select('id, kepemilikan, modified');
         if(! empty($search)) {
             $select->like($searchBy, $search);           
         }
