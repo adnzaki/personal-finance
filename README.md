@@ -4,7 +4,7 @@ A simple personal finance manager application
 ## Dev Installation
 
 ### Database Config
-Before running API installation, make sure you have created a database named "sisa-uang" and it has been set in <strong>.env</strong> file. Skip this step will make database migration failed to run. 
+Before running API installation, make sure you have created a database named "sisa-uang" and it has been set in <strong>.env</strong> file. Skipping this step will make database migration failed to run. 
 
 ### API
 - Go to `/api` folder
