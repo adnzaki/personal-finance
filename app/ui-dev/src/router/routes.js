@@ -25,6 +25,11 @@ const routes = [
         beforeEnter: () => validatePage(),
       },
       {
+        path: 'kepemilikan/edit',
+        component: () => import('pages/kepemilikan/EditFormPage.vue'),
+        beforeEnter: () => validatePage(),
+      },
+      {
         path: 'sumber-dana',
         component: () => import('pages/sumber-dana/MainView.vue'),
         beforeEnter: () => validatePage(),

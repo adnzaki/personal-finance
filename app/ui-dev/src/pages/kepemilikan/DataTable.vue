@@ -16,7 +16,13 @@
           </q-item-section>
 
           <q-item-section side>
-            <q-btn class="custom-round" flat color="primary" icon="r_edit" />
+            <q-btn
+              class="custom-round"
+              flat
+              color="primary"
+              icon="r_edit"
+              @click="getDetail(item.id)"
+            />
           </q-item-section>
           <q-item-section side>
             <q-btn
@@ -42,7 +48,11 @@
           <q-card>
             <q-card-actions align="right">
               <q-btn-group class="custom-round">
-                <q-btn color="primary" icon="r_edit" />
+                <q-btn
+                  color="primary"
+                  icon="r_edit"
+                  @click="getDetail(item.id, true)"
+                />
                 <q-btn color="primary" icon="r_delete_outline" />
               </q-btn-group>
             </q-card-actions>
@@ -59,12 +69,24 @@
 import { ref, computed } from 'vue'
 import { usePagingStore } from 'ss-paging-vue'
 import { useOwnershipStore } from 'stores/ownership-store'
+import { useRouter } from 'vue-router'
 
 const paging = usePagingStore()
 const current = ref(1)
+const router = useRouter()
 
 const store = useOwnershipStore()
 store.getOwnership()
+
+const getDetail = (id, mobile = false) => {
+  store.getDetail(id, () => {
+    if (mobile) {
+      router.push('/kepemilikan/edit')
+    } else {
+      store.showEditForm = true
+    }
+  })
+}
 
 const data = computed(() => paging.state.data)
 </script>

@@ -16,6 +16,11 @@ class OwnershipModel extends Connector
         $this->builder2 = $this->db->table($this->pemilikSumberDana);
     }
 
+    public function getDetail(int $id)
+    {
+        return $this->builder->getWhere(['id' => $id])->getResult()[0];
+    }
+
     public function getTotalFund($id)
     {
         $query = $this->builder2->select('jumlah')

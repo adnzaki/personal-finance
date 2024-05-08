@@ -34,6 +34,13 @@ class Ownership extends BaseController
         ]);
     }
 
+    public function getDetail($id)
+    {
+        $data = $this->model->getDetail($id);
+
+        return $this->createResponse($data);
+    }
+
     public function save($id = null)
     {
         if(valid_access()) {

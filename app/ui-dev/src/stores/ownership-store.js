@@ -17,10 +17,24 @@ export const useOwnershipStore = defineStore('ownership', {
     showAddForm: false,
     showEditForm: false,
     disableButton: false,
-    addFormTitle: 'Tambah Kepemilikan',
+    formTitle: 'Tambah Kepemilikan',
     data: { kepemilikan: '' },
   }),
   actions: {
+    getDetail(id, next) {
+      api
+        .get(`${this.baseUrl}detail/${id}`, {
+          headers: { Authorization: bearerToken },
+        })
+        .then(({ data }) => {
+          this.data = data
+          this.formTitle = 'Perbarui Kepemilikan'
+          next()
+        })
+        .catch((error) => {
+          console.error(error)
+        })
+    },
     save({ id, afterSuccess }) {
       const endpoint =
         id !== null ? `${this.baseUrl}save/${id}` : `${this.baseUrl}save`
@@ -60,6 +74,8 @@ export const useOwnershipStore = defineStore('ownership', {
               icon: 'done',
               spinner: false,
             })
+
+            this.data.kepemilikan = ''
 
             // next action from the component
             afterSuccess()

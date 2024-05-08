@@ -46,7 +46,7 @@ const router = useRouter()
 
 const save = () =>
   store.save({
-    id: null,
+    id: store.data.id,
     afterSuccess: () => closeForm(),
   })
 
@@ -54,7 +54,9 @@ const closeForm = () => {
   if (props.mobile) {
     router.push('/kepemilikan')
   } else {
-    store.showAddForm = false
+    store.showEditForm = false
   }
+
+  store.data.kepemilikan = ''
 }
 </script>

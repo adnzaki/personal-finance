@@ -3,11 +3,11 @@
     <q-card class="content-card q-pb-sm">
       <q-card-section>
         <div class="text-subtitle1 text-uppercase">
-          {{ store.formTitle }}
+          {{ store.addFormTitle }}
         </div>
       </q-card-section>
 
-      <AddFormContent mobile />
+      <EditFormContent mobile />
     </q-card>
   </div>
 </template>
@@ -15,7 +15,7 @@
 <script setup>
 import { wrapperPadding } from 'src/composables/screen'
 import { useOwnershipStore } from 'stores/ownership-store'
-import AddFormContent from './AddFormContent.vue'
+import EditFormContent from './EditFormContent.vue'
 
 const store = useOwnershipStore()
 </script>
