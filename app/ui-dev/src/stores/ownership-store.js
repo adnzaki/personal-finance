@@ -6,7 +6,7 @@ import {
   bearerToken,
   createFormData,
 } from 'src/router/http'
-import { Cookies, Notify } from 'quasar'
+import { Cookies, Notify, Dialog } from 'quasar'
 import { usePagingStore as paging } from 'ss-paging-vue'
 
 export const useOwnershipStore = defineStore('ownership', {
@@ -21,6 +21,61 @@ export const useOwnershipStore = defineStore('ownership', {
     data: { kepemilikan: '' },
   }),
   actions: {
+    deleteOwnership(id) {
+      Dialog.create({
+        title: 'Hapus Kepemilikan',
+        message: 'Anda yakin ingin menghapus kepemilikan ini?',
+        cancel: true,
+        persistent: true,
+      })
+        .onOk(() => {
+          const notifyProgress = Notify.create({
+            group: false,
+            spinner: true,
+            message: 'Menghapus data kepemilikan...',
+            color: 'info',
+            position: 'center',
+            timeout: 0,
+          })
+
+          api
+            .get(`${this.baseUrl}delete/${id}`, {
+              headers: { Authorization: bearerToken },
+            })
+            .then(({ data }) => {
+              notifyProgress({
+                timeout,
+                message: data.msg,
+                spinner: false,
+              })
+
+              if (data.code === 200) {
+                notifyProgress({
+                  color: 'positive',
+                  icon: 'done',
+                })
+              } else {
+                notifyProgress({
+                  color: 'negative',
+                  icon: 'close',
+                })
+              }
+              paging().reloadData()
+            })
+            .catch((error) => {
+              console.error(error)
+              notifyProgress({
+                message: error.message,
+                color: 'negative',
+                spinner: false,
+                timeout,
+              })
+            })
+        })
+        .onCancel(() => {
+          // console.log('Cancel')
+        })
+    },
     getDetail(id, next) {
       api
         .get(`${this.baseUrl}detail/${id}`, {

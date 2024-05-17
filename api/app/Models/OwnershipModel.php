@@ -57,9 +57,9 @@ class OwnershipModel extends Connector
         $this->builder->update($data, ['id' => $id]);
     }
 
-    public function delete(int $id): void
+    public function delete(int $id): bool
     {
-        $this->builder->update(['deleted' => 1], ['id' => $id]);
+        return $this->builder->update(['deleted' => 1], ['id' => $id]);
     }
 
     private function search(string $searchBy, string $search)

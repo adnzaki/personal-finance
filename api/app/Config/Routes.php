@@ -13,5 +13,5 @@ $routes->add('ownership/get-data/(:any)/(:any)/(:any)/(:any)/(:any)/(:any)', 'Ow
 $routes->add('ownership/save', 'Ownership::save');
 $routes->add('ownership/save/(:any)', 'Ownership::save/$1');
 $routes->add('ownership/detail/(:any)', 'Ownership::getDetail/$1');
-
+$routes->add('ownership/delete/(:any)', 'Ownership::delete/$1');
 service('auth')->routes($routes);

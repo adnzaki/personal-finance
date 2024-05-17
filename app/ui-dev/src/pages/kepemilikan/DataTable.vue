@@ -30,6 +30,7 @@
               flat
               color="primary"
               icon="r_delete_outline"
+              @click="store.deleteOwnership(item.id)"
             />
           </q-item-section>
         </q-item>
@@ -53,7 +54,11 @@
                   icon="r_edit"
                   @click="getDetail(item.id, true)"
                 />
-                <q-btn color="primary" icon="r_delete_outline" />
+                <q-btn
+                  color="primary"
+                  icon="r_delete_outline"
+                  @click="store.deleteOwnership(item.id)"
+                />
               </q-btn-group>
             </q-card-actions>
           </q-card>

@@ -34,6 +34,24 @@ class Ownership extends BaseController
         ]);
     }
 
+    public function delete($id)
+    {
+        if(valid_access()) {
+            if($this->model->delete($id)) {
+                return $this->response->setJSON([
+                    'code' => 200,
+                    'msg' => 'Data berhasil dihapus',
+                ]);
+            } else {
+                return $this->response->setJSON([
+                    'code' => 500,
+                    'msg' => 'Terjadi kesalahan saat menghapus data',
+                ]);
+            }            
+        }
+    }
+    
+
     public function getDetail($id)
     {
         $data = $this->model->getDetail($id);
