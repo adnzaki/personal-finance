@@ -22,7 +22,7 @@ class Ownership extends BaseController
         foreach($data as $d) {
             $totalFund = $this->model->getTotalFund($d->id);
             if($totalFund !== null) {
-                $d->total_dana = 'Rp. '.number_format(array_sum(array_column($totalFund, 'jumlah')), 2);
+                $d->total_dana = 'Rp. '.number_format(array_sum(array_column($totalFund, 'jumlah_dana')), 2);
             } else {
                 $d->total_dana = 'Rp. 0.00';
             }

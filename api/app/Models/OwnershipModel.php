@@ -23,9 +23,7 @@ class OwnershipModel extends Connector
 
     public function getTotalFund($id)
     {
-        $query = $this->builder2->select('jumlah')
-                ->join($this->sumberDana, "{$this->sumberDana}.id = {$this->pemilikSumberDana}.id_sumber_dana")
-                ->getWhere(['id_kepemilikan' => $id]);
+        $query = $this->builder2->select('jumlah_dana')->getWhere(['id_kepemilikan' => $id]);
         
         return $query->getNumRows() > 0 ? $query->getResult() : null;
     }
