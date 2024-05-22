@@ -36,13 +36,13 @@
           label="Rekening Mandiri"
           class="mobile-only"
           caption="Rp. 200.000"
+          header-class="bottom-border"
+          group="sumber-dana"
         >
           <q-card>
             <q-card-actions align="right">
-              <q-btn-group class="custom-round">
-                <q-btn color="primary" icon="r_edit" />
-                <q-btn color="primary" icon="r_delete_outline" />
-              </q-btn-group>
+              <q-btn flat color="primary">Edit</q-btn>
+              <q-btn flat color="primary">Hapus</q-btn>
             </q-card-actions>
           </q-card>
         </q-expansion-item>

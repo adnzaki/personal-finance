@@ -45,21 +45,20 @@
           :caption="item.total_dana"
           v-for="(item, index) in data"
           :key="index"
+          header-class="bottom-border"
+          group="kepemilikan"
         >
           <q-card>
             <q-card-actions align="right">
-              <q-btn-group class="custom-round">
-                <q-btn
-                  color="primary"
-                  icon="r_edit"
-                  @click="getDetail(item.id, true)"
-                />
-                <q-btn
-                  color="primary"
-                  icon="r_delete_outline"
-                  @click="store.deleteOwnership(item.id)"
-                />
-              </q-btn-group>
+              <q-btn flat color="primary" @click="getDetail(item.id, true)"
+                >Edit</q-btn
+              >
+              <q-btn
+                flat
+                color="primary"
+                @click="store.deleteOwnership(item.id)"
+                >Hapus</q-btn
+              >
             </q-card-actions>
           </q-card>
         </q-expansion-item>
