@@ -13,8 +13,6 @@
         />
 
         <q-toolbar-title> SisaUang </q-toolbar-title>
-
-        <div>Quasar v{{ $q.version }}</div>
       </q-toolbar>
     </q-header>
     <q-footer v-if="$q.screen.lt.sm" class="su-box-shadow">
