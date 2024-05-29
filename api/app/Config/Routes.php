@@ -14,4 +14,6 @@ $routes->add('ownership/save', 'Ownership::save');
 $routes->add('ownership/save/(:any)', 'Ownership::save/$1');
 $routes->add('ownership/detail/(:any)', 'Ownership::getDetail/$1');
 $routes->add('ownership/delete/(:any)', 'Ownership::delete/$1');
+$routes->add('fund/get-data/(:any)/(:any)/(:any)/(:any)/(:any)', 'Fund::getData/$1/$2/$3/$4/$5');
+$routes->add('fund/get-data/(:any)/(:any)/(:any)/(:any)/(:any)/(:any)', 'Fund::getData/$1/$2/$3/$4/$5/$6');
 service('auth')->routes($routes);

@@ -1,18 +1,28 @@
 <template>
   <div>
     <div class="q-px-md q-pb-md">
-      <q-list bordered class="rounded-borders">
+      <q-list bordered class="rounded-borders" separator>
         <!-- Desktop View -->
-        <q-item clickable class="mobile-hide">
+        <q-item
+          clickable
+          class="mobile-hide"
+          v-for="(item, index) in data"
+          :key="index"
+        >
           <q-item-section avatar><q-icon name="r_dns" /></q-item-section>
           <q-item-section>
-            Rekening Mandiri
-            <q-item-label caption>Rp. 200.000</q-item-label>
+            {{ item.nama }}
+            <q-item-label caption>{{ item.total_dana }}</q-item-label>
             <q-item-label caption
               >Kepemilikan:
-              <q-badge color="primary" label="Pribadi" class="q-mr-xs" />
-              <q-badge color="primary" label="Kantor"
-            /></q-item-label>
+              <q-badge
+                color="primary"
+                :label="row.kepemilikan"
+                class="q-mr-xs"
+                v-for="(row, index) in item.pemilik"
+                :key="index"
+              />
+            </q-item-label>
           </q-item-section>
 
           <q-item-section side>
@@ -33,9 +43,11 @@
         <q-expansion-item
           expand-separator
           icon="r_dns"
-          label="Rekening Mandiri"
+          :label="item.nama"
           class="mobile-only"
-          caption="Rp. 200.000"
+          v-for="(item, index) in data"
+          :key="index"
+          :caption="item.total_dana"
           header-class="bottom-border"
           group="sumber-dana"
         >
@@ -48,10 +60,33 @@
         </q-expansion-item>
         <!-- #END Mobile and Tablet View -->
       </q-list>
+      <data-nav v-model="current" />
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
+import { usePagingStore } from 'ss-paging-vue'
+import { useFundStore } from 'stores/fund-store'
+import { useRouter } from 'vue-router'
+
+const paging = usePagingStore()
+const current = ref(1)
+const router = useRouter()
+
+const store = useFundStore()
+store.getFund()
+
+const getDetail = (id, mobile = false) => {
+  store.getDetail(id, () => {
+    if (mobile) {
+      router.push('/sumber-dana/edit')
+    } else {
+      store.showEditForm = true
+    }
+  })
+}
+
+const data = computed(() => paging.state.data)
 </script>
