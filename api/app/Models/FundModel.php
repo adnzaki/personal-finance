@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use App\Models\OwnershipModel;
+use CodeIgniter\Database\BaseBuilder;
+
 class FundModel extends Connector
 {
     private $builder;
@@ -18,7 +21,8 @@ class FundModel extends Connector
 
     public function getDetail(int $id)
     {
-        return $this->builder->getWhere(['id' => $id])->getResult()[0];
+        $fundSource = $this->builder->getWhere(['id' => $id])->getResult()[0];
+        $ownership = $this->builder2->getWhere(['id_sumber_dana' => $id])->getResult();
     }
 
     public function getTotalFund($id)
@@ -31,12 +35,19 @@ class FundModel extends Connector
     public function getData(int $limit, int $offset, string $sort = 'ASC', string $search = ''): array
     {
         $field = 'nama';
-        $query = $this->search($field, $search)->where('deleted', 0)->orderBy($field, $sort)->limit($limit, $offset);
+        $query = $this->search($field, $search)->where($this->basicFilter)->orderBy($field, $sort)->limit($limit, $offset);
 
         return $query->get()->getResult();
     }
 
-    
+    public function getPemilik(): array
+    {
+        $ownership = new OwnershipModel;
+        $rows = $ownership->getTotalRows();
+        
+        return $ownership->getData($rows, 0);
+    }
+
     public function getDaftarKepemilikan(int $idSumberDana): array
     {
         $query = $this->builder
@@ -52,7 +63,7 @@ class FundModel extends Connector
 
     public function getTotalRows(string $search = ''): int
     {
-        $query = $this->search('nama', $search)->where('deleted', 0);
+        $query = $this->search('nama', $search)->where($this->basicFilter);
         
         return $query->countAllResults();
     }
@@ -62,6 +73,11 @@ class FundModel extends Connector
         $this->builder->insert($data);
 
         return $this->db->insertID();
+    }
+
+    public function insertOwnership(array $data)
+    {
+        $this->builder2->insert($data);
     }
 
     public function update(array $data, int $id): void

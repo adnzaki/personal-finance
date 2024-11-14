@@ -4,10 +4,9 @@ namespace App\Models;
 
 class OwnershipModel extends Connector
 {
-    private $builder;
+    public $builder;
 
     private $builder2; // for tb_kepemilikan_sumber_dana
-    
     public function __construct()
     {
         parent::__construct();
@@ -31,14 +30,15 @@ class OwnershipModel extends Connector
     public function getData(int $limit, int $offset, string $sort = 'ASC', string $search = ''): array
     {
         $field = 'kepemilikan';
-        $query = $this->search($field, $search)->where('deleted', 0)->orderBy($field, $sort)->limit($limit, $offset);
+        
+        $query = $this->search($field, $search)->where($this->basicFilter)->orderBy($field, $sort)->limit($limit, $offset);
 
         return $query->get()->getResult();
     }
 
     public function getTotalRows(string $search = ''): int
     {
-        $query = $this->search('kepemilikan', $search)->where('deleted', 0);
+        $query = $this->search('kepemilikan', $search)->where($this->basicFilter);
         
         return $query->countAllResults();
     }

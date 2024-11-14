@@ -35,6 +35,16 @@ const routes = [
         beforeEnter: () => validatePage(),
       },
       {
+        path: 'sumber-dana/add',
+        component: () => import('pages/sumber-dana/AddFormPage.vue'),
+        beforeEnter: () => validatePage(),
+      },
+      // {
+      //   path: 'sumber-dana/edit',
+      //   component: () => import('pages/sumber-dana/EditFormPage.vue'),
+      //   beforeEnter: () => validatePage(),
+      // },
+      {
         path: 'pengaturan',
         component: () => import('pages/settings/MainView.vue'),
         beforeEnter: () => validatePage(),

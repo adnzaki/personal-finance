@@ -36,6 +36,13 @@ class Fund extends BaseController
         ]);
     }
 
+    public function getPemilik()
+    {
+        $data = $this->model->getPemilik();
+
+        return $this->createResponse($data);
+    }
+
     public function delete($id)
     {
         if(valid_access()) {
@@ -64,6 +71,7 @@ class Fund extends BaseController
     public function save($id = null)
     {
         if(valid_access()) {
+            $balance = json_decode($this->request->getPost('kepemilikan'));
             $validation = $this->validation();
             $data = $this->request->getPost(array_keys($validation->rules));
     
@@ -74,20 +82,30 @@ class Fund extends BaseController
                 ]);
             } else {
                 if($id === null) {
-                    $this->model = $this->model->insert($data);
+                    $insertId = $this->model->insert(array_merge($data, ['user_id' => auth()->id()]));
+                    foreach($balance as $b) {
+                        $this->model->insertOwnership([
+                            'id_sumber_dana' => $insertId,
+                            'id_kepemilikan' => $b->id_kepemilikan,
+                            'jumlah_dana' => $b->jumlah_dana
+                        ]);
+                    }
                     $message = 'Berhasil menambahkan sumber dana';
                 } else {
-                    $this->model = $this->model->update($data, $id);
+                    $this->model->update($data, $id);
                     $message = 'Sumber dana berhasil diperbarui';
                 }
     
                 return $this->response->setJSON([
                     'code'      => 200,
                     'msg'       => $message,
+                    'data'      => $data,
+                    'kepemilikan' => $balance
                 ]);
             }
         }
     }
+
 
     private function validation()
     {

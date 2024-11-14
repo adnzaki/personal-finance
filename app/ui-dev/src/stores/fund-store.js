@@ -18,9 +18,70 @@ export const useFundStore = defineStore('fund', {
     showEditForm: false,
     disableButton: false,
     formTitle: 'Tambah Sumber Dana',
-    data: { nama: '', kepemilikan: [] },
+    data: {
+      nama: '',
+      kepemilikan: [],
+      ownerName: '',
+      ownerId: null,
+      balance: 0,
+    },
+    daftarPemilik: [],
   }),
   actions: {
+    addBalance() {
+      this.data.kepemilikan.push({
+        name: this.data.ownerName,
+        id_kepemilikan: this.data.ownerId,
+        jumlah_dana: this.data.balance,
+      })
+
+      // remove selected owner
+      const index = this.daftarPemilik.findIndex(
+        (item) => item.id === this.data.ownerId,
+      )
+      if (index > -1) {
+        this.daftarPemilik.splice(index, 1)
+      }
+
+      // set default value for ownerId and ownerName
+      if (this.daftarPemilik.length > 0) {
+        this.data.ownerId = this.daftarPemilik[0].id
+        this.data.ownerName = this.daftarPemilik[0].kepemilikan
+      }
+
+      // reset balance
+      this.data.balance = 0
+    },
+    removeBalance(owner) {
+      this.daftarPemilik.push({
+        id: owner.id_kepemilikan,
+        kepemilikan: owner.name,
+      })
+
+      // remove selected owner
+      const index = this.data.kepemilikan.findIndex(
+        (item) => item.id_kepemilikan === owner.id_kepemilikan,
+      )
+      if (index > -1) {
+        this.data.kepemilikan.splice(index, 1)
+      }
+    },
+    getPemilik() {
+      api
+        .get(`${this.baseUrl}get-pemilik`, {
+          headers: { Authorization: bearerToken },
+        })
+        .then(({ data }) => {
+          this.daftarPemilik = data
+          if (data.length > 0) {
+            this.data.ownerName = data[0].kepemilikan
+            this.data.ownerId = data[0].id
+          }
+        })
+        .catch((error) => {
+          console.error(error)
+        })
+    },
     deleteFund(id) {
       Dialog.create({
         title: 'Hapus Sumber Dana',
@@ -103,6 +164,8 @@ export const useFundStore = defineStore('fund', {
         timeout: 0,
       })
 
+      this.data.kepemilikan = JSON.stringify(this.data.kepemilikan)
+
       api
         .post(endpoint, this.data, {
           headers: { Authorization: bearerToken },
@@ -114,6 +177,7 @@ export const useFundStore = defineStore('fund', {
         })
         .then(({ data }) => {
           notifyProgress({ timeout })
+          this.data.kepemilikan = []
           if (data.code === 500) {
             this.error = data.msg
             notifyProgress({

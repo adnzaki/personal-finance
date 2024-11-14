@@ -37,9 +37,15 @@ class Connector
      */
     protected $transaksi = 'tb_transaksi';
 
+    /**
+     * @var array
+     */
+    protected $basicFilter = [];
+
 
     public function __construct()
     {
         $this->db = db_connect();
+        $this->basicFilter = ['deleted' => 0, 'user_id' => auth()->id()];
     }
 }
