@@ -40,6 +40,7 @@
               flat
               color="primary"
               icon="r_delete_outline"
+              @click="store.deleteFund(item.id)"
             />
           </q-item-section>
         </q-item>
@@ -62,7 +63,9 @@
               <q-btn flat color="primary" @click="getDetail(item.id, true)"
                 >Edit</q-btn
               >
-              <q-btn flat color="primary">Hapus</q-btn>
+              <q-btn flat color="primary" @click="store.deleteFund(item.id)"
+                >Hapus</q-btn
+              >
             </q-card-actions>
           </q-card>
         </q-expansion-item>
