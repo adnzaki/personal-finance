@@ -1,11 +1,10 @@
 <?php namespace App\Database\Migrations;
 
-use App\Models\Connector;
-
-class Helper extends Connector
+class Helper
 {
     public function fixCreatedAndModifiedField(string $table, string $type = 'TIMESTAMP'): void
     {
+        $db = db_connect();
         $createdSql = "ALTER TABLE `{$table}` 
                 CHANGE `created` `created` {$type} 
                 NULL DEFAULT CURRENT_TIMESTAMP"; 
@@ -15,7 +14,7 @@ class Helper extends Connector
                 on update CURRENT_TIMESTAMP NULL 
                 DEFAULT CURRENT_TIMESTAMP"; 
 
-        $this->db->simpleQuery($createdSql);
-        $this->db->simpleQuery($modifiedSql);
+        $db->simpleQuery($createdSql);
+        $db->simpleQuery($modifiedSql);
     }
 }

@@ -45,6 +45,21 @@ const routes = [
         beforeEnter: () => validatePage(),
       },
       {
+        path: 'transaksi',
+        component: () => import('pages/transaksi/MainView.vue'),
+        beforeEnter: () => validatePage(),
+      },
+      // {
+      //   path: 'transaksi/add',
+      //   component: () => import('pages/transaksi/AddFormPage.vue'),
+      //   beforeEnter: () => validatePage(),
+      // },
+      // {
+      //   path: 'transaksi/edit',
+      //   component: () => import('pages/transaksi/EditFormPage.vue'),
+      //   beforeEnter: () => validatePage(),
+      // },
+      {
         path: 'pengaturan',
         component: () => import('pages/settings/MainView.vue'),
         beforeEnter: () => validatePage(),
