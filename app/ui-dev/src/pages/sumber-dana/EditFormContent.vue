@@ -128,7 +128,7 @@ const store = useFundStore()
 const router = useRouter()
 const $q = useQuasar()
 const showOwnerInput = ref(false)
-const showOwnerList = ref(false)
+const showOwnerList = ref(true)
 const kepemilikan = computed(() => store.data.kepemilikan)
 
 const save = () => {
@@ -167,7 +167,16 @@ const closeForm = () => {
   if (props.mobile) {
     router.push('/sumber-dana')
   } else {
-    store.showAddForm = false
+    store.showEditForm = false
+    store.fundId = null
+
+    store.data = {
+      nama: '',
+      kepemilikan: [],
+      ownerName: '',
+      ownerId: null,
+      balance: 0,
+    }
   }
 }
 </script>

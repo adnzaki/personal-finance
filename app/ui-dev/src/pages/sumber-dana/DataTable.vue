@@ -26,7 +26,13 @@
           </q-item-section>
 
           <q-item-section side>
-            <q-btn class="custom-round" flat color="primary" icon="r_edit" />
+            <q-btn
+              class="custom-round"
+              flat
+              color="primary"
+              icon="r_edit"
+              @click="getDetail(item.id)"
+            />
           </q-item-section>
           <q-item-section side>
             <q-btn
@@ -53,7 +59,9 @@
         >
           <q-card>
             <q-card-actions align="right">
-              <q-btn flat color="primary">Edit</q-btn>
+              <q-btn flat color="primary" @click="getDetail(item.id, true)"
+                >Edit</q-btn
+              >
               <q-btn flat color="primary">Hapus</q-btn>
             </q-card-actions>
           </q-card>

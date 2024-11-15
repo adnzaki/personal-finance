@@ -22,12 +22,20 @@ class FundModel extends Connector
     public function getDetail(int $id)
     {
         $fundSource = $this->builder->getWhere(['id' => $id])->getResult()[0];
-        $ownership = $this->builder2->getWhere(['id_sumber_dana' => $id])->getResult();
+        $ownership = $this->builder2->select('id_kepemilikan, kepemilikan as name, jumlah_dana, id_sumber_dana')
+                                    ->join($this->kepemilikan, $this->pemilikSumberDana . '.id_kepemilikan = ' . $this->kepemilikan . '.id')
+                                    ->getWhere(['id_sumber_dana' => $id, $this->pemilikSumberDana . '.deleted' => 0])
+                                    ->getResult();
+
+        return [
+            'fundSource' => $fundSource,
+            'ownership' => $ownership
+        ];
     }
 
     public function getTotalFund($id)
     {
-        $query = $this->builder2->select('jumlah_dana')->getWhere(['id_sumber_dana' => $id]);
+        $query = $this->builder2->select('jumlah_dana')->getWhere(['id_sumber_dana' => $id, 'deleted' => 0]);
         
         return $query->getNumRows() > 0 ? $query->getResult() : null;
     }
@@ -77,7 +85,30 @@ class FundModel extends Connector
 
     public function insertOwnership(array $data)
     {
-        $this->builder2->insert($data);
+        // automatically insert or update ownership
+        $isExist = $this->builder2->where([
+            'id_sumber_dana' => $data['id_sumber_dana'], 
+            'id_kepemilikan' => $data['id_kepemilikan'],
+        ]);
+        if($isExist->countAllResults() > 0) {
+            $this->builder2->update([
+                'jumlah_dana' => $data['jumlah_dana'], 
+                'deleted' => 0
+            ], [
+                'id_sumber_dana' => $data['id_sumber_dana'],
+                'id_kepemilikan' => $data['id_kepemilikan']
+            ]);
+        } else {
+            $this->builder2->insert($data);
+        }
+    }
+
+    public function deleteOwnership(int $fundId, int $ownershipId)
+    {
+        $this->builder2->update(['deleted' => 1], [
+            'id_sumber_dana' => $fundId,
+            'id_kepemilikan' => $ownershipId
+        ]);
     }
 
     public function update(array $data, int $id): void

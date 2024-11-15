@@ -18,6 +18,7 @@ export const useFundStore = defineStore('fund', {
     showEditForm: false,
     disableButton: false,
     formTitle: 'Tambah Sumber Dana',
+    fundId: null,
     data: {
       nama: '',
       kepemilikan: [],
@@ -25,7 +26,8 @@ export const useFundStore = defineStore('fund', {
       ownerId: null,
       balance: 0,
     },
-    daftarPemilik: [],
+    ownerList: [],
+    deletedBalance: [],
   }),
   actions: {
     addBalance() {
@@ -36,28 +38,23 @@ export const useFundStore = defineStore('fund', {
       })
 
       // remove selected owner
-      const index = this.daftarPemilik.findIndex(
+      const index = this.ownerList.findIndex(
         (item) => item.id === this.data.ownerId,
       )
       if (index > -1) {
-        this.daftarPemilik.splice(index, 1)
+        this.ownerList.splice(index, 1)
       }
 
       // set default value for ownerId and ownerName
-      if (this.daftarPemilik.length > 0) {
-        this.data.ownerId = this.daftarPemilik[0].id
-        this.data.ownerName = this.daftarPemilik[0].kepemilikan
+      if (this.ownerList.length > 0) {
+        this.data.ownerId = this.ownerList[0].id
+        this.data.ownerName = this.ownerList[0].kepemilikan
       }
 
       // reset balance
       this.data.balance = 0
     },
     removeBalance(owner) {
-      this.daftarPemilik.push({
-        id: owner.id_kepemilikan,
-        kepemilikan: owner.name,
-      })
-
       // remove selected owner
       const index = this.data.kepemilikan.findIndex(
         (item) => item.id_kepemilikan === owner.id_kepemilikan,
@@ -65,6 +62,11 @@ export const useFundStore = defineStore('fund', {
       if (index > -1) {
         this.data.kepemilikan.splice(index, 1)
       }
+
+      this.deletedBalance.push({
+        ownerId: owner.id_kepemilikan,
+        fundId: owner.id_sumber_dana,
+      })
     },
     getPemilik() {
       api
@@ -72,7 +74,7 @@ export const useFundStore = defineStore('fund', {
           headers: { Authorization: bearerToken },
         })
         .then(({ data }) => {
-          this.daftarPemilik = data
+          this.ownerList = data
           if (data.length > 0) {
             this.data.ownerName = data[0].kepemilikan
             this.data.ownerId = data[0].id
@@ -143,7 +145,13 @@ export const useFundStore = defineStore('fund', {
           headers: { Authorization: bearerToken },
         })
         .then(({ data }) => {
-          this.data = data
+          this.data.nama = data.fundSource.nama
+          this.data.kepemilikan = data.ownership
+          this.data.ownerName = data.ownership.kepemilikan
+          this.data.ownerId = data.ownership.id_kepemilikan
+          this.data.balance = data.ownership.jumlah_dana
+          this.fundId = data.fundSource.id
+
           this.formTitle = 'Perbarui Sumber Dana'
           next()
         })
@@ -151,9 +159,11 @@ export const useFundStore = defineStore('fund', {
           console.error(error)
         })
     },
-    save({ id, afterSuccess }) {
+    save(afterSuccess) {
       const endpoint =
-        id !== null ? `${this.baseUrl}save/${id}` : `${this.baseUrl}save`
+        this.fundId !== null
+          ? `${this.baseUrl}save/${this.fundId}`
+          : `${this.baseUrl}save`
 
       const notifyProgress = Notify.create({
         group: false,
@@ -164,10 +174,17 @@ export const useFundStore = defineStore('fund', {
         timeout: 0,
       })
 
-      this.data.kepemilikan = JSON.stringify(this.data.kepemilikan)
+      const data = {
+        nama: this.data.nama,
+        kepemilikan: JSON.stringify(this.data.kepemilikan),
+        ownerName: this.data.ownerName,
+        ownerId: this.data.ownerId,
+        balance: this.data.balance,
+        deletedBalance: JSON.stringify(this.deletedBalance),
+      }
 
       api
-        .post(endpoint, this.data, {
+        .post(endpoint, data, {
           headers: { Authorization: bearerToken },
           transformRequest: [
             (data) => {
@@ -177,7 +194,6 @@ export const useFundStore = defineStore('fund', {
         })
         .then(({ data }) => {
           notifyProgress({ timeout })
-          this.data.kepemilikan = []
           if (data.code === 500) {
             this.error = data.msg
             notifyProgress({
@@ -224,6 +240,7 @@ export const useFundStore = defineStore('fund', {
     resetForm() {
       this.error = {}
       this.current = 1
+      this.deletedBalance = []
       paging().reloadData()
     },
   },

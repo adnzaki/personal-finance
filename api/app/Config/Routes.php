@@ -23,6 +23,8 @@ $routes->group('fund', function ($routes) {
     $routes->add('get-pemilik', 'Fund::getPemilik');
     $routes->add('save', 'Fund::save');
     $routes->add('save/(:any)', 'Fund::save/$1');    
+    $routes->add('detail/(:any)', 'Fund::getDetail/$1');
+    $routes->add('delete/(:any)', 'Fund::delete/$1');
 });
 
 $routes->add('run-command', 'CommandRunner::runCommand');

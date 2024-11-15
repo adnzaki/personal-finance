@@ -72,6 +72,8 @@ class Fund extends BaseController
     {
         if(valid_access()) {
             $balance = json_decode($this->request->getPost('kepemilikan'));
+            $removedBalance = json_decode($this->request->getPost('deletedBalance'));
+
             $validation = $this->validation();
             $data = $this->request->getPost(array_keys($validation->rules));
     
@@ -92,6 +94,18 @@ class Fund extends BaseController
                     }
                     $message = 'Berhasil menambahkan sumber dana';
                 } else {
+                    foreach($removedBalance as $b) {
+                        $this->model->deleteOwnership($b->fundId, $b->ownerId);
+                    }
+
+                    foreach ($balance as $b) {
+                        $this->model->insertOwnership([
+                            'id_sumber_dana' => $id,
+                            'id_kepemilikan' => $b->id_kepemilikan,
+                            'jumlah_dana' => $b->jumlah_dana
+                        ]);
+                    }
+
                     $this->model->update($data, $id);
                     $message = 'Sumber dana berhasil diperbarui';
                 }

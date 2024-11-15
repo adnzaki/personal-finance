@@ -72,7 +72,7 @@ class Ownership extends BaseController
                 ]);
             } else {
                 if($id === null) {
-                    $this->model = $this->model->insert($data);
+                    $this->model = $this->model->insert(array_merge($data, ['user_id' => auth()->id()]));
                     $message = 'Berhasil menambahkan data kepemilikan';
                 } else {
                     $this->model = $this->model->update($data, $id);

@@ -17,6 +17,7 @@
       <!-- Main content goes here -->
       <DataTable />
       <AddFormDialog />
+      <EditFormDialog />
     </q-card>
   </div>
 </template>
@@ -27,6 +28,7 @@ import { wrapperPadding, titleSpacing } from 'src/composables/screen.js'
 import ButtonGroup from './ButtonGroup.vue'
 import DataTable from './DataTable.vue'
 import AddFormDialog from './AddFormDialog.vue'
+import EditFormDialog from './EditFormDialog.vue'
 
 const cardTitle = ref('Sumber Dana')
 </script>
