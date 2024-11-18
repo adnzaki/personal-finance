@@ -38,6 +38,11 @@ class Connector
     protected $transaksi = 'tb_transaksi';
 
     /**
+     * @var string
+     */
+    protected $kategori = 'tb_kategori';
+
+    /**
      * @var array
      */
     protected $basicFilter = [];

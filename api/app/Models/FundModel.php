@@ -3,11 +3,10 @@
 namespace App\Models;
 
 use App\Models\OwnershipModel;
-use CodeIgniter\Database\BaseBuilder;
 
 class FundModel extends Connector
 {
-    private $builder;
+    public $builder;
 
     private $builder2; // for tb_kepemilikan_sumber_dana
     
@@ -59,7 +58,7 @@ class FundModel extends Connector
     public function getDaftarKepemilikan(int $idSumberDana): array
     {
         $query = $this->builder
-                    ->select('kepemilikan')
+                    ->select($this->pemilikSumberDana . '.id as value, kepemilikan as label, kepemilikan')
                     ->join($this->pemilikSumberDana, $this->sumberDana . '.id = ' . $this->pemilikSumberDana . '.id_sumber_dana')
                     ->join($this->kepemilikan, $this->pemilikSumberDana . '.id_kepemilikan = ' . $this->kepemilikan . '.id')
                     ->where($this->sumberDana . '.id', $idSumberDana)

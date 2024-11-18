@@ -27,6 +27,18 @@ $routes->group('fund', function ($routes) {
     $routes->add('delete/(:any)', 'Fund::delete/$1');
 });
 
+$routes->group('transaction', function ($routes) {
+    $routes->add('get-data/(:any)/(:any)/(:any)/(:any)/(:any)', 'Transaction::getData/$1/$2/$3/$4/$5');
+    $routes->add('get-data/(:any)/(:any)/(:any)/(:any)/(:any)/(:any)', 'Transaction::getData/$1/$2/$3/$4/$5/$6');
+    $routes->add('get-fund-source', 'Transaction::getFundSource');
+    $routes->add('get-owner-by-fund-id/(:any)', 'Transaction::getOwnerByFundId/$1');
+    $routes->add('get-categories/(:alpha)', 'Transaction::getCategories/$1');
+    $routes->add('save', 'Transaction::save');
+    $routes->add('save/(:any)', 'Transaction::save/$1');    
+    $routes->add('detail/(:any)', 'Transaction::getDetail/$1');
+    $routes->add('delete/(:any)', 'Transaction::delete/$1');
+});
+
 $routes->add('run-command', 'CommandRunner::runCommand');
 
 $routes->group('test', function ($routes) {
