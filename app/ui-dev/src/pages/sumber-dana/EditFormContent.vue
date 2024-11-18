@@ -24,11 +24,8 @@
           v-model="store.data.balance"
           class="rounded-field q-mt-md"
           label="Jumlah Saldo"
-          :rules="[
-            (val) =>
-              (val >= 0 && val <= 999999999999999) ||
-              'Jumlah Saldo Tidak Valid',
-          ]"
+          input-class="saldo"
+          :rules="[(val) => validateNumber(val) || 'Jumlah Saldo Tidak Valid']"
           @keyup.enter="addBalance"
           v-if="showOwnerInput"
         />
@@ -115,7 +112,8 @@ import { useFundStore } from 'stores/fund-store'
 import { useRouter } from 'vue-router'
 import { ref, computed } from 'vue'
 import { useQuasar } from 'quasar'
-import { formatDecimal } from 'src/composables/utils'
+import { formatDecimal, validateNumber } from 'src/composables/utils'
+import { formatNumeral } from 'cleave-zen'
 
 const props = defineProps({
   mobile: {
@@ -150,6 +148,15 @@ const addBalance = () => {
 const addOwner = () => {
   if (store.ownerList.length > 0) {
     showOwnerInput.value = true
+
+    const amountInput = ref(null)
+    setTimeout(() => {
+      amountInput.value = document.querySelector('.saldo')
+      amountInput.value.addEventListener('input', (e) => {
+        const value = e.target.value
+        store.data.balance = formatNumeral(value)
+      })
+    }, 500)
   } else {
     $q.notify({
       type: 'negative',

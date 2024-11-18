@@ -24,35 +24,37 @@ export const useFundStore = defineStore('fund', {
       kepemilikan: [],
       ownerName: '',
       ownerId: null,
-      balance: 0,
+      balance: '0',
     },
     ownerList: [],
     deletedBalance: [],
   }),
   actions: {
     addBalance() {
-      this.data.kepemilikan.push({
-        name: this.data.ownerName,
-        id_kepemilikan: this.data.ownerId,
-        jumlah_dana: this.data.balance,
-      })
+      if (this.data.balance !== '' && this.data.balance !== '0') {
+        this.data.kepemilikan.push({
+          name: this.data.ownerName,
+          id_kepemilikan: this.data.ownerId,
+          jumlah_dana: this.data.balance.replace(/,/g, ''),
+        })
 
-      // remove selected owner
-      const index = this.ownerList.findIndex(
-        (item) => item.id === this.data.ownerId,
-      )
-      if (index > -1) {
-        this.ownerList.splice(index, 1)
+        // remove selected owner
+        const index = this.ownerList.findIndex(
+          (item) => item.id === this.data.ownerId,
+        )
+        if (index > -1) {
+          this.ownerList.splice(index, 1)
+        }
+
+        // set default value for ownerId and ownerName
+        if (this.ownerList.length > 0) {
+          this.data.ownerId = this.ownerList[0].id
+          this.data.ownerName = this.ownerList[0].kepemilikan
+        }
+
+        // reset balance
+        this.data.balance = '0'
       }
-
-      // set default value for ownerId and ownerName
-      if (this.ownerList.length > 0) {
-        this.data.ownerId = this.ownerList[0].id
-        this.data.ownerName = this.ownerList[0].kepemilikan
-      }
-
-      // reset balance
-      this.data.balance = 0
     },
     removeBalance(owner) {
       // remove selected owner
@@ -149,7 +151,10 @@ export const useFundStore = defineStore('fund', {
           this.data.kepemilikan = data.ownership
           this.data.ownerName = data.ownership.kepemilikan
           this.data.ownerId = data.ownership.id_kepemilikan
-          this.data.balance = data.ownership.jumlah_dana
+          if (data.ownership.length > 0) {
+            this.data.balance = data.ownership.jumlah_dana
+          }
+
           this.fundId = data.fundSource.id
 
           this.formTitle = 'Perbarui Sumber Dana'
