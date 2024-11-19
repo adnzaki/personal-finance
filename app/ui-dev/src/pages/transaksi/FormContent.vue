@@ -5,7 +5,7 @@
       <q-form class="q-gutter-xs" @submit="save">
         <q-select
           filled
-          v-model="store.data.id_sumber_dana"
+          v-model="store.fundId"
           :options="store.fundSource"
           label="Sumber Dana"
           class="rounded-field q-mb-md"
@@ -13,10 +13,11 @@
         />
         <q-select
           filled
-          v-model="store.data.id_kepemilikan"
+          v-model="store.ownerId"
           :options="store.owners"
           label="Pemilik"
           class="rounded-field q-mb-md"
+          @update:model-value="onOwnerSelected"
         />
         <q-btn-toggle
           v-model="store.data.jenis_transaksi"
@@ -87,6 +88,7 @@
           v-model="store.data.deskripsi"
           class="rounded-field q-mb-md"
           label="Deskripsi"
+          :rules="[(val) => !!val || 'Deskripsi Tidak Boleh Kosong']"
         />
         <q-input
           outlined
@@ -102,8 +104,27 @@
           :list="store.categories"
           :options-value="{ label: 'category_name', value: 'id' }"
           load-on-route
-          custom-class="rounded-field custom-dropdown"
+          custom-class="rounded-field"
           v-if="showCategory"
+        />
+        <q-select
+          filled
+          v-model="store.destinationFundId"
+          :options="store.targetFunds"
+          label="Sumber Dana Tujuan"
+          class="rounded-field q-mt-sm"
+          @update:model-value="onTargetFundSelected"
+          v-if="!showCategory"
+        />
+
+        <q-select
+          filled
+          v-model="store.destinationOwnerId"
+          :options="store.targetOwners"
+          label="Pemilik"
+          class="rounded-field q-mt-md"
+          @update:model-value="onTargetOwnerSelected"
+          v-if="!showCategory"
         />
       </q-form>
     </q-card-section>
@@ -181,27 +202,45 @@ const datePickerChanged = (val) => {
 
 const amountInput = ref(null)
 onMounted(() => {
-  amountInput.value = document.querySelector('.nominal')
+  setTimeout(() => {
+    amountInput.value = document.querySelector('.nominal')
 
-  amountInput.value.addEventListener('input', (e) => {
-    const value = e.target.value
-    store.data.nominal = formatNumeral(value)
-  })
+    amountInput.value.addEventListener('input', (e) => {
+      const value = e.target.value
+      store.data.nominal = formatNumeral(value)
+    })
+  }, 500)
 })
 
 const onCategorySelected = (v) => {
   store.data.id_kategori = v.value
 }
 
-const onFundSelected = (v) => {
-  store.getOwnerByFundSource(v.value)
+const onTargetFundSelected = (v) => {
+  store.data.sumber_dana_tujuan = v.value
+  store.getTargetOwners(v.value)
 }
 
-const save = () =>
-  store.save({
-    id: null,
-    afterSuccess: () => closeForm(),
+const onTargetOwnerSelected = (v) => {
+  store.data.pemilik_dana_tujuan = v.value
+}
+
+const onOwnerSelected = (v) => {
+  store.data.id_pemilik_sumber_dana = v.value
+}
+
+const onFundSelected = (v) => {
+  store.data.id_sumber_dana = v.value
+  store.getOwnerByFundSource(v.value)
+  store.getTargetFunds(v.value)
+}
+
+const save = () => {
+  store.save(() => {
+    closeForm()
+    showCategory.value = true
   })
+}
 
 const closeForm = () => {
   if (props.mobile) {
@@ -209,5 +248,11 @@ const closeForm = () => {
   } else {
     store.showAddForm = false
   }
+
+  store.fundId = null
+  store.ownerId = null
+  store.destinationFundId = null
+  store.destinationOwnerId = null
+  store.resetForm()
 }
 </script>

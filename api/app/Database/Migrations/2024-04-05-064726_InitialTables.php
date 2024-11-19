@@ -76,13 +76,13 @@ class InitialTables extends Migration
     public function down()
     {
         $helper = new Helper;
-        $helper->db->disableForeignKeyChecks();
+        $this->db->disableForeignKeyChecks();
 
         $this->forge->dropTable('tb_kepemilikan_sumber_dana');
         $this->forge->dropTable('tb_transaksi');
         $this->forge->dropTable('tb_kepemilikan_dana');        
         $this->forge->dropTable('tb_sumber_dana');
         
-        $helper->db->enableForeignKeyChecks();
+        $this->db->enableForeignKeyChecks();
     }
 }
