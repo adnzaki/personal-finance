@@ -3,7 +3,7 @@
     <q-input
       outlined
       v-model="dateStr"
-      class="rounded-field q-mr-sm"
+      class="rounded-field date-filter"
       dense
       readonly
     >
@@ -63,6 +63,9 @@ const onDatePickerChanged = (val) => {
 const reset = () => {
   dateValue.value = null
   dateStr.value = 'Filter Tanggal'
+  store.filter.date = 'all'
+  datePicker.value = null
+  store.getTransactions()
 }
 
 const save = () => {

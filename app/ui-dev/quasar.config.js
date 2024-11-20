@@ -17,7 +17,7 @@ export default configure((ctx) => {
     boot: ['i18n', 'axios', 'register-component'],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#css
-    css: ['app.sass', 'fonts/style.css'],
+    css: ['app.sass', 'responsive.sass', 'fonts/style.css'],
 
     // https://github.com/quasarframework/quasar/tree/dev/extras
     extras: [
