@@ -1,5 +1,5 @@
 <template>
-  <div class="col-12 col-md-8">
+  <div class="col-12 col-md-5">
     <div class="q-gutter-xs mobile-hide">
       <q-btn
         icon="add"
@@ -12,7 +12,11 @@
     </div>
 
     <!-- FAB -->
-    <q-page-sticky position="bottom-right" :offset="fabPos" class="mobile-only">
+    <q-page-sticky
+      position="bottom-right"
+      :offset="fabPos"
+      class="mobile-only custom-fab"
+    >
       <q-btn
         fab
         icon="add"

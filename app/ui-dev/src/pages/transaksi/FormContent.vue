@@ -230,7 +230,6 @@ const onOwnerSelected = (v) => {
 }
 
 const onFundSelected = (v) => {
-  store.data.id_sumber_dana = v.value
   store.getOwnerByFundSource(v.value)
   store.getTargetFunds(v.value)
 }

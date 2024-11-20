@@ -28,8 +28,14 @@ export const useTransactionStore = defineStore('transaction', {
     ownerId: null,
     destinationFundId: null,
     destinationOwnerId: null,
+    filter: {
+      fundId: 'all',
+      ownerId: 'all',
+      transactionType: 'all',
+      category: 'all',
+      date: 'all',
+    },
     data: {
-      id_sumber_dana: '',
       id_pemilik_sumber_dana: '',
       jenis_transaksi: 'expense',
       tgl_transaksi: '',
@@ -41,6 +47,30 @@ export const useTransactionStore = defineStore('transaction', {
     },
   }),
   actions: {
+    getDetail(id, next) {},
+    getTransactions() {
+      const limit = 25
+      paging().state.rows = limit
+
+      const params = `${this.filter.fundId}/${this.filter.ownerId}/${this.filter.transactionType}/${this.filter.category}/${this.filter.date}`
+
+      paging().getData({
+        token: bearerToken,
+        lang: 'indonesia',
+        limit,
+        offset: this.current - 1,
+        orderBy: 'tgl_transaksi',
+        searchBy: 'deskripsi',
+        sort: 'DESC',
+        search: '',
+        url: `${conf.apiPublicPath}${this.baseUrl}get-data/${params}/`,
+        autoReset: {
+          active: true,
+          timeout: 500,
+        },
+      })
+    },
+    deleteTransaction(id) {},
     save(afterSuccess) {
       const endpoint =
         this.transactionId !== null
@@ -92,9 +122,8 @@ export const useTransactionStore = defineStore('transaction', {
     resetForm() {
       this.error = {}
       this.current = 1
-      //paging().reloadData()
+      paging().reloadData()
       this.data = {
-        id_sumber_dana: '',
         id_pemilik_sumber_dana: '',
         jenis_transaksi: 'expense',
         tgl_transaksi: '',

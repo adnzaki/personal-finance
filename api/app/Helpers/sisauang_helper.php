@@ -1,5 +1,12 @@
 <?php
 
+if (!function_exists('os_date')) {
+    function os_date()
+    {
+        return new \OstiumDate();
+    }
+}
+
 if(! function_exists('valid_access')) {
     function valid_access()
     {

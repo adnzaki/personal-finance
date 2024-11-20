@@ -11,11 +11,12 @@
         <div class="text-h6 text-capitalize" v-else>{{ cardTitle }}</div>
         <div :class="['row', titleSpacing()]">
           <ButtonGroup />
+          <DateFilter />
           <search-box label="Cari transaksi..." />
         </div>
       </q-card-section>
       <!-- Main content goes here -->
-      <!-- <DataTable /> -->
+      <DataTable />
       <AddFormDialog />
       <!-- <EditFormDialog /> -->
     </q-card>
@@ -26,8 +27,9 @@
 import { ref } from 'vue'
 import { wrapperPadding, titleSpacing } from 'src/composables/screen.js'
 import ButtonGroup from './ButtonGroup.vue'
-// import DataTable from './DataTable.vue'
+import DataTable from './DataTable.vue'
 import AddFormDialog from './AddFormDialog.vue'
+import DateFilter from './DateFilter.vue'
 // import EditFormDialog from './EditFormDialog.vue'
 
 const cardTitle = ref('Transaksi')

@@ -14,6 +14,25 @@ class Transaction extends BaseController
         $this->model = new TransactionModel;
     }
 
+    public function getData($sumberDana, $kepemilikan, $jenisTransaksi, $kategori, $tanggal, $limit, $offset, $orderBy, $searchBy, $sort, $search = '')
+    {
+        $data = $this->model->getData($sumberDana, $kepemilikan, $jenisTransaksi, $kategori, $tanggal, $limit, $offset, $sort, $searchBy, $search);
+        $totalRows = $this->model->getTotalRows($sumberDana, $kepemilikan, $jenisTransaksi, $kategori, $tanggal, $searchBy, $search);
+
+        foreach($data as $d) {
+            $d->nominal = 'Rp. '.number_format($d->nominal);
+            $transactionDate = explode(' ', $d->tgl_transaksi)[0];
+            $d->tgl_transaksi = os_date()->create($transactionDate);
+            $d->tgl_transaksi_dayOnly = substr(os_date()->create($transactionDate, 'd-m-y', '/'), 0, 2);
+            $d->tgl_transaksi_monthYear = substr(os_date()->create($transactionDate, 'd-M-y'), 3, 8);
+        }
+
+        return $this->createResponse([
+            'container' => $data,
+            'totalRows' => $totalRows
+        ]);
+    }
+
     public function save($id = null)
     {
         if(valid_access()) {
@@ -39,7 +58,6 @@ class Transaction extends BaseController
     private function validation($transactionType)
     {
         $rules = [
-            'id_sumber_dana'            => ['label' => 'sumber dana', 'rules' => 'required'],
             'id_pemilik_sumber_dana'    => ['label' => 'pemilik dana', 'rules' => 'required'],
             'jenis_transaksi'           => ['label' => 'jenis transaksi', 'rules' => 'required'],
             'tgl_transaksi'             => ['label' => 'tanggal transaksi', 'rules' => 'required'],
@@ -48,7 +66,6 @@ class Transaction extends BaseController
         ];
 
         $messages = [
-            'id_sumber_dana'            => ['required' => $this->messages['required']],
             'id_pemilik_sumber_dana'    => ['required' => $this->messages['required']],
             'jenis_transaksi'           => ['required' => $this->messages['required']],
             'tgl_transaksi'             => ['required' => $this->messages['required']],

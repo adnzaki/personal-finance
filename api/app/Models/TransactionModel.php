@@ -12,6 +12,8 @@ class TransactionModel extends Connector
 
     public $fundModel; // FundingModel
 
+    private $defaultFilter;
+
     public function __construct()
     {
         parent::__construct();
@@ -21,12 +23,12 @@ class TransactionModel extends Connector
         $this->fundOwner = $this->db->table($this->pemilikSumberDana);
 
         $this->fundModel = new FundModel;
+        $this->defaultFilter = [$this->sumberDana . '.deleted' => 0, $this->sumberDana . '.user_id' => auth()->id()];
     }
 
     public function save($data, $id)
     {
         // Get the fund source details for the given source fund ID
-        $data['id_sumber_dana'] = (int)$data['id_sumber_dana'];
         $fundOwnerId = (int)$data['id_pemilik_sumber_dana'];
         $getBalance = (int)$this->fundOwner->getWhere(['id' => $fundOwnerId])->getResult()[0]->jumlah_dana;
         $params = ['id' => $fundOwnerId];
@@ -124,20 +126,21 @@ class TransactionModel extends Connector
         $kepemilikan = 'all',
         $jenisTransaksi = 'all',
         $kategori = 'all',
+        $tanggal = 'all',
         int $limit,
         int $offset,
-        string $sort = 'ASC',
+        string $sort = 'DESC',
         string $searchBy = 'deskripsi',
         string $search = ''
     ): array {
         $query = $this->search($searchBy, $search);
 
         if ($sumberDana !== 'all') {
-            $query->where('id_sumber_dana', $sumberDana);
+            $query->where($this->sumberDana . '.id', $sumberDana);
         }
 
         if ($kepemilikan !== 'all') {
-            $query->where('id_kepemilikan', $kepemilikan);
+            $query->where('id_pemilik_sumber_dana', $kepemilikan);
         }
 
         if ($jenisTransaksi !== 'all') {
@@ -148,14 +151,73 @@ class TransactionModel extends Connector
             $query->where('id_kategori', $kategori);
         }
 
-        $query->where($this->basicFilter)->orderBy('tgl_transaksi', $sort)->limit($limit, $offset);
+        if($tanggal !== 'all') {
+            if(strpos($tanggal, '_') !== false) {
+                $date = explode('_', $tanggal);
+                $query->where([
+                    'tgl_transaksi >= ' => $date[0] . ' 00:00:00',
+                    'tgl_transaksi <= ' => $date[1] . ' 23:59:59'
+                ]);
+            } else {
+                $query->like('tgl_transaksi', $tanggal);
+            }
+        }
+
+        $query->where($this->defaultFilter)->orderBy('tgl_transaksi', $sort)->limit($limit, $offset);
 
         return $query->get()->getResult();
+   }
+
+    public function getTotalRows(
+        $sumberDana = 'all',
+        $kepemilikan = 'all',
+        $jenisTransaksi = 'all',
+        $kategori = 'all',
+        $tanggal = 'all',
+        string $searchBy = 'deskripsi',
+        string $search = ''
+    ): int {
+        $query = $this->search($searchBy, $search);
+
+        if ($sumberDana !== 'all') {
+            $query->where($this->sumberDana . '.id', $sumberDana);
+        }
+
+        if ($kepemilikan !== 'all') {
+            $query->where('id_pemilik_sumber_dana', $kepemilikan);
+        }
+
+        if ($jenisTransaksi !== 'all') {
+            $query->where('jenis_transaksi', $jenisTransaksi);
+        }
+
+        if ($kategori !== 'all') {
+            $query->where('id_kategori', $kategori);
+        }
+
+        if ($tanggal !== 'all') {
+            if(strpos($tanggal, '_') !== false) {
+                $date = explode('_', $tanggal);
+                $query->where([
+                    'tgl_transaksi >= ' => $date[0] . ' 00:00:00',
+                    'tgl_transaksi <= ' => $date[1] . ' 23:59:59'
+                ]);
+            } else {
+                $query->like('tgl_transaksi', $tanggal);
+            }
+        }
+
+        return $query->where($this->defaultFilter)->countAllResults();
     }
 
     private function search(string $searchBy, string $search)
     {
-        $select = $this->builder->select('id, id_sumber_dana, id_kepemilikan, jenis_transaksi, deskripsi, nominal, id_kategori, category_name, category_type, kepemilikan, nama, modified');
+        $field = "{$this->transaksi}.id, $this->sumberDana.id as id_sumber_dana, $this->sumberDana.nama as sumber_dana, id_pemilik_sumber_dana, kepemilikan as nama_pemilik, jenis_transaksi, tgl_transaksi, deskripsi, nominal, id_kategori, category_name, $this->transaksi.modified";
+        $select = $this->builder->select($field)
+                                ->join($this->pemilikSumberDana, $this->pemilikSumberDana . '.id = ' . $this->transaksi . '.id_pemilik_sumber_dana')
+                                ->join($this->sumberDana, $this->sumberDana . '.id = ' . $this->pemilikSumberDana . '.id_sumber_dana')
+                                ->join($this->kategori, $this->kategori . '.id = ' . $this->transaksi . '.id_kategori')
+                                ->join($this->kepemilikan, $this->kepemilikan . '.id = ' . $this->pemilikSumberDana . '.id_kepemilikan');
         if (! empty($search)) {
             $select->like($searchBy, $search); // search by one parameter
         }

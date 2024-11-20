@@ -31,7 +31,7 @@ export const useFundStore = defineStore('fund', {
   }),
   actions: {
     addBalance() {
-      if (this.data.balance !== '' && this.data.balance !== '0') {
+      if (this.data.balance !== '') {
         this.data.kepemilikan.push({
           name: this.data.ownerName,
           id_kepemilikan: this.data.ownerId,

@@ -12,7 +12,11 @@
     </div>
 
     <!-- FAB -->
-    <q-page-sticky position="bottom-right" :offset="fabPos" class="mobile-only">
+    <q-page-sticky
+      position="bottom-right"
+      :offset="fabPos"
+      class="mobile-only custom-fab"
+    >
       <q-btn
         fab
         icon="add"
