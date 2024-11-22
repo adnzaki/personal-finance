@@ -40,6 +40,12 @@ $routes->group('transaction', function ($routes) {
     $routes->add('delete/(:any)', 'Transaction::delete/$1');
 });
 
+$routes->group('user', function ($routes) {
+    $routes->post('create', 'UserManager::createUser');
+    $routes->post('update', 'UserManager::updateUser');
+    $routes->post('delete', 'UserManager::deleteUser');
+});
+
 $routes->add('run-command', 'CommandRunner::runCommand');
 
 $routes->group('test', function ($routes) {
