@@ -45,6 +45,23 @@ class Transaction extends BaseController
         ]);
     }
 
+    public function delete($id)
+    {
+        if (valid_access()) {
+            $this->model->deleteTransaction($id);
+            
+            return $this->response->setJSON([
+                'code' => 200,
+                'msg' => 'Transaksi berhasil dihapus',
+            ]);
+        } else {
+            return $this->response->setJSON([
+                'code' => 500,
+                'msg' => lang('Messages.invalid_access'),
+            ]);
+        }
+    }
+
     public function save($id = null)
     {
         if(valid_access()) {

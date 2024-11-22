@@ -51,6 +51,22 @@ class TransactionModel extends Connector
         return $query->getNumRows() > 0 ? $query->getResult()[0] : (object)['sumber_dana' => '', 'kepemilikan' => ''];
     }
 
+    public function deleteTransaction($id)
+    {
+        $this->builder->update(['deleted' => 1], ['id' => $id]);
+        $transactionDetail = $this->getDetail($id);
+        $amount = (int)$transactionDetail->nominal;
+        $ownerId = (int)$transactionDetail->id_pemilik_sumber_dana;
+        $ownerBalance = $this->getBalance($ownerId);
+        $this->fundOwner->update(['jumlah_dana' => $ownerBalance + $amount], ['id' => $ownerId]);
+        if($transactionDetail->jenis_transaksi === 'transfer') {
+            // Return the balance of receiver
+            $receiverId = (int)$transactionDetail->pemilik_dana_tujuan;
+            $receiverBalance = $this->getBalance($receiverId);
+            $this->fundOwner->update(['jumlah_dana' => $receiverBalance - $amount], ['id' => $receiverId]);
+        }
+    }
+
     public function save($data, $id)
     {
         // Get the fund source details for the given source fund ID

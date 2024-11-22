@@ -117,7 +117,61 @@ export const useTransactionStore = defineStore('transaction', {
         },
       })
     },
-    deleteTransaction(id) {},
+    deleteTransaction(id) {
+      Dialog.create({
+        title: 'Hapus Transaksi',
+        message: 'Anda yakin ingin menghapus transaksi ini?',
+        cancel: true,
+        persistent: true,
+      })
+        .onOk(() => {
+          const notifyProgress = Notify.create({
+            group: false,
+            spinner: true,
+            message: 'Menghapus transaksi...',
+            color: 'info',
+            position: 'center',
+            timeout: 0,
+          })
+
+          api
+            .get(`${this.baseUrl}delete/${id}`, {
+              headers: { Authorization: bearerToken },
+            })
+            .then(({ data }) => {
+              notifyProgress({
+                timeout,
+                message: data.msg,
+                spinner: false,
+              })
+
+              if (data.code === 200) {
+                notifyProgress({
+                  color: 'positive',
+                  icon: 'done',
+                })
+              } else {
+                notifyProgress({
+                  color: 'negative',
+                  icon: 'close',
+                })
+              }
+              paging().reloadData()
+            })
+            .catch((error) => {
+              console.error(error)
+              notifyProgress({
+                message: error.message,
+                color: 'negative',
+                spinner: false,
+                timeout,
+              })
+            })
+        })
+        .onCancel(() => {
+          // console.log('Cancel')
+        })
+    },
     save(afterSuccess) {
       const endpoint =
         this.transactionId !== null

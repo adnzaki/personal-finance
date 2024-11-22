@@ -49,34 +49,6 @@
           </q-item-section>
         </q-item>
         <!-- #END Desktop and Tablet View -->
-
-        <!-- Mobile and Tablet View -->
-        <!-- <q-expansion-item
-          expand-separator
-          icon="r_dns"
-          :label="item.deskripsi"
-          class="mobile-only"
-          v-for="(item, index) in data"
-          :key="index"
-          :caption="item.nominal"
-          header-class="bottom-border"
-          group="sumber-dana"
-        >
-          <q-card>
-            <q-card-actions align="right">
-              <q-btn flat color="primary" @click="getDetail(item.id, true)"
-                >Edit</q-btn
-              >
-              <q-btn
-                flat
-                color="primary"
-                @click="store.deleteTransaction(item.id)"
-                >Hapus</q-btn
-              >
-            </q-card-actions>
-          </q-card>
-        </q-expansion-item> -->
-        <!-- #END Mobile and Tablet View -->
       </q-list>
       <data-nav v-model="current" />
     </div>
