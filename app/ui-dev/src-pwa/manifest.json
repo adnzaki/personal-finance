@@ -1,4 +1,7 @@
 {
+  "name": "Sisa Uang",
+  "short_name": "Sisa Uang",
+  "description": "A simple personal finance manager app",
   "orientation": "portrait",
   "background_color": "#ffffff",
   "theme_color": "#027be3",
