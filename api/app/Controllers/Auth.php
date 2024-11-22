@@ -43,6 +43,7 @@ class Auth extends BaseController
     {
         if(auth()->loggedIn()) {
             auth()->logout();
+            delete_cookie('sisauang_api_session');
         }
 
         return $this->response->setJSON(['status' => 'success']);
