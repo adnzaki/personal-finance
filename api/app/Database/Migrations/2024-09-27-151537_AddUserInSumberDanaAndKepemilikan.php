@@ -18,7 +18,7 @@ class AddUserInSumberDanaAndKepemilikan extends Migration
                 'null' => true,
             ],
         ];
-        $helper->db->enableForeignKeyChecks();
+        $this->db->enableForeignKeyChecks();
         $this->forge->addColumn('tb_sumber_dana', $fields);
         $this->forge->addForeignKey('user_id', 'users', 'id', '', 'CASCADE');
         $this->forge->addColumn('tb_kepemilikan_dana', $fields);
