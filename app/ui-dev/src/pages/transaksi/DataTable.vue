@@ -31,12 +31,39 @@
 
           <q-item-section side>
             <q-btn
-              class="custom-round"
+              class="custom-round mobile-hide"
               flat
               color="primary"
               icon="r_edit"
               @click="getDetail(item.id)"
             />
+            <q-btn
+              class="custom-round mobile-only"
+              flat
+              color="primary"
+              icon="r_edit"
+            >
+              <q-menu>
+                <q-list style="min-width: 150px">
+                  <q-item clickable v-close-popup @click="getDetail(item.id)">
+                    <q-item-section avatar
+                      ><q-icon name="r_edit"
+                    /></q-item-section>
+                    <q-item-section>Edit</q-item-section>
+                  </q-item>
+                  <q-separator />
+                  <q-item
+                    clickable
+                    v-close-popup
+                    @click="store.deleteTransaction(item.id)"
+                    ><q-item-section avatar
+                      ><q-icon name="r_delete_outline"
+                    /></q-item-section>
+                    <q-item-section>Hapus</q-item-section>
+                  </q-item>
+                </q-list>
+              </q-menu>
+            </q-btn>
           </q-item-section>
           <q-item-section side class="mobile-hide">
             <q-btn
