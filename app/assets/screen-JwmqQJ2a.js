@@ -1,1 +1,0 @@
-import{aB as t}from"./index-BO94wXXz.js";const s=()=>t.lt.sm?"":"q-mt-md",a=()=>t.lt.sm?"":"q-pa-md",e=()=>t.lt.sm?{}:{width:"700px",maxWidth:"80vw"},n=()=>!t.lt.sm;export{e as a,n as d,s as t,a as w};
