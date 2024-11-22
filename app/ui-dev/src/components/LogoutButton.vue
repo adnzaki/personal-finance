@@ -26,7 +26,7 @@ const logout = () => {
         $q.cookies.remove(conf.cookieName, { path: '/' })
         $q.cookies.remove('sisauang_api_session')
         localStorage.removeItem('username')
-        window.location.href = conf.loginUrl()
+        window.location.reload()
       }
     })
 }
