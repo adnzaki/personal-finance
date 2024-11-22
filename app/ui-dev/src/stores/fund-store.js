@@ -246,6 +246,7 @@ export const useFundStore = defineStore('fund', {
       this.error = {}
       this.current = 1
       this.deletedBalance = []
+      this.data.kepemilikan = []
       paging().reloadData()
     },
   },
