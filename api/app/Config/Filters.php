@@ -26,6 +26,9 @@ class Filters extends BaseConfig
         'invalidchars'  => InvalidChars::class,
         'secureheaders' => SecureHeaders::class,
         'cors'          => AllowCors::class,
+        'forcehttps'    => \CodeIgniter\Filters\ForceHTTPS::class,
+        'pagecache'     => \CodeIgniter\Filters\PageCache::class,
+        'performance'   => \CodeIgniter\Filters\PerformanceMetrics::class,
     ];
 
     /**
@@ -36,18 +39,13 @@ class Filters extends BaseConfig
      */
     public array $globals = [
         'before' => [
-            'cors',
-            // 'tokens' => ['except' => [
-            //     'validate-login', 'logout-user', 'validate-page'
-            // ]]
-            // 'honeypot',
-            // 'csrf',
-            // 'invalidchars',
+            'forcehttps', // Force Global Secure Requests
+            'pagecache',  // Web Page Caching
         ],
         'after' => [
-            'toolbar',
-            // 'honeypot',
-            // 'secureheaders',
+            'pagecache',   // Web Page Caching
+            'performance', // Performance Metrics
+            'toolbar',     // Debug Toolbar
         ],
     ];
 
