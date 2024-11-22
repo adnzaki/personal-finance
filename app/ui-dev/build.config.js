@@ -68,7 +68,7 @@ const uiPath = () => {
  */
 const baseUrl = () => {
   return mode === 'production'
-    ? `${host()}api/public/`
+    ? `${host()}/api/public/`
     : `${host()}${apiPort}/personal-finance/api/public/`
 }
 
