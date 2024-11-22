@@ -11,6 +11,7 @@
           class="custom-round refresh-button"
           icon="refresh"
           @click="paging.reloadData()"
+          v-if="totalPages() > 0"
         />
       </div>
       <div :class="[navWidth]" v-if="totalPages() > 0">
