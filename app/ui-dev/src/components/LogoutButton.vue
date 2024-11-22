@@ -23,7 +23,7 @@ const logout = () => {
     })
     .then(({ data }) => {
       if (data.status === 'success') {
-        $q.cookies.remove(conf.cookieName)
+        $q.cookies.remove(conf.cookieName, { path: '/' })
         localStorage.removeItem('username')
         window.location.href = conf.loginUrl()
       }

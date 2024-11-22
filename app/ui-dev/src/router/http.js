@@ -1,6 +1,5 @@
 import conf from '../../sisauang.config'
 import axios from 'axios'
-import router from '.'
 import { Cookies, LoadingBar } from 'quasar'
 
 export const api = axios.create({ baseURL: conf.apiPublicPath })
@@ -31,7 +30,9 @@ export const validatePage = (isLoginPage = false) => {
                 'Successfully established connection to SisaUang API.',
             )
 
-            if (isLoginPage) router.push('/home')
+            if (isLoginPage) {
+              window.location.href = conf.homeUrl()
+            }
           }
         })
         .catch((error) => {
