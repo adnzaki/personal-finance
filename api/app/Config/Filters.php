@@ -39,6 +39,7 @@ class Filters extends BaseConfig
      */
     public array $globals = [
         'before' => [
+            'cors',
             'forcehttps', // Force Global Secure Requests
             'pagecache',  // Web Page Caching
         ],
