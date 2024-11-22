@@ -127,6 +127,7 @@ const validate = () => {
             }
 
           $q.cookies.set(conf.cookieName, data.token, cookieOptions)
+          localStorage.setItem('username', data.user.username)
 
           // redirect to dashboard
           window.location.href = conf.homeUrl()

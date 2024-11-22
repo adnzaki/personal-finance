@@ -27,7 +27,8 @@ class Auth extends BaseController
         if($getToken['status'] !== false) {
             return $this->response->setJSON([
                 'status'    => 'success',
-                'token'     => $getToken['token']
+                'token'     => $getToken['token'],
+                'user'      => auth()->getProvider()->findById(auth()->id())
             ]);
         } else {
             return $this->response->setJSON([

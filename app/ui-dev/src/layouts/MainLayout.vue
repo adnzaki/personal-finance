@@ -57,7 +57,10 @@
 
     <q-drawer v-model="leftDrawerOpen" show-if-above bordered>
       <q-list class="q-px-sm">
-        <q-item-label header> User Name </q-item-label>
+        <q-item-label header>
+          Halo, <strong>{{ userName }}</strong
+          >!
+        </q-item-label>
 
         <EssentialLink
           v-for="link in linksList"
@@ -118,6 +121,7 @@ const linksList = [
 ]
 
 const leftDrawerOpen = ref(false)
+const userName = localStorage.getItem('username')
 
 function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value
