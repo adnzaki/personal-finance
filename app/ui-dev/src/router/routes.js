@@ -51,7 +51,7 @@ const routes = [
       },
       {
         path: 'transaksi/add',
-        component: () => import('pages/transaksi/AddFormPage.vue'),
+        component: () => import('src/pages/transaksi/FormPage.vue'),
         beforeEnter: () => validatePage(),
       },
       // {

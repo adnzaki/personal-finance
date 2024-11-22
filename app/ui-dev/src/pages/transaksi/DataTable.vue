@@ -88,6 +88,9 @@ import { ref, computed } from 'vue'
 import { usePagingStore } from 'ss-paging-vue'
 import { useTransactionStore } from 'stores/transaction-store'
 import { useRouter } from 'vue-router'
+import { useQuasar } from 'quasar'
+
+const $q = useQuasar()
 
 const paging = usePagingStore()
 const current = ref(1)
@@ -96,12 +99,12 @@ const router = useRouter()
 const store = useTransactionStore()
 store.getTransactions()
 
-const getDetail = (id, mobile = false) => {
+const getDetail = (id) => {
   store.getDetail(id, () => {
-    if (mobile) {
+    if ($q.screen.lt.sm) {
       router.push('/transaksi/edit')
     } else {
-      store.showEditForm = true
+      store.showForm = true
     }
   })
 }

@@ -4,7 +4,16 @@
       <div :class="[rangeWidth, 'q-mt-sm']">
         <p>{{ rowRange }}</p>
       </div>
-      <div :class="[navWidth, navOffset]" v-if="totalPages() > 0">
+      <div :class="['col-2 col-md-1', navOffset]">
+        <q-btn
+          color="primary"
+          flat
+          class="custom-round refresh-button"
+          icon="refresh"
+          @click="paging.reloadData()"
+        />
+      </div>
+      <div :class="[navWidth]" v-if="totalPages() > 0">
         <q-pagination
           :model-value="modelValue"
           :max="totalPages()"
@@ -15,6 +24,15 @@
     </div>
   </div>
 </template>
+
+<style lang="sass" scoped>
+@media(min-width: $breakpoint-sm-min)
+  .refresh-button
+    margin-left: 20px
+
+.refresh-button
+  margin-top: 2px
+</style>
 
 <script setup>
 import { computed } from 'vue'
@@ -31,11 +49,11 @@ const props = defineProps({
   },
   navWidth: {
     type: String,
-    default: 'col-12 col-md-2',
+    default: 'col-10 col-md-2',
   },
   navOffset: {
     type: String,
-    default: 'offset-md-4',
+    default: 'offset-md-3',
   },
 })
 

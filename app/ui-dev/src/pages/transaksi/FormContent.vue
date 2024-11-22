@@ -98,6 +98,7 @@
           label="Nominal"
           :rules="[(val) => validateNumber(val) || 'Nominal Tidak Valid']"
         />
+        <!-- For Add New Transaction -->
         <dropdown-search
           @selected="onCategorySelected"
           label="Kategori"
@@ -105,7 +106,22 @@
           :options-value="{ label: 'category_name', value: 'id' }"
           load-on-route
           custom-class="rounded-field"
-          v-if="showCategory"
+          v-if="showCategory && store.transactionId === null"
+        />
+
+        <!-- For Edit Transaction -->
+        <dropdown-search
+          @selected="onCategorySelected"
+          label="Kategori"
+          :list="store.categories"
+          :default="{
+            label: store.categoryName,
+            value: store.data.id_kategori,
+          }"
+          :options-value="{ label: 'category_name', value: 'id' }"
+          load-on-route
+          custom-class="rounded-field"
+          v-if="showCategory && store.transactionId !== null"
         />
         <q-select
           filled
@@ -168,7 +184,6 @@ const $q = useQuasar()
 const showCategory = ref(true)
 
 store.getFundSource()
-store.getCategories()
 
 const onTransactionTypeChanged = (v) => {
   if (v === 'transfer') {
@@ -176,7 +191,9 @@ const onTransactionTypeChanged = (v) => {
   } else {
     showCategory.value = true
     store.data.jenis_transaksi = v
-    store.getCategories()
+    if (store.transactionId === null) {
+      store.getCategories()
+    }
   }
 }
 
@@ -191,13 +208,22 @@ const dateStr = ref(formatDate(new Date()))
 const dateValue = ref(defaultDateValue)
 
 // set initial value
-store.data.tgl_transaksi = defaultDateValue
+// this is only fired when transaction is created
+if (store.transactionId === null) {
+  store.data.tgl_transaksi = defaultDateValue
+}
 
 const datePickerChanged = (val) => {
   dateStr.value = formatDate(new Date(val))
 
   // update transaction date in store
   store.data.tgl_transaksi = val
+}
+
+// this is only fired when transaction is edited
+if (store.transactionId !== null) {
+  onTransactionTypeChanged(store.data.jenis_transaksi)
+  dateStr.value = formatDate(new Date(store.data.tgl_transaksi))
 }
 
 const amountInput = ref(null)
@@ -232,6 +258,9 @@ const onOwnerSelected = (v) => {
 const onFundSelected = (v) => {
   store.getOwnerByFundSource(v.value)
   store.getTargetFunds(v.value)
+  if (store.transactionId === null) {
+    store.getCategories()
+  }
 }
 
 const save = () => {
@@ -245,13 +274,9 @@ const closeForm = () => {
   if (props.mobile) {
     router.push('/transaksi')
   } else {
-    store.showAddForm = false
+    store.showForm = false
   }
 
-  store.fundId = null
-  store.ownerId = null
-  store.destinationFundId = null
-  store.destinationOwnerId = null
   store.resetForm()
 }
 </script>

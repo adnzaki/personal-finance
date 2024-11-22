@@ -7,7 +7,7 @@
         unelevated
         color="primary"
         label="Tambah"
-        @click="store.showAddForm = true"
+        @click="store.showForm = true"
       />
     </div>
 

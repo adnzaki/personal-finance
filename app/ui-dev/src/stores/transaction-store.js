@@ -14,8 +14,7 @@ export const useTransactionStore = defineStore('transaction', {
     baseUrl: 'transaction/',
     error: {},
     current: 1,
-    showAddForm: false,
-    showEditForm: false,
+    showForm: false,
     disableButton: false,
     formTitle: 'Tambah Transaksi',
     transactionId: null,
@@ -24,6 +23,7 @@ export const useTransactionStore = defineStore('transaction', {
     targetOwners: [],
     owners: [],
     categories: [],
+    categoryName: '',
     fundId: null,
     ownerId: null,
     destinationFundId: null,
@@ -47,7 +47,54 @@ export const useTransactionStore = defineStore('transaction', {
     },
   }),
   actions: {
-    getDetail(id, next) {},
+    getDetail(id, next) {
+      api
+        .get(`${this.baseUrl}detail/${id}`, {
+          headers: { Authorization: bearerToken },
+        })
+        .then(({ data }) => {
+          const {
+            id_transaksi,
+            id_sumber_dana,
+            sumber_dana,
+            category_name,
+            nama_tujuan_transfer,
+            ...filteredResponse
+          } = data
+          this.transactionId = data.id_transaksi
+
+          // set selected fund source
+          this.fundId = { label: sumber_dana, value: id_sumber_dana }
+
+          if (data.jenis_transaksi === 'transfer') {
+            this.getTargetFunds(id_sumber_dana, true, data.sumber_dana_tujuan)
+
+            this.destinationFundId = {
+              label: nama_tujuan_transfer.sumber_dana,
+              value: data.sumber_dana_tujuan,
+            }
+
+            this.destinationOwnerId = {
+              label: nama_tujuan_transfer.kepemilikan,
+              value: data.pemilik_dana_tujuan,
+            }
+          }
+
+          // set category name
+          this.categoryName = category_name
+          this.getCategories(data.id_kategori)
+
+          // get fund owner
+          this.getOwnerByFundSource(id_sumber_dana)
+
+          this.data = { ...this.data, ...filteredResponse }
+          this.formTitle = 'Perbarui Transaksi'
+          next()
+        })
+        .catch((error) => {
+          console.error(error)
+        })
+    },
     getTransactions() {
       const limit = 25
       paging().state.rows = limit
@@ -120,6 +167,14 @@ export const useTransactionStore = defineStore('transaction', {
         })
     },
     resetForm() {
+      // ensure that the form is reset to "Add" mode
+      this.transactionId = null
+
+      this.fundId = null
+      this.ownerId = null
+      this.destinationFundId = null
+      this.destinationOwnerId = null
+
       this.error = {}
       this.current = 1
       paging().reloadData()
@@ -133,7 +188,7 @@ export const useTransactionStore = defineStore('transaction', {
         sumber_dana_tujuan: '',
       }
     },
-    getTargetFunds(from) {
+    getTargetFunds(from, skipDefault = false, targetFundId = null) {
       api
         .get(`${this.baseUrl}get-target-funds/${from}`, {
           headers: { Authorization: bearerToken },
@@ -141,16 +196,20 @@ export const useTransactionStore = defineStore('transaction', {
         .then(({ data }) => {
           this.targetFunds = data
           if (data.length > 0) {
-            this.destinationFundId = data[0]
-            this.data.sumber_dana_tujuan = data[0].value
-            this.getTargetOwners(data[0].value)
+            if (!skipDefault) {
+              this.destinationFundId = data[0]
+              this.data.sumber_dana_tujuan = data[0].value
+              this.getTargetOwners(data[0].value)
+            } else {
+              this.getTargetOwners(targetFundId, true)
+            }
           } else {
             this.destinationFundId = null
             this.data.sumber_dana_tujuan = ''
           }
         })
     },
-    getTargetOwners(destinationFundId) {
+    getTargetOwners(destinationFundId, skipDefault = false) {
       api
         .get(`${this.baseUrl}get-owner-by-fund-id/${destinationFundId}`, {
           headers: { Authorization: bearerToken },
@@ -158,15 +217,17 @@ export const useTransactionStore = defineStore('transaction', {
         .then(({ data }) => {
           this.targetOwners = data
           if (data.length > 0) {
-            this.destinationOwnerId = data[0]
-            this.data.pemilik_dana_tujuan = data[0].value
+            if (!skipDefault) {
+              this.destinationOwnerId = data[0]
+              this.data.pemilik_dana_tujuan = data[0].value
+            }
           } else {
             this.destinationFundId = null
             this.data.pemilik_dana_tujuan = ''
           }
         })
     },
-    getCategories() {
+    getCategories(categoryId = null) {
       api
         .get(`${this.baseUrl}get-categories/${this.data.jenis_transaksi}`, {
           headers: { Authorization: bearerToken },
@@ -174,7 +235,13 @@ export const useTransactionStore = defineStore('transaction', {
         .then(({ data }) => {
           this.categories = data
           if (data.length > 0) {
-            this.data.id_kategori = data[0].id
+            if (categoryId === null) {
+              this.data.id_kategori = data[0].id
+              console.log('Kategori default: ' + this.data.id_kategori)
+            } else {
+              this.data.id_kategori = categoryId
+              console.log('Kategori dari detail: ' + categoryId)
+            }
           }
         })
     },

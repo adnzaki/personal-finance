@@ -14,6 +14,18 @@ class Transaction extends BaseController
         $this->model = new TransactionModel;
     }
 
+    public function getDetail($id)
+    {
+        $response = $this->model->getDetail($id);
+        $response->nominal = number_format($response->nominal);
+        $response->id_pemilik_sumber_dana = (int)$response->id_pemilik_sumber_dana;
+        if($response->jenis_transaksi === 'transfer') {
+            $response->nama_tujuan_transfer = $this->model->getDestinationTransferName($response->pemilik_dana_tujuan);
+        }
+
+        return $this->createResponse($response);
+    }
+
     public function getData($sumberDana, $kepemilikan, $jenisTransaksi, $kategori, $tanggal, $limit, $offset, $orderBy, $searchBy, $sort, $search = '')
     {
         $data = $this->model->getData($sumberDana, $kepemilikan, $jenisTransaksi, $kategori, $tanggal, $limit, $offset, $sort, $searchBy, $search);

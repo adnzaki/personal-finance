@@ -1,5 +1,9 @@
 <template>
-  <q-dialog no-backdrop-dismiss v-model="store.showAddForm">
+  <q-dialog
+    no-backdrop-dismiss
+    v-model="store.showForm"
+    @hide="store.resetForm()"
+  >
     <q-card class="q-pa-sm" :style="dialogSize()">
       <q-card-section class="row items-center q-pb-none">
         <div class="text-h6 text-capitalize">{{ store.formTitle }}</div>

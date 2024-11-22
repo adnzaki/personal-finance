@@ -43,10 +43,8 @@ import { ref } from 'vue'
 import { date } from 'quasar'
 import { indonesiaDate } from 'src/composables/utils'
 import { useTransactionStore } from 'src/stores/transaction-store'
-import { usePagingStore } from 'ss-paging-vue'
 
 const store = useTransactionStore()
-const paging = usePagingStore()
 const datePicker = ref(null)
 const dateStr = ref('Filter Tanggal')
 const dateValue = ref(null)

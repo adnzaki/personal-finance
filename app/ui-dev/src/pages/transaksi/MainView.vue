@@ -17,7 +17,7 @@
       </q-card-section>
       <!-- Main content goes here -->
       <DataTable />
-      <AddFormDialog />
+      <FormDialog />
       <!-- <EditFormDialog /> -->
     </q-card>
   </div>
@@ -28,7 +28,7 @@ import { ref } from 'vue'
 import { wrapperPadding, titleSpacing } from 'src/composables/screen.js'
 import ButtonGroup from './ButtonGroup.vue'
 import DataTable from './DataTable.vue'
-import AddFormDialog from './AddFormDialog.vue'
+import FormDialog from './FormDialog.vue'
 import DateFilter from './DateFilter.vue'
 // import EditFormDialog from './EditFormDialog.vue'
 
