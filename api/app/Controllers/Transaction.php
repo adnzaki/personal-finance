@@ -32,7 +32,13 @@ class Transaction extends BaseController
         $totalRows = $this->model->getTotalRows($sumberDana, $kepemilikan, $jenisTransaksi, $kategori, $tanggal, $searchBy, $search);
 
         foreach($data as $d) {
-            $d->nominal = 'Rp. '.number_format($d->nominal);
+            $nominal = 'Rp. '.number_format($d->nominal);
+            if($d->jenis_transaksi === 'expense') {
+                $d->nominal = '-'.$nominal;
+            } else {
+                $d->nominal = '+'.$nominal;
+            }
+            
             $transactionDate = explode(' ', $d->tgl_transaksi)[0];
             $d->tgl_transaksi = os_date()->create($transactionDate);
             $d->tgl_transaksi_dayOnly = substr(os_date()->create($transactionDate, 'd-m-y', '/'), 0, 2);
