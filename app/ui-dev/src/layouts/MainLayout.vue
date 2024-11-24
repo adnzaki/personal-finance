@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="hHh Lpr lff">
+  <q-layout view="hHh Lpr lFf">
     <q-header elevated :reveal="$q.screen.lt.sm ? true : false">
       <q-toolbar>
         <q-btn
