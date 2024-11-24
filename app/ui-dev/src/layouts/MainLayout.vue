@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
+  <q-layout view="hHh Lpr lff">
     <q-header elevated :reveal="$q.screen.lt.sm ? true : false">
       <q-toolbar>
         <q-btn
@@ -55,12 +55,12 @@
       </q-tabs>
     </q-footer>
 
-    <q-drawer v-model="leftDrawerOpen" show-if-above bordered>
+    <q-drawer v-model="leftDrawerOpen" class="q-mt-md" show-if-above bordered>
       <q-list class="q-px-sm">
-        <q-item-label header>
+        <!-- <q-item-label header>
           Halo, <strong>{{ userName }}</strong
           >!
-        </q-item-label>
+        </q-item-label> -->
 
         <EssentialLink
           v-for="link in linksList"
