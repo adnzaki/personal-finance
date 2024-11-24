@@ -29,7 +29,7 @@ const apiPort = ''
 
 const uiPort = ':9200'
 
-const mode = 'production' // development, build, production
+const mode = 'development' // development, build, production
 
 // ------ WARNING! Do not touch below this line ------
 /**
