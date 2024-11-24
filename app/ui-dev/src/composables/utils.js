@@ -1,3 +1,5 @@
+import colors from './color-pallete'
+
 export const formatter = (numberFormat, options) => {
   return new Intl.NumberFormat(numberFormat, options)
 }
@@ -8,6 +10,10 @@ export const formatDecimal = (value) =>
 export const validateNumber = (val) => {
   const regex = /^\d+(,\d+)*$/
   return regex.test(val)
+}
+
+export function getRandomColor() {
+  return colors[Math.floor(Math.random() * colors.length)]
 }
 
 export const indonesiaDate = {

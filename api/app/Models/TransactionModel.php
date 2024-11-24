@@ -26,6 +26,21 @@ class TransactionModel extends Connector
         $this->defaultFilter = [$this->transaksi . '.deleted' => 0, $this->sumberDana . '.user_id' => auth()->id()];
     }
 
+    public function getTransactionByCategory($categoryType)
+    {
+        $select = "id_kategori, category_name, CONCAT('Rp. ', REPLACE(FORMAT(SUM(nominal), 0), ',', '.')) AS total_nominal, COUNT(*) AS jumlah_transaksi";
+        $query = $this->builder->select($select)
+                               ->join($this->kategori, $this->kategori . '.id = ' . $this->transaksi . '.id_kategori')
+                               ->join($this->pemilikSumberDana, $this->pemilikSumberDana . '.id = ' . $this->transaksi . '.id_pemilik_sumber_dana')
+                               ->join($this->sumberDana, $this->sumberDana . '.id = ' . $this->pemilikSumberDana . '.id_sumber_dana')
+                               ->where($this->defaultFilter)
+                               ->where(['category_type' => $categoryType])
+                               ->groupBy('id_kategori')
+                               ->orderBy('total_nominal', 'DESC');
+                               
+        return $query->get()->getResult();
+    }
+
     public function getDetail($id) 
     {
         $field = "$this->transaksi.id as id_transaksi, $this->sumberDana.id as id_sumber_dana, nama as sumber_dana, id_pemilik_sumber_dana, category_name, sumber_dana_tujuan, pemilik_dana_tujuan, jenis_transaksi, tgl_transaksi, deskripsi, nominal, id_kategori";

@@ -39,6 +39,17 @@ class FundModel extends Connector
         return $query->getNumRows() > 0 ? $query->getResult() : null;
     }
 
+    public function getBiggestFunds(): array
+    {
+        $query = $this->builder->select('id, nama, jumlah_dana')
+                               ->join($this->pemilikSumberDana, $this->sumberDana . '.id = ' . $this->pemilikSumberDana . '.id_sumber_dana')
+                               ->where([$this->pemilikSumberDana . '.deleted' => 0, 'user_id' => auth()->id()])
+                               ->orderBy('jumlah_dana', 'DESC')
+                               ->limit(3);
+
+        return $query->get()->getResult();
+    }
+
     public function getData(int $limit, int $offset, string $sort = 'ASC', string $search = ''): array
     {
         $field = 'nama';
@@ -58,7 +69,7 @@ class FundModel extends Connector
     public function getDaftarKepemilikan(int $idSumberDana): array
     {
         $query = $this->builder
-                    ->select($this->pemilikSumberDana . '.id as value, kepemilikan as label, kepemilikan')
+                    ->select($this->pemilikSumberDana . '.id as value, kepemilikan as label, jumlah_dana, kepemilikan')
                     ->join($this->pemilikSumberDana, $this->sumberDana . '.id = ' . $this->pemilikSumberDana . '.id_sumber_dana')
                     ->join($this->kepemilikan, $this->pemilikSumberDana . '.id_kepemilikan = ' . $this->kepemilikan . '.id')
                     ->where($this->sumberDana . '.id', $idSumberDana)

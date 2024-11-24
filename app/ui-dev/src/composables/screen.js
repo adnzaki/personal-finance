@@ -12,6 +12,10 @@ const wrapperPadding = () => {
   return Screen.lt.sm ? '' : 'q-pa-md'
 }
 
+const dashboardWrapperPadding = () => {
+  return Screen.lt.sm ? '' : 'q-pa-xs'
+}
+
 const checkColWidth = () => {
   return Screen.lt.sm ? 'decrease-col-size' : ''
 }
@@ -33,6 +37,7 @@ export {
   dialogSize,
   checkColWidth,
   wrapperPadding,
+  dashboardWrapperPadding,
   menuWidth,
   titleSpacing,
   dense,

@@ -1,14 +1,33 @@
 <template>
-  <q-page class="flex flex-center">
-    <img
-      alt="Quasar logo"
-      src="~assets/main-logo.png"
-      style="width: 200px; height: 200px"
+  <div class="q-pa-md">
+    <greetings-text />
+    <fund-balance />
+    <transaction-recap
+      :data="store.transactions.expense"
+      icon="o_payments"
+      title="Pengeluaran"
     />
-  </q-page>
+    <transaction-recap
+      :data="store.transactions.income"
+      icon="o_account_balance_wallet"
+      title="Pemasukan"
+    />
+    <!-- <transaction-recap
+      :data="store.transactions.transfer"
+      icon="label_important_outline"
+      title="Transfer"
+    /> -->
+  </div>
 </template>
 
 <script setup>
+import GreetingsText from './dashboard/GreetingsText.vue'
+import FundBalance from './dashboard/FundBalance.vue'
+import TransactionRecap from './dashboard/TransactionRecap.vue'
+import { useDashboardStore } from 'src/stores/dashboard-store'
+
+const store = useDashboardStore()
+store.getTransactionByCategory()
 defineOptions({
   name: 'IndexPage',
 })
