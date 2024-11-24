@@ -175,15 +175,16 @@ const closeForm = () => {
     router.push('/sumber-dana')
   } else {
     store.showEditForm = false
-    store.fundId = null
+  }
 
-    store.data = {
-      nama: '',
-      kepemilikan: [],
-      ownerName: '',
-      ownerId: null,
-      balance: 0,
-    }
+  store.fundId = null
+
+  store.data = {
+    nama: '',
+    kepemilikan: [],
+    ownerName: '',
+    ownerId: null,
+    balance: 0,
   }
 }
 </script>
