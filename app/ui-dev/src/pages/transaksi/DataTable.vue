@@ -19,7 +19,11 @@
           </q-item-section>
           <q-item-section>
             {{ item.deskripsi }}
-            <q-item-label caption>{{ item.nominal }}</q-item-label>
+            <q-item-label
+              caption
+              :class="['text-' + amountColor(item.jenis_transaksi)]"
+              >{{ item.nominal }}</q-item-label
+            >
             <q-item-label caption>
               <q-badge
                 color="primary"
@@ -106,6 +110,16 @@ const getDetail = (id) => {
       store.showForm = true
     }
   })
+}
+
+const amountColor = (transactionType) => {
+  const colors = {
+    income: 'green-7',
+    expense: 'black',
+    transfer: 'black',
+  }
+
+  return colors[transactionType]
 }
 
 const data = computed(() => paging.state.data)
