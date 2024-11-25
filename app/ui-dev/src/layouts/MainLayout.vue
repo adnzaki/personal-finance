@@ -23,7 +23,7 @@
       >
         <q-route-tab
           name="dashboard"
-          class="text-capitalize"
+          :class="activeClass('dashboard')"
           icon="r_dashboard"
           to="/dashboard"
         />
@@ -31,25 +31,25 @@
         <q-route-tab
           to="/sumber-dana"
           name="sumber-dana"
-          class="text-capitalize"
+          :class="activeClass('sumber-dana')"
           icon="r_storage"
         />
         <q-route-tab
           to="/transaksi"
           name="transaksi"
-          class="text-capitalize main-feature"
+          :class="['main-feature', activeClass('transaksi')]"
           icon="r_sync_alt"
         />
         <q-route-tab
           to="/kepemilikan"
           name="kepemilikan"
-          class="text-capitalize"
+          :class="activeClass('kepemilikan')"
           icon="r_groups"
         />
         <q-route-tab
           to="/pengaturan"
           name="pengaturan"
-          class="text-capitalize"
+          :class="activeClass('pengaturan')"
           icon="r_settings"
         />
       </q-tabs>
@@ -91,6 +91,9 @@ defineOptions({
 const $q = useQuasar()
 
 const activeMobileMenu = ref('dashboard')
+
+const activeClass = (menu) =>
+  menu === activeMobileMenu.value ? 'text-primary' : ''
 
 const linksList = [
   {
