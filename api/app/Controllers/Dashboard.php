@@ -17,9 +17,13 @@ class Dashboard extends BaseController
 
     public function getTransactionByCategory()
     {
-        $income = $this->transactionModel->getTransactionByCategory('income');
-        $expense = $this->transactionModel->getTransactionByCategory('expense');
-        $transfer = $this->transactionModel->getTransactionByCategory('transfer');
+        $date = getdate();
+        $date1 = $date['year'] . '-' . $date['mon'] . '-01';
+        $date2 = $date['year'] . '-' . $date['mon'] . '-' . os_date()->daysInMonth($date['mon'], $date['year']);
+
+        $income = $this->transactionModel->getTransactionByCategory('income', $date1, $date2);
+        $expense = $this->transactionModel->getTransactionByCategory('expense', $date1, $date2);
+        $transfer = $this->transactionModel->getTransactionByCategory('transfer', $date1, $date2);
 
         $data = [
             'income' => $income,

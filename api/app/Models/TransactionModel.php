@@ -26,7 +26,7 @@ class TransactionModel extends Connector
         $this->defaultFilter = [$this->transaksi . '.deleted' => 0, $this->sumberDana . '.user_id' => auth()->id()];
     }
 
-    public function getTransactionByCategory($categoryType)
+    public function getTransactionByCategory($categoryType, $date1, $date2)
     {
         $select = "id_kategori, category_name, CONCAT('Rp. ', REPLACE(FORMAT(SUM(nominal), 0), ',', '.')) AS total_nominal, COUNT(*) AS jumlah_transaksi";
         $query = $this->builder->select($select)
@@ -35,6 +35,10 @@ class TransactionModel extends Connector
                                ->join($this->sumberDana, $this->sumberDana . '.id = ' . $this->pemilikSumberDana . '.id_sumber_dana')
                                ->where($this->defaultFilter)
                                ->where(['category_type' => $categoryType])
+                               ->where([
+                                   'tgl_transaksi >= ' => $date1 . ' 00:00:00',
+                                   'tgl_transaksi <= ' => $date2 . ' 23:59:59'
+                               ])
                                ->groupBy('id_kategori')
                                ->orderBy('total_nominal', 'DESC');
                                
