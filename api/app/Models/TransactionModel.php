@@ -77,12 +77,16 @@ class TransactionModel extends Connector
         $amount = (int)$transactionDetail->nominal;
         $ownerId = (int)$transactionDetail->id_pemilik_sumber_dana;
         $ownerBalance = $this->getBalance($ownerId);
-        $this->fundOwner->update(['jumlah_dana' => $ownerBalance + $amount], ['id' => $ownerId]);
+        
         if($transactionDetail->jenis_transaksi === 'transfer') {
             // Return the balance of receiver
             $receiverId = (int)$transactionDetail->pemilik_dana_tujuan;
             $receiverBalance = $this->getBalance($receiverId);
             $this->fundOwner->update(['jumlah_dana' => $receiverBalance - $amount], ['id' => $receiverId]);
+        } else if($transactionDetail->jenis_transaksi === 'income') {
+            $this->fundOwner->update(['jumlah_dana' => $ownerBalance - $amount], ['id' => $ownerId]);
+        } else {
+            $this->fundOwner->update(['jumlah_dana' => $ownerBalance + $amount], ['id' => $ownerId]);
         }
     }
 
