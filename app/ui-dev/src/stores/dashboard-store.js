@@ -11,7 +11,10 @@ import { Cookies, Notify, Dialog } from 'quasar'
 export const useDashboardStore = defineStore('dashboard', {
   state: () => ({
     baseUrl: 'dashboard/',
-    biggestFunds: [],
+    biggestFunds: {
+      funds: [],
+      rows: 0,
+    },
     transactions: {
       expense: [],
       income: [],

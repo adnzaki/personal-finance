@@ -1,5 +1,5 @@
 <template>
-  <div class="row q-col-gutter-sm">
+  <div class="row q-col-gutter-sm" v-if="store.biggestFunds.funds.length > 0">
     <div
       v-for="(item, index) in store.biggestFunds.funds"
       :key="index"

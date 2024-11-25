@@ -5,12 +5,12 @@
     <transaction-recap
       :data="store.transactions.expense"
       icon="o_payments"
-      title="Pengeluaran"
+      title="Pengeluaran Bulan Ini"
     />
     <transaction-recap
       :data="store.transactions.income"
       icon="o_account_balance_wallet"
-      title="Pemasukan"
+      title="Pemasukan Bulan Ini"
     />
     <!-- <transaction-recap
       :data="store.transactions.transfer"
