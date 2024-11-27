@@ -4,32 +4,53 @@ class UserManager extends BaseController
 {
     private $model;
 
+    private $message = ['status' => 'failed', 'message' => 'You are not authorized to access this feature.'];
+
     public function __construct()
     {
         $this->model = new \App\Models\UserModel();
     }
 
     public function createUser()
-    {
-        $data = $this->request->getPost(['username', 'email', 'password']);
-        $this->model->create($data);
-
-        return $this->response->setJSON(['status' => 'success']);
+    {       
+        if($this->validateUser()) {
+            $data = $this->request->getPost(['username', 'email', 'password']);
+            $this->model->create($data);
+    
+            return $this->response->setJSON(['status' => 'success']);
+        } else {
+            return $this->response->setJSON($this->message);
+        }
     }
 
     public function updateUser()
     {
-        $data = $this->request->getPost(['username', 'email', 'password']);
-        $this->model->update($data);
-
-        return $this->response->setJSON(['status' => 'success']);
+        if ($this->validateUser()) {
+            $data = $this->request->getPost(['username', 'email', 'password']);
+            $this->model->update($data);
+    
+            return $this->response->setJSON(['status' => 'success']);
+        } else {
+            return $this->response->setJSON($this->message);
+        }
     }
 
     public function deleteUser()
     {
-        $email = $this->request->getPost('email');
-        $this->model->deleteUser($email);    
+        if ($this->validateUser()) {
+            $email = $this->request->getPost('email');
+            $this->model->deleteUser($email);    
+    
+            return $this->response->setJSON(['status' => 'success']);
+        } else {
+            return $this->response->setJSON($this->message);
+        }
+    }
 
-        return $this->response->setJSON(['status' => 'success']);
+    private function validateUser()
+    {
+        $credentials = $this->request->getPost(['dev_username', 'dev_password']);
+
+        return $credentials['dev_username'] === env('dev_username') && $credentials['dev_password'] === env('dev_password');
     }
 }

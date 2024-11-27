@@ -24,10 +24,16 @@
                 outlined
                 v-model="password"
                 label="Password"
-                type="password"
                 @keyup.enter="validate"
                 class="rounded-field"
-              />
+                :type="showPassword ? 'text' : 'password'"
+                ><template v-slot:append>
+                  <q-icon
+                    :name="showPassword ? 'visibility_off' : 'visibility'"
+                    class="cursor-pointer"
+                    @click="showPassword = !showPassword"
+                  /> </template
+              ></q-input>
             </div>
             <!-- <q-checkbox
               color="primary"
@@ -82,6 +88,8 @@ const showMsg = ref(false)
 const msg = ref('')
 const msgClass = ref('black')
 const cardMobileSize = computed(() => ($q.screen.lt.sm ? 'col-12 q-ml-sm' : ''))
+
+const showPassword = ref(false)
 
 const validate = () => {
   msg.value = ''

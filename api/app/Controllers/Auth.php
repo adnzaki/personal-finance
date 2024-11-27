@@ -4,6 +4,7 @@ header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Headers: Authorization, Content-type');
 
 use App\Models\AuthModel;
+use App\Models\UserModel;
 
 class Auth extends BaseController
 {
@@ -14,12 +15,68 @@ class Auth extends BaseController
         $this->model = new AuthModel();    
     }
 
+    public function updatePassword()
+    {
+        if(valid_access()) {
+            $validation = $this->formValidation();
+            $data = $this->request->getPost(array_keys($validation->rules));
+    
+            if(! $this->validateData($data, $validation->rules, $validation->messages)) {
+                return $this->response->setJSON([
+                    'code'  => 500,
+                    'msg'   => $this->validator->getErrors(),
+                ]);
+            } else {
+                $credentials = [
+                    'username' => auth()->user()->username,
+                    'password' => $data['oldPassword']
+                ];
+    
+                $loginAttempt = auth('session')->attempt($credentials);
+                if ($loginAttempt->isOK()) {
+                    $userModel = new UserModel;
+                    $fillUser = [
+                        'username' => auth()->user()->username,
+                        'email' => auth()->user()->email,
+                        'password' => $data['newPassword']
+                    ];
+    
+                    $userModel->update($fillUser);
+    
+                    return $this->response->setJSON([
+                        'code'  => 200,
+                        'msg'   => 'Password berhasil diubah',
+                    ]);
+                } else {
+                    return $this->response->setJSON([
+                        'code'  => 503,
+                        'msg'   => 'Password lama yang anda masukkan salah.',
+                    ]);
+                }
+            }
+        }
+    }
+
+    public function formValidation()
+    {
+        $rules = [
+            'oldPassword'   => ['label' => 'password saat ini', 'rules' => 'required'],
+            'newPassword'   => ['label' => 'password baru', 'rules' => 'required'],
+            'confirmNewPassword'   => ['label' => 'konfirmasi password', 'rules' => 'required|matches[newPassword]']
+        ];
+        
+        $messages = [
+            'oldPassword'   => ['required' => $this->messages['required']],
+            'newPassword'   => ['required' => $this->messages['required']],
+            'confirmNewPassword'   => ['required' => $this->messages['required'], 'matches' => $this->messages['matches']]
+        ];
+
+        return (object)['rules' => $rules, 'messages' => $messages];
+    }
+
     public function validateLogin()
     {
-        $credentials = [
-            'username'  => $this->request->getPost('username'),
-            'password'  => $this->request->getPost('password')
-        ];
+        $credentials = $this->request->getPost(['username', 'password']);
 
         // $rememberMe = $this->request->getPost('rememberMe') === 1 ? true : false;
 

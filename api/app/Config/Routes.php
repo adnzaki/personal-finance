@@ -46,6 +46,10 @@ $routes->group('user', function (RouteCollection $routes) {
     $routes->post('delete', 'UserManager::deleteUser');
 });
 
+$routes->group('settings', function (RouteCollection $routes) {
+    $routes->add('update-password', 'Auth::updatePassword');
+});
+
 $routes->group('dashboard', function (RouteCollection $routes) {
     $routes->add('get-biggest-funds', 'Dashboard::getBiggestFunds');
     $routes->add('get-transaction-by-category', 'Dashboard::getTransactionByCategory');
