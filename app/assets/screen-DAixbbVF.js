@@ -1,1 +1,0 @@
-import{aA as t}from"./index-BGCzdZDW.js";const r=()=>t.lt.sm?"":"q-mt-md",s=()=>t.lt.sm?"":"q-pa-md",e=()=>t.lt.sm?"":"q-pa-xs",n=()=>t.lt.sm?{}:{width:"700px",maxWidth:"80vw"},d=()=>!t.lt.sm;export{e as a,n as b,d,r as t,s as w};
