@@ -57,6 +57,7 @@
       color="primary"
       class="btn-w95 save-btn q-mb-md mobile-only"
       :label="btnLabel"
+      @click="store.updatePassword()"
     />
   </q-card-actions>
   <q-card-actions align="left" class="q-ml-sm">
@@ -73,7 +74,6 @@
 import { useSettingStore } from 'src/stores/setting-store'
 import { useQuasar } from 'quasar'
 import { ref } from 'vue'
-import { rules } from 'eslint-config-prettier'
 
 const store = useSettingStore()
 const $q = useQuasar()
