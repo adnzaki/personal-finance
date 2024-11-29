@@ -23,11 +23,11 @@ class UserManager extends BaseController
         }
     }
 
-    public function updateUser()
+    public function updateUser($id = null)
     {
         if ($this->validateUser()) {
             $data = $this->request->getPost(['username', 'email', 'password']);
-            $this->model->update($data);
+            $this->model->update($data, $id);
     
             return $this->response->setJSON(['status' => 'success']);
         } else {

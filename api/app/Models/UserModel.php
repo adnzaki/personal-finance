@@ -23,12 +23,17 @@ class UserModel
         $users->addToDefaultGroup($user);
     }
 
-    public function update(array $data)
+    public function update(array $data, $id)
     {
         // Get the User Provider (UserModel by default)
         $users = auth()->getProvider();
 
-        $user = $users->findByCredentials(['email' => $data['email']]);
+        if($id === null) {
+            $user = $users->findById(auth()->id());
+        } else {
+            $user = $users->findById($id);
+        }
+
         $user->fill([
             'username' => $data['username'],
             'email'    => $data['email'],

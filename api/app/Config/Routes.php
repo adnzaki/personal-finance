@@ -43,6 +43,7 @@ $routes->group('transaction', function (RouteCollection $routes) {
 $routes->group('user', function (RouteCollection $routes) {
     $routes->post('create', 'UserManager::createUser');
     $routes->post('update', 'UserManager::updateUser');
+    $routes->post('update/(:any)', 'UserManager::updateUser/$1');
     $routes->post('delete', 'UserManager::deleteUser');
 });
 
