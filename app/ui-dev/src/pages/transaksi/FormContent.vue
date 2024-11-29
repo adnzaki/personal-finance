@@ -193,6 +193,8 @@ const onTransactionTypeChanged = (v) => {
     store.data.jenis_transaksi = v
     if (store.transactionId === null) {
       store.getCategories()
+    } else {
+      store.getCategories(store.data.id_kategori)
     }
   }
 }

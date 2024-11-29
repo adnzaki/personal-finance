@@ -80,14 +80,15 @@ export const useTransactionStore = defineStore('transaction', {
             }
           }
 
-          // set category name
-          this.categoryName = category_name
-          this.getCategories(data.id_kategori)
-
           // get fund owner
           this.getOwnerByFundSource(id_sumber_dana)
 
           this.data = { ...this.data, ...filteredResponse }
+
+          // set category name
+          this.categoryName = category_name
+          this.getCategories(data.id_kategori)
+
           this.formTitle = 'Perbarui Transaksi'
           next()
         })
