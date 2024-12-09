@@ -1,7 +1,7 @@
 <template>
   <q-layout view="hHh lpR fFf" class="login-layout">
     <q-page-container>
-      <div class="q-pa-md q-mt-xl row items-start q-gutter-md">
+      <div class="q-pa-md q-mt-lg row items-start q-gutter-md">
         <q-card
           :class="[
             'login-card col-md-4 col-sm-8 offset-md-4 offset-sm-2',
@@ -9,8 +9,15 @@
           ]"
         >
           <q-card-section>
+            <div class="text-center q-mb-md">
+              <q-img
+                src="main-logo.png"
+                alt="SisaUang Logo"
+                style="max-width: 100px; max-height: 100px; margin: auto"
+              />
+            </div>
             <div class="text-h6 text-center">
-              Login <strong>SisaUang</strong>
+              Login ke <strong>SisaUang</strong>
             </div>
             <div class="q-gutter-lg q-mt-lg">
               <q-input
