@@ -71,7 +71,7 @@ const routes = [
     component: () => import('layouts/LoginPage.vue'),
     beforeEnter: () => validatePage(true),
   },
-  // { path: '/register', component: () => import('layouts/RegisterPage.vue') },
+  { path: '/register', component: () => import('layouts/RegisterPage.vue') },
 
   // Always leave this as last one,
   // but you can also remove it

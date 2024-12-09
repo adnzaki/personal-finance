@@ -23,7 +23,7 @@ class UserModel
         $users->addToDefaultGroup($user);
     }
 
-    public function update(array $data, $id)
+    public function update(array $data, $id = null)
     {
         // Get the User Provider (UserModel by default)
         $users = auth()->getProvider();

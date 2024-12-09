@@ -37,16 +37,16 @@
         class="rounded-field"
         label="Konfirmasi Password Baru"
         lazy-rules
-        :type="showConfirmPassword ? 'text' : 'password'"
+        :type="showNewPassword ? 'text' : 'password'"
         :rules="[
           (val) => !!val || 'Silakan konfirmasi password baru terlebih dahulu',
           (val) => val === store.data.newPassword || 'Password tidak sama',
         ]"
         ><template v-slot:append>
           <q-icon
-            :name="showConfirmPassword ? 'visibility_off' : 'visibility'"
+            :name="showNewPassword ? 'visibility_off' : 'visibility'"
             class="cursor-pointer"
-            @click="showConfirmPassword = !showConfirmPassword"
+            @click="showNewPassword = !showNewPassword"
           /> </template
       ></q-input>
     </q-form>

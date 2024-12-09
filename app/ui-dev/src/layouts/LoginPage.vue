@@ -58,6 +58,14 @@
               class="full-width q-mt-xl custom-round"
               @click="validate"
             />
+            <p class="q-mt-xl">
+              Belum punya akun? Daftar
+              <strong
+                ><a class="link-style" :href="conf.registerUrl()"
+                  >di sini</a
+                ></strong
+              >
+            </p>
 
             <!-- <q-btn
               color="blue"
@@ -73,6 +81,12 @@
     </q-page-container>
   </q-layout>
 </template>
+
+<style lang="sass" scoped>
+.link-style
+  text-decoration: none
+  color: $primary
+</style>
 
 <script setup>
 import { ref, computed } from 'vue'
@@ -106,6 +120,7 @@ const validate = () => {
       password: password.value,
     }
 
+    msgClass.value = 'black'
     msg.value = 'Memroses autentikasi...'
     api
       .post('validate-login', postData, {

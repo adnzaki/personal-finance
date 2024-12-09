@@ -26,6 +26,11 @@ export default {
       ? `${uiPath()}#/login`
       : `${uiPath()}app/#/login`
   },
+  registerUrl: () => {
+    return mode === 'development'
+      ? `${uiPath()}#/register`
+      : `${uiPath()}app/#/register`
+  },
 
   host,
   uiPath,
