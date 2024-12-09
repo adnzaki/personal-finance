@@ -3,7 +3,7 @@
     <q-card class="content-card q-pb-sm">
       <q-card-section>
         <div class="text-subtitle1 text-uppercase">
-          {{ store.addFormTitle }}
+          {{ store.formTitle }}
         </div>
       </q-card-section>
 
