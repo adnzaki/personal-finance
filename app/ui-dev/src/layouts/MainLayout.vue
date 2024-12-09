@@ -67,7 +67,7 @@
           :key="link.title"
           v-bind="link"
         />
-        <q-item>
+        <q-item class="q-mt-md">
           <logout-btn />
         </q-item>
       </q-list>

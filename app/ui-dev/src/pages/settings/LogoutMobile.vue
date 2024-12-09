@@ -1,5 +1,5 @@
 <template>
-  <q-card class="content-card q-mt-lg">
+  <!-- <q-card class="content-card q-mt-lg">
     <q-card-section>
       <div class="text-subtitle1 text-uppercase q-mb-sm" v-if="$q.screen.lt.sm">
         {{ cardTitle }}
@@ -13,8 +13,22 @@
         <logout-btn class="mobile-only" />
       </div>
     </q-card-section>
-  </q-card>
+  </q-card> -->
+  <q-page-container>
+    <div class="q-px-md row items-start logout-mobile">
+      <logout-btn class="mobile-only" />
+    </div>
+  </q-page-container>
 </template>
+
+<style lang="sass" scoped>
+@media (max-width: $breakpoint-xs-max)
+  .logout-mobile
+    .q-btn
+      padding-top: 12px !important
+      padding-bottom: 12px !important
+      border-radius: 1.5rem !important
+</style>
 
 <script setup>
 import { titleSpacing } from 'src/composables/screen'
