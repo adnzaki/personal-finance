@@ -166,7 +166,7 @@
 </template>
 <script setup>
 import { onMounted, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, onBeforeRouteLeave } from 'vue-router'
 import { date, useQuasar } from 'quasar'
 import { useTransactionStore } from 'stores/transaction-store'
 import { indonesiaDate, validateNumber } from 'src/composables/utils'
@@ -198,6 +198,11 @@ const onTransactionTypeChanged = (v) => {
     }
   }
 }
+
+onBeforeRouteLeave((to, from, next) => {
+  store.data.jenis_transaksi = 'expense'
+  next()
+})
 
 const dateModelFormat = 'YYYY-MM-DD HH:mm'
 const defaultDateValue = date.formatDate(new Date(), dateModelFormat)
