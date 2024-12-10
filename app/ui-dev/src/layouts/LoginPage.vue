@@ -104,7 +104,6 @@ const $q = useQuasar()
 
 const username = ref('')
 const password = ref('')
-const rememberMe = ref(true)
 const showMsg = ref(false)
 const msg = ref('')
 const msgClass = ref('black')

@@ -21,7 +21,7 @@
 </template>
 
 <script setup>
-const signInWithGoogle = () => {
-  window.gapi.auth2.getAuthInstance().signIn()
-}
+// const signInWithGoogle = () => {
+//   window.gapi.auth2.getAuthInstance().signIn()
+// }
 </script>

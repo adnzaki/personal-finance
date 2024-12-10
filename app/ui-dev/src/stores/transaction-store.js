@@ -6,7 +6,7 @@ import {
   bearerToken,
   createFormData,
 } from 'src/router/http'
-import { Cookies, Notify, Dialog } from 'quasar'
+import { Notify, Dialog } from 'quasar'
 import { usePagingStore as paging } from 'ss-paging-vue'
 
 export const useTransactionStore = defineStore('transaction', {
@@ -61,7 +61,7 @@ export const useTransactionStore = defineStore('transaction', {
             nama_tujuan_transfer,
             ...filteredResponse
           } = data
-          this.transactionId = data.id_transaksi
+          this.transactionId = id_transaksi
 
           // set selected fund source
           this.fundId = { label: sumber_dana, value: id_sumber_dana }

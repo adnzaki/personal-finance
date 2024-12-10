@@ -72,14 +72,11 @@
 
 <script setup>
 import { useSettingStore } from 'src/stores/setting-store'
-import { useQuasar } from 'quasar'
 import { ref } from 'vue'
 
 const store = useSettingStore()
-const $q = useQuasar()
 const showPassword = ref(false)
 const showNewPassword = ref(false)
-const showConfirmPassword = ref(false)
 
 const btnLabel = ref('Ganti Password')
 </script>
