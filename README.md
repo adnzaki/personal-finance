@@ -4,7 +4,7 @@ A simple personal finance manager application
 ## Dev Installation
 
 ### Database Config
-Before running API installation, make sure you have created a database named "sisa-uang" and it has been set in <strong>.env</strong> file. Skipping this step will make database migration fail to run. 
+Before running API installation, make sure you have created a database named `sisa-uang` and it has been set in <strong>.env</strong> file. Skipping this step will make database migration fail to run. 
 
 ### API
 - Go to `/api` folder
@@ -20,6 +20,26 @@ composer install
 ```bash
 php spark migrate --all
 ```
+- Run seeder to insert pre-filled data
+```bash
+php spark db:seed AllSeeder
+```
+SisaUang also supports running migration and seeder via API endpoint for production use:
+```php
+/api/public/run-command
+```
+And provide the following POST parameters:
+```json
+{
+    "command": "migrate --all or db:seed AllSeeder",
+    "username": "the_developer_username",
+    "password": "the developer password"
+}
+```
+
+
+
+
 
 
 ### User Interface
