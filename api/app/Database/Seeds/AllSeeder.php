@@ -11,5 +11,6 @@ class AllSeeder extends Seeder
         $this->call('CategorySeeder');
         $this->call('AddCategoryValues');
         $this->call('AddMoreCategories');
+        $this->call('AddMoreCategories2');
     }
 }
