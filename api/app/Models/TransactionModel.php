@@ -316,7 +316,7 @@ class TransactionModel extends Connector
 
     private function search(string $searchBy, string $search)
     {
-        $field = "{$this->transaksi}.id, $this->sumberDana.id as id_sumber_dana, $this->sumberDana.nama as sumber_dana, id_pemilik_sumber_dana, kepemilikan as nama_pemilik, jenis_transaksi, tgl_transaksi, deskripsi, nominal, id_kategori, category_name, $this->transaksi.modified";
+        $field = "{$this->transaksi}.id, $this->sumberDana.id as id_sumber_dana, $this->sumberDana.nama as sumber_dana, id_pemilik_sumber_dana, kepemilikan as nama_pemilik, pemilik_dana_tujuan, jenis_transaksi, tgl_transaksi, deskripsi, nominal, id_kategori, category_name, $this->transaksi.modified";
         $select = $this->builder->select($field)
                                 ->join($this->pemilikSumberDana, $this->pemilikSumberDana . '.id = ' . $this->transaksi . '.id_pemilik_sumber_dana')
                                 ->join($this->sumberDana, $this->sumberDana . '.id = ' . $this->pemilikSumberDana . '.id_sumber_dana')
