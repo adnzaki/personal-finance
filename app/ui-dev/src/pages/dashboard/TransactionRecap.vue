@@ -34,11 +34,10 @@
 
 <script setup>
 import { dashboardWrapperPadding } from 'src/composables/screen'
-import { ref } from 'vue'
 
-const props = defineProps({
+defineProps({
   data: {
-    type: String,
+    type: Array,
     required: true,
   },
   title: {

@@ -79,7 +79,7 @@ export default {
         }
       }
 
-      return new Promise((resolve, reject) => setTimeout(resolve, 500))
+      return new Promise((resolve) => setTimeout(resolve, 500))
     }
 
     getList().then(async () => {
@@ -109,7 +109,7 @@ export default {
     return {
       options,
       model,
-      filterFn(val, update, abort) {
+      filterFn(val, update) {
         update(() => {
           const needle = val.toLowerCase()
           options.value = stringOptions.value.filter((v) => {

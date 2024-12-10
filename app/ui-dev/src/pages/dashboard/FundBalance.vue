@@ -47,7 +47,6 @@
   padding-bottom: 10px
 </style>
 <script setup>
-import { getRandomColor } from 'src/composables/utils'
 import { useDashboardStore } from 'src/stores/dashboard-store'
 
 const store = useDashboardStore()

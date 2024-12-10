@@ -110,7 +110,7 @@
 <script setup>
 import { useFundStore } from 'stores/fund-store'
 import { useRouter } from 'vue-router'
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed } from 'vue'
 import { useQuasar } from 'quasar'
 import { formatDecimal, validateNumber } from 'src/composables/utils'
 import { formatNumeral } from 'cleave-zen'

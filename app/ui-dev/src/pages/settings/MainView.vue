@@ -18,7 +18,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import { wrapperPadding, titleSpacing } from 'src/composables/screen'
+import { wrapperPadding } from 'src/composables/screen'
 import ChangePassword from './ChangePassword.vue'
 import LogoutMobile from './LogoutMobile.vue'
 

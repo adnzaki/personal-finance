@@ -1,12 +1,5 @@
 import { defineStore } from 'pinia'
-import {
-  api,
-  conf,
-  timeout,
-  bearerToken,
-  createFormData,
-} from 'src/router/http'
-import { Cookies, Notify, Dialog } from 'quasar'
+import { api, bearerToken } from 'src/router/http'
 
 export const useDashboardStore = defineStore('dashboard', {
   state: () => ({
