@@ -24,7 +24,7 @@ import { errorNotif } from '../composables/notify'
 import { usePagingStore } from 'ss-paging-vue'
 import { dense } from '../composables/screen'
 
-const props = defineProps({
+defineProps({
   label: {
     type: String,
   },

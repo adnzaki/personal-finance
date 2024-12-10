@@ -30,9 +30,4 @@
       border-radius: 1.5rem !important
 </style>
 
-<script setup>
-import { titleSpacing } from 'src/composables/screen'
-import { ref } from 'vue'
-
-const cardTitle = ref('Akun')
-</script>
+<script setup></script>

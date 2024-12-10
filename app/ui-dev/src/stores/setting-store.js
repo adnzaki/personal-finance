@@ -1,12 +1,6 @@
 import { defineStore } from 'pinia'
-import {
-  api,
-  conf,
-  timeout,
-  bearerToken,
-  createFormData,
-} from 'src/router/http'
-import { Notify, Dialog } from 'quasar'
+import { api, timeout, bearerToken, createFormData } from 'src/router/http'
+import { Notify } from 'quasar'
 
 export const useSettingStore = defineStore('setting', {
   state: () => ({

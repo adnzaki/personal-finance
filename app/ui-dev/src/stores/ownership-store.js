@@ -6,7 +6,7 @@ import {
   bearerToken,
   createFormData,
 } from 'src/router/http'
-import { Cookies, Notify, Dialog } from 'quasar'
+import { Notify, Dialog } from 'quasar'
 import { usePagingStore as paging } from 'ss-paging-vue'
 
 export const useOwnershipStore = defineStore('ownership', {

@@ -42,7 +42,7 @@ import { conf } from 'src/router/http'
 import { errorNotif } from 'src/composables/notify'
 import { usePagingStore } from 'ss-paging-vue'
 
-const props = defineProps({
+defineProps({
   modelValue: [Number, String],
   rangeWidth: {
     type: String,

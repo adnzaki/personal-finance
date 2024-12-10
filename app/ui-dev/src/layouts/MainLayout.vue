@@ -124,7 +124,7 @@ const linksList = [
 ]
 
 const leftDrawerOpen = ref(false)
-const userName = localStorage.getItem('username')
+// const userName = localStorage.getItem('username')
 
 function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value
