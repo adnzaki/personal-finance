@@ -35,8 +35,11 @@ class Transaction extends BaseController
             $nominal = 'Rp. '.number_format($d->nominal);
             if($d->jenis_transaksi === 'expense') {
                 $d->nominal = '-'.$nominal;
-            } else {
+            } else if($d->jenis_transaksi === 'income') {
                 $d->nominal = '+'.$nominal;
+            } else if($d->jenis_transaksi === 'transfer') {
+                $d->nominal = $nominal;
+                $d->sumber_dana .= ' → '.$this->model->getDestinationTransferName($d->pemilik_dana_tujuan)->sumber_dana;
             }
             
             $transactionDate = explode(' ', $d->tgl_transaksi)[0];
