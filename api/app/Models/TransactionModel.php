@@ -94,7 +94,6 @@ class TransactionModel extends Connector
     {
         // Get the fund source details for the given source fund ID
         $fundOwnerId = (int)$data['id_pemilik_sumber_dana'];
-        
         $currentBalance = $this->getBalance($fundOwnerId);
         $params = ['id' => $fundOwnerId];
 
@@ -111,18 +110,26 @@ class TransactionModel extends Connector
         if ($id === null) {
             if ($data['jenis_transaksi'] === 'transfer') {
 
+                $this->db->transStart();
+                
                 // Update the target fund by increasing its amount with the transaction nominal
                 $this->fundOwner->update(['jumlah_dana' => $destinationBalance + $amount], ['id' => $destinationFundId]);
+                $note = 'Event: [Insert]. Log Untuk: [Saldo Tujuan]. Jenis transaksi: [' . $data['jenis_transaksi'] . ']. ID Transaksi belum tersedia.';
+                $this->addBalanceLogs($destinationFundId, $destinationBalance, $destinationBalance + $amount, $amount, $id, $note);
 
                 // Update the source fund by decreasing its amount with the transaction nominal
                 $this->fundOwner->update(['jumlah_dana' => $currentBalance - $amount], $params);
+                $note = 'Event: [Insert]. Log Untuk: [Saldo Asal]. Jenis transaksi: [' . $data['jenis_transaksi'] . ']. ID Transaksi belum tersedia.';
+                $this->addBalanceLogs($fundOwnerId, $currentBalance, $currentBalance - $amount, $amount, $id, $note);
+
+                $this->db->transComplete();
 
                 // override category for transfer type
                 $data['id_kategori'] = $this->categoryBuilder->getWhere(['deleted' => 0, 'category_type' => 'transfer'])->getResult()[0]->id;
             } else if ($data['jenis_transaksi'] === 'income') {
                 $this->fundOwner->update(['jumlah_dana' => $currentBalance + $amount], $params);
             } else if ($data['jenis_transaksi'] === 'expense') {
-                $this->fundOwner->update(['jumlah_dana' => $currentBalance - $amount], $params);
+                $this->fundOwner->update(['jumlah_dana' => $currentBalance - $amount], $params);  
             }
 
             $transactionData[] = [
@@ -131,7 +138,12 @@ class TransactionModel extends Connector
                 'newBalance' => $currentBalance - $amount,
             ];
 
-            $this->builder->insert($data);            
+            $insertID = $this->builder->insert($data); 
+            if($data['jenis_transaksi'] !== 'transfer') {
+                $note = 'Event: [Insert]' . ' Jenis transaksi: [' . $data['jenis_transaksi'] . ']';
+                $newBalance = $data['jenis_transaksi'] === 'income' ? $currentBalance + $amount : $currentBalance - $amount;
+                $this->addBalanceLogs($fundOwnerId, $currentBalance, $newBalance, $amount, $insertID, $note);
+            }     
         } else {
             $previousTransaction = $this->getDetail($id);
             
@@ -150,6 +162,8 @@ class TransactionModel extends Connector
             if($previousFundOwner !== $fundOwnerId) {
                 $newAmount = $amount;
                 $this->fundOwner->update(['jumlah_dana' => $previousOwnerBalance + $previousAmount], ['id' => $previousFundOwner]);
+                $note = 'Event: [Update]. Ket: Saldo dikembalikan karena mengganti sumber dana. ID Transaksi: [' . $id . ']';
+                $this->addBalanceLogs($previousFundOwner, $previousOwnerBalance, $previousOwnerBalance + $previousAmount, $previousAmount, $id, $note);
             } else {
                 $newAmount = $difference;
             }
@@ -168,10 +182,13 @@ class TransactionModel extends Connector
                     // return the balance of previous destination ID before the transaction
                     $previousDestinationBalance = $this->fundOwner->getWhere(['id' => $previousDestinationId])->getResult()[0]->jumlah_dana;
                     $this->fundOwner->update(['jumlah_dana' => $previousDestinationBalance - $previousAmount], ['id' => $previousDestinationId]);
+                    $note = 'Event: [Update]. Ket: Saldo dikembalikan karena mengganti tujuan transfer';
+                    $this->addBalanceLogs($previousDestinationId, $previousDestinationBalance, $previousDestinationBalance - $previousAmount, $previousAmount, $id, $note);
                 }
 
                 // Update the destination fund ID balance by increasing its amount with the transaction nominal
                 $this->fundOwner->update(['jumlah_dana' => $destinationBalance + $newAmount], ['id' => $destinationFundId]);
+                $note = 'Event: [Update]. Log Untuk: [Saldo Sumber Dana yang ditransfer]';
 
                 if($previousFundOwner === $fundOwnerId) {
                     $newAmount = $difference;
@@ -179,6 +196,9 @@ class TransactionModel extends Connector
                 
                 // Update the source fund ID balance by decreasing its amount with the transaction nominal
                 $this->fundOwner->update(['jumlah_dana' => $currentBalance - $newAmount], $params);
+                $note = 'Event: [Update]. Log Untuk: [Saldo Pemilik Sumber Dana]';
+
+                $this->addBalanceLogs($fundOwnerId, $currentBalance, $currentBalance - $newAmount, $newAmount, $id, $note);
 
                 // override category for transfer type
                 $data['id_kategori'] = $this->categoryBuilder->getWhere(['deleted' => 0, 'category_type' => 'transfer'])->getResult()[0]->id;
@@ -190,6 +210,11 @@ class TransactionModel extends Connector
 
             // Update the transaction data
             $this->builder->update($data, ['id' => $id]);
+            if ($data['jenis_transaksi'] !== 'transfer') {
+                $note = 'Event: [Update]' . ' Jenis transaksi: [' . $data['jenis_transaksi'] . ']';
+                $newBalance = $data['jenis_transaksi'] === 'income' ? $currentBalance + $amount : $currentBalance - $amount;
+                $this->addBalanceLogs($fundOwnerId, $currentBalance, $newBalance, $amount, $id, $note);
+            }  
 
             $transactionData[] = [
                 'previousTransaction' => $previousTransaction,
@@ -198,6 +223,27 @@ class TransactionModel extends Connector
         }
 
         return $transactionData;
+    }
+
+    public function addBalanceLogs(
+        $fundOwnerId,
+        $previousBalance,
+        $newBalance,
+        $amount,
+        $id,
+        $note,
+    )
+    {
+        $this->db->table('fund_audit_logs')->insert([
+            'user_id' => auth()->id(),
+            'fund_owner_id' => $fundOwnerId,
+            'previous_balance' => $previousBalance,
+            'new_balance' => $newBalance,
+            'amount' => $amount,
+            'transaction_id' => $id,
+            'note' => $note,
+            'timestamp' => date('Y-m-d H:i:s'),
+        ]);
     }
 
     public function getBalance($ownerId)
