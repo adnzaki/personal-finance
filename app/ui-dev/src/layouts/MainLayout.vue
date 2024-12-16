@@ -9,7 +9,7 @@
           icon="menu"
           aria-label="Menu"
           @click="toggleLeftDrawer"
-          class="mobile-hide"
+          v-if="$q.screen.gt.xs"
         />
 
         <q-toolbar-title> SisaUang </q-toolbar-title>
@@ -115,6 +115,11 @@ const linksList = [
     title: 'Transaksi',
     icon: 'r_sync_alt',
     link: '/transaksi',
+  },
+  {
+    title: 'Kategori',
+    icon: 'r_category',
+    link: '/kategori',
   },
   {
     title: 'Pengaturan',

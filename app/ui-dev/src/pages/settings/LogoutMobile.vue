@@ -16,7 +16,7 @@
   </q-card> -->
   <q-page-container>
     <div class="q-px-md row items-start logout-mobile">
-      <logout-btn class="mobile-only" />
+      <logout-btn />
     </div>
   </q-page-container>
 </template>

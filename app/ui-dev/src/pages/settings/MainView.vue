@@ -10,17 +10,23 @@
         </div>
       </q-card-section>
       <!-- Main content goes here -->
-      <change-password />
+      <change-password v-if="$q.screen.gt.xs" />
+      <settings-menu v-else />
     </q-card>
-    <logout-mobile class="mobile-only" />
+    <logout-mobile v-if="$q.screen.lt.sm" />
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { computed } from 'vue'
 import { wrapperPadding } from 'src/composables/screen'
 import ChangePassword from './ChangePassword.vue'
 import LogoutMobile from './LogoutMobile.vue'
+import SettingsMenu from './SettingsMenu.vue'
+import { useQuasar } from 'quasar'
 
-const cardTitle = ref('Ubah Password')
+const $q = useQuasar()
+const cardTitle = computed(() => {
+  return $q.screen.lt.sm ? 'Pengaturan' : 'Ubah Password'
+})
 </script>
