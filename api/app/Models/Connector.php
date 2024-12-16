@@ -40,17 +40,25 @@ class Connector
     /**
      * @var string
      */
-    protected $kategori = 'tb_kategori';
+    protected $kategori = 'tb_kategori_user';
+
+    /**
+     * @var string
+     */
+    protected $settings = 'tb_settings';
 
     /**
      * @var array
      */
     protected $basicFilter = [];
 
+    protected $settingBuilder;
+
 
     public function __construct()
     {
         $this->db = db_connect();
         $this->basicFilter = ['deleted' => 0, 'user_id' => auth()->id()];
+        $this->settingBuilder = $this->db->table($this->settings);
     }
 }

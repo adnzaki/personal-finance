@@ -75,9 +75,39 @@ const routes = [
         ],
       },
       {
+        path: 'kategori',
+        children: [
+          {
+            path: '',
+            component: () => import('pages/kategori/MainView.vue'),
+            beforeEnter: () => validatePage(),
+          },
+          {
+            path: 'add',
+            component: () => import('pages/kategori/AddFormPage.vue'),
+            beforeEnter: () => validatePage(),
+          },
+          {
+            path: 'edit',
+            component: () => import('pages/kategori/EditFormPage.vue'),
+            beforeEnter: () => validatePage(),
+          },
+        ],
+      },
+      {
         path: 'pengaturan',
-        component: () => import('pages/settings/MainView.vue'),
-        beforeEnter: () => validatePage(),
+        children: [
+          {
+            path: '',
+            component: () => import('pages/settings/MainView.vue'),
+            beforeEnter: () => validatePage(),
+          },
+          {
+            path: 'reset-password',
+            component: () => import('pages/settings/ResetPassword.vue'),
+            beforeEnter: () => validatePage(),
+          },
+        ],
       },
     ],
   },
