@@ -25,6 +25,7 @@
               color="primary"
               icon="r_edit"
               @click="getDetail(item.id)"
+              :disable="disable(item.is_default)"
             />
           </q-item-section>
           <q-item-section side>
@@ -34,6 +35,7 @@
               color="primary"
               icon="r_delete_outline"
               @click="store.deleteCategory(item.id)"
+              :disable="disable(item.is_default)"
             />
           </q-item-section>
         </q-item>
