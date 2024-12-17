@@ -81,12 +81,18 @@ class CategoryModel extends Connector
 
     public function update(array $data, int $id): void
     {
-        $this->builder->update($data, ['id' => $id]);
+        $detail = $this->getDetail($id);
+        if((int)$detail->user_id !== (int)$this->defaultUserCategory) {
+            $this->builder->update($data, ['id' => $id]);
+        }
     }
 
     public function delete(int $id): bool
     {
-        return $this->builder->update(['deleted' => 1], ['id' => $id]);
+        $detail = $this->getDetail($id);
+        if ((int)$detail->user_id !== (int)$this->defaultUserCategory) {
+            return $this->builder->update(['deleted' => 1], ['id' => $id]);
+        }
     }
 
     public function getDefaultCategorySetting(): object
