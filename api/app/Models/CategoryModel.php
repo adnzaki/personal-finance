@@ -8,6 +8,8 @@ class CategoryModel extends Connector
 
     public $defaultUserCategory;
 
+    public $defaultCategorySettingKey;
+
     public function __construct()
     {
         parent::__construct();
@@ -15,11 +17,18 @@ class CategoryModel extends Connector
         $user = auth()->getProvider()->findByCredentials(['username' => 'default_category']);
         $this->defaultUserCategory = $user->id;
         $this->basicFilter = array_merge($this->basicFilter, ['category_type !=' => 'transfer']);
+
+        $this->defaultCategorySettingKey = 'hide_default_category-user_id_' . auth()->id();
     }
 
     public function updateDefaultCategoryVisibility(int $value): void
     {
-        $this->settingBuilder->update(['value' => $value], ['key' => 'hide_default_category']);   
+        $defaultCategorySetting = $this->getDefaultCategorySetting()->exists;
+        if(!$defaultCategorySetting) {
+            $this->settingBuilder->insert(['key' => $this->defaultCategorySettingKey, 'value' => $value]);
+        } else {
+            $this->settingBuilder->update(['value' => $value], ['key' => $this->defaultCategorySettingKey]);   
+        }
     }
 
     public function getDetail(int $id)
@@ -30,7 +39,7 @@ class CategoryModel extends Connector
     public function getData(int $limit, int $offset, string $search = '', ?string $categoryType = null): array
     {
         $query = $this->search('category_name', $search);
-        $hideDefault = $this->getDefaultCategorySetting();
+        $hideDefault = $this->getDefaultCategorySetting()->value;
         if($hideDefault === 1) {
             $query->where($this->basicFilter);
         } else {
@@ -52,7 +61,7 @@ class CategoryModel extends Connector
     public function getTotalRows(string $search = ''): int
     {
         $query = $this->search('category_name', $search);
-        $hideDefault = $this->getDefaultCategorySetting();
+        $hideDefault = $this->getDefaultCategorySetting()->value;
         if ($hideDefault === 1) {
             $query->where($this->basicFilter);
         } else {
@@ -80,9 +89,20 @@ class CategoryModel extends Connector
         return $this->builder->update(['deleted' => 1], ['id' => $id]);
     }
 
-    public function getDefaultCategorySetting(): int
+    public function getDefaultCategorySetting(): object
     {
-        return $this->settingBuilder->getWhere(['key' => 'hide_default_category'])->getResult()[0]->value;
+        $query = $this->settingBuilder->getWhere(['key' => $this->defaultCategorySettingKey]);
+        if($query->getNumRows() > 0) {
+            return (object)[
+                'exists' => true,
+                'value' => (int)$query->getResult()[0]->value
+            ];
+        } else {
+            return (object)[
+                'exists' => false,
+                'value' => 1
+            ];
+        }
     }
 
     private function search(string $searchBy, string $search)
