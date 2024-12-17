@@ -55,16 +55,18 @@
   <q-card-actions align="center">
     <q-btn
       color="primary"
-      class="btn-w95 save-btn q-mb-md mobile-only"
+      class="btn-w95 save-btn q-mb-md"
       :label="btnLabel"
+      v-if="$q.screen.lt.sm"
       @click="store.updatePassword()"
     />
   </q-card-actions>
   <q-card-actions align="left" class="q-ml-sm">
     <q-btn
       color="primary"
-      class="save-btn q-mb-md mobile-hide"
+      class="save-btn q-mb-md"
       :label="btnLabel"
+      v-if="$q.screen.gt.xs"
       @click="store.updatePassword()"
     />
   </q-card-actions>

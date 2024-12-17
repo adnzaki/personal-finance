@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Models\TransactionModel;
+use App\Models\CategoryModel;
 
 class Transaction extends BaseController
 {
@@ -126,7 +127,9 @@ class Transaction extends BaseController
 
     public function getCategories($type)
     {
-        return $this->createResponse($this->model->getCagories($type));
+        $model = new CategoryModel;
+        $categories = $model->getData(9999, 0, '', $type);
+        return $this->createResponse($categories);
     }
 
     public function getOwnerByFundId($fundId)

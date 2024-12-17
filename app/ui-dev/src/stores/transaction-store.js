@@ -229,6 +229,7 @@ export const useTransactionStore = defineStore('transaction', {
       this.ownerId = null
       this.destinationFundId = null
       this.destinationOwnerId = null
+      this.categories = []
 
       this.error = {}
       this.current = 1
