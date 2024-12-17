@@ -77,7 +77,7 @@ class Category extends BaseController
     public function getDefaultCategorySetting()
     {
         return $this->createResponse([
-            'hideDefault' => $this->model->getDefaultCategorySetting()
+            'hideDefault' => $this->model->getDefaultCategorySetting()->value
         ]);
     }
 
