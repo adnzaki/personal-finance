@@ -33,8 +33,8 @@
       </q-card-section>
       <!-- Main content goes here -->
       <DataTable />
-      <!-- <AddFormDialog />
-      <EditFormDialog /> -->
+      <AddFormDialog />
+      <EditFormDialog />
     </q-card>
   </div>
 </template>
@@ -44,8 +44,8 @@ import { ref } from 'vue'
 import { wrapperPadding, titleSpacing } from 'src/composables/screen'
 import ButtonGroup from './ButtonGroup.vue'
 import DataTable from './DataTable.vue'
-// import AddFormDialog from './AddFormDialog.vue'
-// import EditFormDialog from './EditFormDialog.vue'
+import AddFormDialog from './AddFormDialog.vue'
+import EditFormDialog from './EditFormDialog.vue'
 
 const cardTitle = ref('Kategori')
 </script>

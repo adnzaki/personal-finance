@@ -22,7 +22,12 @@ class CategoryModel extends Connector
         $this->settingBuilder->update(['value' => $value], ['key' => 'hide_default_category']);   
     }
 
-    public function getData(int $limit, int $offset, string $orderBy, string $sort = 'ASC', string $search = ''): array
+    public function getDetail(int $id)
+    {
+        return $this->builder->getWhere(['id' => $id])->getResult()[0];
+    }
+
+    public function getData(int $limit, int $offset, string $search = '', ?string $categoryType = null): array
     {
         $query = $this->search('category_name', $search);
         $hideDefault = $this->getDefaultCategorySetting();
@@ -31,6 +36,10 @@ class CategoryModel extends Connector
         } else {
             $query->where(['deleted' => 0, 'category_type !=' => 'transfer'])
             ->whereIn('user_id', [$this->defaultUserCategory, auth()->id()]);
+        }
+
+        if($categoryType !== null) {
+            $query->where(['category_type' => $categoryType]);
         }
         
         $userOrder = $this->defaultUserCategory > auth()->id() ? 'ASC' : 'DESC';

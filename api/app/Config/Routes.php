@@ -29,13 +29,13 @@ $routes->group('fund', function (RouteCollection $routes) {
 });
 
 $routes->group('category', function (RouteCollection $routes) {
+    $routes->add('save', 'Category::save');
+    $routes->add('save/(:any)', 'Category::save/$1');
+    $routes->add('update-default-visibility', 'Category::updateDefaultCategoryVisibility');
     $routes->add('get-data/(:any)/(:any)/(:any)/(:any)/(:any)', 'Category::getData/$1/$2/$3/$4/$5');
     $routes->add('get-data/(:any)/(:any)/(:any)/(:any)/(:any)/(:any)', 'Category::getData/$1/$2/$3/$4/$5/$6');
-    $routes->add('save', 'Category::save');
-    $routes->add('update-default-visibility', 'Category::updateDefaultCategoryVisibility');
     $routes->add('get-default-category-setting', 'Category::getDefaultCategorySetting');
-    $routes->add('save/(:any)', 'Category::save/$1');
-    $routes->add('detail/(:any)', 'Category::getDetail/$1');
+    $routes->add('detail/(:num)', 'Category::getDetail/$1');
     $routes->add('delete/(:any)', 'Category::delete/$1');
 });
 

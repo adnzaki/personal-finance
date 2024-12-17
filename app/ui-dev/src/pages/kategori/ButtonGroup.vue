@@ -30,7 +30,7 @@
         icon="add"
         class="custom-round"
         color="primary"
-        to="/sumber-dana/add"
+        to="/kategori/add"
       />
     </q-page-sticky>
   </div>
