@@ -1,11 +1,5 @@
 import { defineStore } from 'pinia'
-// import {
-//   api,
-//   conf,
-//   timeout,
-//   bearerToken,
-//   createFormData,
-// } from 'src/router/http'
+import { api, bearerToken } from 'src/router/http'
 import { date, Screen } from 'quasar'
 // import { usePagingStore as paging } from 'ss-paging-vue'
 import { indonesiaDate } from 'src/composables/utils'
@@ -18,10 +12,38 @@ export const useStatisticStore = defineStore('statistic', {
       value: 'monthly',
     },
     dateRange: Date.now(),
-    datePicker: null,
     dateRangeText: '',
+    totalIncome: 0,
+    totalExpense: 0,
+    biggestTransaction: {
+      response: [],
+      category: [],
+      totalTransaction: [],
+    },
   }),
   actions: {
+    getBiggestTransactionByCategory() {
+      api
+        .get(
+          `${this.baseUrl}get-biggest-transaction-by-category/${this.dateRange}`,
+          {
+            headers: { Authorization: bearerToken },
+          },
+        )
+        .then(({ data }) => {
+          this.biggestTransaction = data
+        })
+    },
+    getTotalIncomeExpense() {
+      api
+        .get(`${this.baseUrl}get-total-income-expense/${this.dateRange}`, {
+          headers: { Authorization: bearerToken },
+        })
+        .then(({ data }) => {
+          this.totalIncome = data.total_income
+          this.totalExpense = data.total_expense
+        })
+    },
     setDateRange() {
       if (this.range.value === 'daily') {
         this.dateRangeText = this.formatDateStr(this.dateRange)

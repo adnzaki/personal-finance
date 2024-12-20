@@ -18,11 +18,9 @@
 </style>
 
 <script setup>
-import { useQuasar } from 'quasar'
 import { useStatisticStore } from 'src/stores/statistic-store'
 
 const store = useStatisticStore()
-const $q = useQuasar()
 
 const options = [
   {
@@ -57,6 +55,8 @@ const onRangeSelected = (model) => {
     store.dateRange = store.dateRange.split('_')[0]
   }
   store.setDateRange()
+  store.getTotalIncomeExpense()
+  store.getBiggestTransactionByCategory()
 }
 
 onRangeSelected(store.range)

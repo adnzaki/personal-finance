@@ -34,15 +34,11 @@
 
 <script setup>
 import { ref } from 'vue'
-import { date } from 'quasar'
-import { indonesiaDate } from 'src/composables/utils'
 import { useStatisticStore } from 'src/stores/statistic-store'
 
 const store = useStatisticStore()
 const datePicker = ref(null)
 const dateStr = ref('Rentang Tanggal')
-const dateValue = ref(null)
-const formatDate = (val) => date.formatDate(val, 'DD-MMM-YYYY', indonesiaDate)
 
 const onDatePickerChanged = (val) => {
   if (val.from !== undefined && val.to !== undefined) {
@@ -54,14 +50,9 @@ const onDatePickerChanged = (val) => {
     store.dateRange = val.replace(/\//g, '-')
     store.dateRangeText = store.formatDateStr(val)
   }
-}
 
-const reset = () => {
-  dateValue.value = null
-  dateStr.value = 'Rentang Tanggal'
-  store.dateRange = 'all'
-  datePicker.value = null
-  //store.getTransactions()
+  store.getTotalIncomeExpense()
+  store.getBiggestTransactionByCategory()
 }
 
 // const save = () => {

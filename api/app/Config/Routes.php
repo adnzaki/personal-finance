@@ -52,6 +52,11 @@ $routes->group('transaction', function (RouteCollection $routes) {
     $routes->add('delete/(:any)', 'Transaction::delete/$1');
 });
 
+$routes->group('statistic', function (RouteCollection $routes) {
+    $routes->add('get-total-income-expense/(:any)', 'Statistic::getTotalIncomeExpense/$1');
+    $routes->add('get-biggest-transaction-by-category/(:any)', 'Statistic::getBiggestTransactionByCategory/$1');
+});
+
 $routes->group('user', function (RouteCollection $routes) {
     $routes->post('create', 'UserManager::createUser');
     $routes->post('update', 'UserManager::updateUser');

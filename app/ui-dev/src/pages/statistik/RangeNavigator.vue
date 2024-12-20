@@ -144,7 +144,6 @@ const navigateYear = (navType) => {
 }
 
 const moveTo = (navType) => {
-  const numberOfDays = ref(0)
   if (store.range.value === 'daily') {
     navigateDay(1)
   } else if (store.range.value === 'weekly') {
@@ -154,5 +153,8 @@ const moveTo = (navType) => {
   } else if (store.range.value === 'yearly') {
     navigateYear(navType)
   }
+
+  store.getTotalIncomeExpense()
+  store.getBiggestTransactionByCategory()
 }
 </script>

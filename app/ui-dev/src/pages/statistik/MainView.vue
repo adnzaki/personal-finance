@@ -44,6 +44,8 @@
       </q-card-section>
       <!-- Main content goes here -->
       <RangeNavigator />
+      <TotalIncomeExpense />
+      <BiggestCategoryExpense />
     </q-card>
   </div>
 </template>
@@ -55,6 +57,8 @@ import RangeType from './RangeType.vue'
 import DateFilter from './DateFilter.vue'
 import { useStatisticStore } from 'src/stores/statistic-store'
 import RangeNavigator from './RangeNavigator.vue'
+import TotalIncomeExpense from './TotalIncomeExpense.vue'
+import BiggestCategoryExpense from './BiggestCategoryExpense.vue'
 
 const store = useStatisticStore()
 
