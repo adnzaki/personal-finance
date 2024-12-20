@@ -12,7 +12,7 @@
                 color="white"
                 text-color="black"
                 ><strong class="q-ml-xs">
-                  {{ store.totalIncome }}</strong
+                  {{ store.totalIncome || 'Rp. -' }}</strong
                 ></q-badge
               >
             </div>
@@ -29,7 +29,7 @@
                 color="white"
                 text-color="black"
                 ><strong class="q-ml-xs">
-                  {{ store.totalExpense }}</strong
+                  {{ store.totalExpense || 'Rp. -' }}</strong
                 ></q-badge
               >
             </div>
