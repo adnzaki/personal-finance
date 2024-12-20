@@ -41,10 +41,10 @@
           icon="r_sync_alt"
         />
         <q-route-tab
-          to="/kepemilikan"
-          name="kepemilikan"
-          :class="activeClass('kepemilikan')"
-          icon="r_groups"
+          to="/statistik"
+          name="statistik"
+          :class="activeClass('statistik')"
+          icon="r_equalizer"
         />
         <q-route-tab
           to="/pengaturan"
@@ -120,6 +120,11 @@ const linksList = [
     title: 'Kategori',
     icon: 'r_category',
     link: '/kategori',
+  },
+  {
+    title: 'Statistik',
+    icon: 'r_equalizer',
+    link: '/statistik',
   },
   {
     title: 'Pengaturan',

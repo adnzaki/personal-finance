@@ -18,7 +18,6 @@
       <!-- Main content goes here -->
       <DataTable />
       <FormDialog />
-      <!-- <EditFormDialog /> -->
     </q-card>
   </div>
 </template>
@@ -30,7 +29,6 @@ import ButtonGroup from './ButtonGroup.vue'
 import DataTable from './DataTable.vue'
 import FormDialog from './FormDialog.vue'
 import DateFilter from './DateFilter.vue'
-// import EditFormDialog from './EditFormDialog.vue'
 
 const cardTitle = ref('Transaksi')
 </script>
