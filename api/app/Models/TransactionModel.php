@@ -4,15 +4,15 @@ namespace App\Models;
 
 class TransactionModel extends Connector
 {
-    private $builder; // for tb_transaksi
+    protected $builder; // for tb_transaksi
 
-    private $categoryBuilder;
+    protected $categoryBuilder;
 
-    private $fundOwner;
+    protected $fundOwner;
 
-    public $fundModel; // FundingModel
+    protected $fundModel; // FundingModel
 
-    private $defaultFilter;
+    protected $defaultFilter;
 
     public function __construct()
     {

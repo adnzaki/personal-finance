@@ -8,6 +8,13 @@
 
         <q-item-section>Kategori</q-item-section>
       </q-item>
+      <q-item clickable v-ripple to="/kepemilikan">
+        <q-item-section avatar>
+          <q-icon name="r_groups" />
+        </q-item-section>
+
+        <q-item-section>Kepemilikan</q-item-section>
+      </q-item>
 
       <q-item clickable v-ripple to="/pengaturan/reset-password">
         <q-item-section avatar>

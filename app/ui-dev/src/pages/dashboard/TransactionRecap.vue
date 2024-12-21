@@ -18,7 +18,12 @@
           separator
           v-if="data.length > 0"
         >
-          <q-item clickable v-for="(item, index) in data" :key="index">
+          <q-item
+            clickable
+            v-for="(item, index) in data"
+            to="/statistik"
+            :key="index"
+          >
             <q-item-section avatar><q-icon :name="icon" /></q-item-section>
             <q-item-section>
               <q-item-label>{{ item.category_name }}</q-item-label>

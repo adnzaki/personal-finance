@@ -95,6 +95,16 @@ const routes = [
         ],
       },
       {
+        path: 'statistik',
+        children: [
+          {
+            path: '',
+            component: () => import('pages/statistik/MainView.vue'),
+            beforeEnter: () => validatePage(),
+          },
+        ],
+      },
+      {
         path: 'pengaturan',
         children: [
           {
