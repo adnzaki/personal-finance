@@ -107,6 +107,12 @@ const routes = [
             component: () => import('pages/statistik/kategori/MainView.vue'),
             beforeEnter: () => validatePage(),
           },
+          {
+            path: 'kategori/transaksi',
+            component: () =>
+              import('pages/statistik/kategori/TransactionList.vue'),
+            beforeEnter: () => validatePage(),
+          },
         ],
       },
       {

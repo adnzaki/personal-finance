@@ -9,7 +9,12 @@
           separator
           v-if="expense.length > 0"
         >
-          <q-item clickable v-for="(item, index) in expense" :key="index">
+          <q-item
+            clickable
+            v-for="(item, index) in expense"
+            :key="index"
+            @click="viewTransactions(item.id_kategori)"
+          >
             <q-item-section avatar><q-icon name="o_payments" /></q-item-section>
             <q-item-section>
               <q-item-label>{{ item.category_name }}</q-item-label>
@@ -28,7 +33,12 @@
           separator
           v-if="income.length > 0"
         >
-          <q-item clickable v-for="(item, index) in income" :key="index">
+          <q-item
+            clickable
+            v-for="(item, index) in income"
+            :key="index"
+            @click="viewTransactions(item.id_kategori)"
+          >
             <q-item-section avatar><q-icon name="o_payments" /></q-item-section>
             <q-item-section>
               <q-item-label>{{ item.category_name }}</q-item-label>
@@ -44,13 +54,20 @@
 </template>
 
 <script setup>
-import { useStatisticStore } from 'src/stores/statistic-store'
 import { computed } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
+import { useStatisticStore } from 'src/stores/statistic-store'
+import { useTransactionStore } from 'src/stores/transaction-store'
 
 const store = useStatisticStore()
+const transactionStore = useTransactionStore()
 const route = useRoute()
+const router = useRouter()
 
+const viewTransactions = (id) => {
+  transactionStore.filter.category = id
+  router.push('/statistik/kategori/transaksi')
+}
 store.getAllTransactionByCategory(route.params.dateRange)
 const income = computed(() => store.allTransactions.income)
 const expense = computed(() => store.allTransactions.expense)
