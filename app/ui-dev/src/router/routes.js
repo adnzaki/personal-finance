@@ -102,6 +102,11 @@ const routes = [
             component: () => import('pages/statistik/MainView.vue'),
             beforeEnter: () => validatePage(),
           },
+          {
+            path: 'kategori/:dateRange',
+            component: () => import('pages/statistik/kategori/MainView.vue'),
+            beforeEnter: () => validatePage(),
+          },
         ],
       },
       {

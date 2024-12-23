@@ -20,7 +20,7 @@
           <q-btn
             flat
             label="Lihat Detail"
-            to="/transaksi"
+            :to="`/statistik/kategori/${store.dateRange}`"
             class="save-btn btn-w100 q-my-md see-more"
             color="primary"
           />

@@ -20,8 +20,21 @@ export const useStatisticStore = defineStore('statistic', {
       category: [],
       totalTransaction: [],
     },
+    allTransactions: {
+      income: [],
+      expense: [],
+    },
   }),
   actions: {
+    getAllTransactionByCategory(dateRange) {
+      api
+        .get(`${this.baseUrl}get-all-transaction-by-category/${dateRange}`, {
+          headers: { Authorization: bearerToken },
+        })
+        .then(({ data }) => {
+          this.allTransactions = data
+        })
+    },
     getBiggestTransactionByCategory() {
       api
         .get(

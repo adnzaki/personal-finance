@@ -11,6 +11,26 @@ class Statistic extends BaseController
         $this->model = new StatisticModel;
     }
 
+    public function getAllTransactionByCategory($dateRange)
+    {
+        if (strpos($dateRange, '_') !== false) {
+            $date = explode('_', $dateRange);
+            $date1 = $date[0];
+            $date2 = $date[1];
+        } else {
+            $date1 = $dateRange;
+            $date2 = $dateRange;
+        }
+
+        $income = $this->model->getAllTransactionByCategory($date1, $date2, 'income', 100);
+        $expense = $this->model->getAllTransactionByCategory($date1, $date2, 'expense', 100);
+
+        return $this->createResponse([
+            'income' => $income,
+            'expense' => $expense
+        ]);
+    }
+
     public function getBiggestTransactionByCategory($dateRange)
     {
         if(strpos($dateRange, '_') !== false) {
@@ -22,7 +42,7 @@ class Statistic extends BaseController
             $date2 = $dateRange;
         }
 
-        $response = $this->model->getBiggestTransactionByCategory($date1, $date2);
+        $response = $this->model->getAllTransactionByCategory($date1, $date2, 'expense', 5);
         $categoryName = array_column($response, 'category_name');
         $totalTransaction = array_column($response, 'total_transaksi');
 
