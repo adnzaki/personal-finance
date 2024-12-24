@@ -1,12 +1,12 @@
 <template>
-  <div class="q-pb-md" style="margin-top: -30px">
+  <div class="q-pb-md" :style="{ marginTop: navWrapper }">
     <div class="row">
       <div class="col-2 col-sm-1 text-center prev-bg">
         <q-btn
           color="primary"
           class="custom-round prev-btn"
-          flat
           size="lg"
+          flat
           icon="keyboard_arrow_left"
           @click="moveTo('prev')"
           :disable="store.range.value === 'custom'"
@@ -18,9 +18,9 @@
       <div class="col-2 col-sm-1 text-center next-bg">
         <q-btn
           color="primary"
-          class="custom-round"
-          flat
+          class="custom-round next-btn"
           size="lg"
+          flat
           icon="keyboard_arrow_right"
           @click="moveTo('next')"
           :disable="store.range.value === 'custom'"
@@ -32,7 +32,9 @@
 <style lang="sass" scoped>
 @media(max-width: $breakpoint-sm-min)
   .prev-btn
-    margin-left: -5px
+    margin-left: 2px
+  .next-btn
+    margin-left: -8px
 .prev-bg
   // background-color: $positive
 .next-bg
@@ -43,10 +45,12 @@
 
 <script setup>
 import { useStatisticStore } from 'src/stores/statistic-store'
-import { date } from 'quasar'
-import { ref } from 'vue'
+import { date, useQuasar } from 'quasar'
+import { ref, computed } from 'vue'
 
 const store = useStatisticStore()
+const $q = useQuasar()
+const navWrapper = computed(() => ($q.screen.lt.sm ? '0' : '-30px'))
 
 const navigateDay = (numberOfDays, navType) => {
   const newDate = ref(null)
