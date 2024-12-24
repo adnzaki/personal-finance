@@ -21,7 +21,7 @@
             flat
             label="Lihat Detail"
             :to="`/statistik/kategori/${store.dateRange}`"
-            class="save-btn btn-w100 q-my-md see-more"
+            class="save-btn btn-w100 see-more"
             color="primary"
           />
         </div>
