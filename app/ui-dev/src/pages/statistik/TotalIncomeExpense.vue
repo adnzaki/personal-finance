@@ -4,7 +4,7 @@
       <div class="col-6">
         <h6 class="text-h6 custom-h6">Pemasukan</h6>
         <h6 class="text-h6 custom-h6">Pengeluaran</h6>
-        <h6 class="text-h6 custom-h6">Surplus</h6>
+        <h6 class="text-h6 custom-h6">Neraca Akhir</h6>
       </div>
       <div class="col-6">
         <h6 class="text-h6 custom-h6-2 text-right">
