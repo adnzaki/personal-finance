@@ -60,6 +60,8 @@ const navigateDay = (numberOfDays, navType) => {
     })
   }
 
+  console.log(newDate.value)
+
   store.dateRange = store.formatDateValue(newDate.value)
   store.dateRangeText = store.formatDateStr(newDate.value)
 }
@@ -145,7 +147,7 @@ const navigateYear = (navType) => {
 
 const moveTo = (navType) => {
   if (store.range.value === 'daily') {
-    navigateDay(1)
+    navigateDay(1, navType)
   } else if (store.range.value === 'weekly') {
     navigateWeek(7, navType)
   } else if (store.range.value === 'monthly') {
@@ -154,6 +156,7 @@ const moveTo = (navType) => {
     navigateYear(navType)
   }
 
+  store.getTotalBalance()
   store.getTotalIncomeExpense()
   store.getBiggestTransactionByCategory()
 }

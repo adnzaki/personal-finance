@@ -51,21 +51,8 @@ const onDatePickerChanged = (val) => {
     store.dateRangeText = store.formatDateStr(val)
   }
 
+  store.getTotalBalance()
   store.getTotalIncomeExpense()
   store.getBiggestTransactionByCategory()
 }
-
-// const save = () => {
-//   if (
-//     datePicker.value.from !== undefined &&
-//     datePicker.value.to !== undefined
-//   ) {
-//     dateValue.value = `${datePicker.value.from.replace(/\//g, '-')}_${datePicker.value.to.replace(/\//g, '-')}`
-//   } else {
-//     dateValue.value = datePicker.value.replace(/\//g, '-')
-//   }
-
-//   store.dateRange = dateValue.value
-//   //store.getTransactions()
-// }
 </script>

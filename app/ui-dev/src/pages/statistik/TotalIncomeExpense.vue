@@ -1,40 +1,21 @@
 <template>
   <div class="q-pa-md">
     <div class="row q-col-gutter-sm">
-      <div class="col-12 col-md-6">
-        <q-card class="custom-round bg-red-5 text-white">
-          <q-card-section>
-            <div class="text-h6">Total Pemasukan</div>
-            <div class="text-subtitle1">
-              <q-badge
-                size="lg"
-                class="q-mr-xs q-mt-md total-income-expense"
-                color="white"
-                text-color="black"
-                ><strong class="q-ml-xs">
-                  {{ store.totalIncome || 'Rp. -' }}</strong
-                ></q-badge
-              >
-            </div>
-          </q-card-section>
-        </q-card>
+      <div class="col-6">
+        <h6 class="text-h6 custom-h6">Pemasukan</h6>
+        <h6 class="text-h6 custom-h6">Pengeluaran</h6>
+        <h6 class="text-h6 custom-h6">Surplus</h6>
       </div>
-      <div class="col-12 col-md-6">
-        <q-card class="custom-round bg-pink-5 text-white">
-          <q-card-section>
-            <div class="text-h6">Total Pengeluaran</div>
-            <div class="text-subtitle2">
-              <q-badge
-                class="q-mr-xs q-mt-md total-income-expense"
-                color="white"
-                text-color="black"
-                ><strong class="q-ml-xs">
-                  {{ store.totalExpense || 'Rp. -' }}</strong
-                ></q-badge
-              >
-            </div>
-          </q-card-section>
-        </q-card>
+      <div class="col-6">
+        <h6 class="text-h6 custom-h6-2 text-right">
+          {{ store.totalIncome || '-' }}
+        </h6>
+        <h6 class="text-h6 custom-h6-2 text-right">
+          {{ store.totalExpense || '-' }}
+        </h6>
+        <h6 class="text-h6 custom-h6-2 text-right">
+          {{ store.netIncome || '-' }}
+        </h6>
       </div>
     </div>
   </div>
@@ -43,6 +24,12 @@
 <style lang="sass" scoped>
 .total-income-expense
   font-size: .8rem
+
+.custom-h6
+  font-weight: 400
+
+.custom-h6, .custom-h6-2
+  line-height: .7rem
 </style>
 
 <script setup>

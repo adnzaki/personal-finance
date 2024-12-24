@@ -20,7 +20,7 @@
           <q-btn
             flat
             label="Lihat Detail"
-            to="/transaksi"
+            :to="`/statistik/kategori/${store.dateRange}`"
             class="save-btn btn-w100 q-my-md see-more"
             color="primary"
           />
@@ -29,7 +29,7 @@
     </div>
     <div class="row q-col-gutter-sm" v-else>
       <div class="col-12">
-        <div class="text-subtitle-1">
+        <div class="text-subtitle-1 q-mb-lg">
           Tidak ada data pengeluaran di periode ini.
         </div>
       </div>

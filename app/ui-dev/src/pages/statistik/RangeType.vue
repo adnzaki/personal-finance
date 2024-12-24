@@ -55,6 +55,7 @@ const onRangeSelected = (model) => {
     store.dateRange = store.dateRange.split('_')[0]
   }
   store.setDateRange()
+  store.getTotalBalance()
   store.getTotalIncomeExpense()
   store.getBiggestTransactionByCategory()
 }

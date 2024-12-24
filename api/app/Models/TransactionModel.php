@@ -39,6 +39,7 @@ class TransactionModel extends Connector
                                    'tgl_transaksi >= ' => $date1 . ' 00:00:00',
                                    'tgl_transaksi <= ' => $date2 . ' 23:59:59'
                                ])
+                               ->limit(3)
                                ->groupBy('id_kategori')
                                ->orderBy('total_nominal', 'DESC');
                                

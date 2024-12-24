@@ -3,10 +3,66 @@
 namespace App\Models;
 use App\Models\TransactionModel;
 use App\Models\CategoryModel;
+use App\Models\FundModel;
 
 class StatisticModel extends TransactionModel
 {
-    public function getTotalIncomeExpense($date1, $date2)
+    public function getTotalBalance(string $dateRange)
+    {
+        $fund = new FundModel();
+        $limit = $fund->getTotalRows();
+        $data = $fund->getData($limit, 0);
+        foreach($data as $d) {
+            $balance = array_sum(array_column($fund->getTotalFund($d->id), 'jumlah_dana'));
+            $d->balance = $balance ?? 0;
+        }
+
+        $totalBalance = array_sum(array_column($data, 'balance'));
+
+        // split the $dateRange first if it contains '_'
+        // otherwise, do not split $dateRange
+        if(strpos($dateRange, '_') !== false) {
+            $date = explode('_', $dateRange);
+            $startDate = date('Y-m-d', strtotime($date[0]) + 86400);
+            $endDate = date('Y-m-d', strtotime($date[1]) + 86400);
+            $startDateRange = $startDate . '_2999-12-31';
+            $endDateRange = $endDate . '_2999-12-31';
+        } else {
+            $startDate = date('Y-m-d', strtotime($dateRange) + 86400);
+            $startDateRange = $startDate . '_2999-12-31';
+            $endDateRange = $startDate . '_2999-12-31';
+        }
+
+        // now get the transactions that will be excluded from the total balance
+        // and separate between income and expense
+        $incomeTransactionsStart = $this->getData('all', 'all', 'income', 'all', $startDateRange, $limit, 0);
+        $expenseTransactionsStart = $this->getData('all', 'all', 'expense', 'all', $startDateRange, $limit, 0);
+        $totalIncomeTransactionsStart = array_sum(array_column($incomeTransactionsStart, 'nominal'));
+        $totalExpenseTransactionsStart = array_sum(array_column($expenseTransactionsStart, 'nominal'));
+
+        // now here is the Start Balance!
+        $startBalance = $totalBalance + $totalExpenseTransactionsStart - $totalIncomeTransactionsStart;
+
+        // now let's calculate the ending balance
+        $incomeTransactionsEnd = $this->getData('all', 'all', 'income', 'all', $endDateRange, $limit, 0);
+        $expenseTransactionsEnd = $this->getData('all', 'all', 'expense', 'all', $endDateRange, $limit, 0);
+        $totalIncomeTransactionsEnd = array_sum(array_column($incomeTransactionsEnd, 'nominal'));
+        $totalExpenseTransactionsEnd = array_sum(array_column($expenseTransactionsEnd, 'nominal'));
+        $endBalance = $totalBalance - $totalIncomeTransactionsEnd + $totalExpenseTransactionsEnd;
+        
+        return [
+            'total_balance'     => idr_number_format($totalBalance),
+            'start_balance'     => idr_number_format($startBalance),
+            'end_balance'       => idr_number_format($endBalance),
+            'income_start'      => idr_number_format($totalIncomeTransactionsStart),
+            'expense_start'     => idr_number_format($totalExpenseTransactionsStart),
+            'net_income'        => idr_number_format($totalIncomeTransactionsStart - $totalExpenseTransactionsStart),
+            'income_end'        => idr_number_format($totalIncomeTransactionsEnd),
+            'expense_end'       => idr_number_format($totalExpenseTransactionsEnd),
+        ];
+    }
+
+    public function getTotalIncomeExpense(string $date1, string $date2)
     {
         $field = 'jenis_transaksi, SUM(nominal) as total';
         $select = $this->builder->select($field);
@@ -21,28 +77,35 @@ class StatisticModel extends TransactionModel
         return $select->groupBy('jenis_transaksi')->get()->getResult();
     }
 
-    public function getBiggestTransactionByCategory($date1, $date2) 
+    public function getAllTransactionByCategory(string $date1, string $date2, string $categoryType, int $limit) 
     {
         $categoryModel = new CategoryModel();
 
         $select = "id_kategori, category_name, SUM(nominal) as total_transaksi, CONCAT('Rp. ', REPLACE(FORMAT(SUM(nominal), 0), ',', '.')) AS total_nominal";
         $query = $this->builder->select($select)
-                               ->join($this->kategori, $this->kategori . '.id = ' . $this->transaksi . '.id_kategori')
-                               ->where('jenis_transaksi', 'expense')
-                               ->where([
+                            ->join($this->kategori, $this->kategori . '.id = ' . $this->transaksi . '.id_kategori')
+                            ->where('jenis_transaksi', $categoryType)
+                            ->where([
                                     "{$this->transaksi}.deleted"    => 0,
                                     "{$this->kategori}.deleted"     => 0,
-                               ])
-                               ->whereIn("{$this->kategori}.user_id", [$categoryModel->defaultUserCategory, auth()->id()])
-                               ->where([
-                                   'tgl_transaksi >= ' => $date1 . ' 00:00:00',
-                                   'tgl_transaksi <= ' => $date2 . ' 23:59:59'
-                               ])
-                               ->groupBy('id_kategori')
-                               ->orderBy('total_transaksi', 'DESC')
-                               ->limit(5)
-                               ->get();
+                            ])
+                            ->whereIn("{$this->kategori}.user_id", [$categoryModel->defaultUserCategory, auth()->id()])
+                            ->where([
+                                'tgl_transaksi >= ' => $date1 . ' 00:00:00',
+                                'tgl_transaksi <= ' => $date2 . ' 23:59:59'
+                            ])
+                            ->groupBy('id_kategori')
+                            ->orderBy('total_transaksi', 'DESC')
+                            ->limit($limit)
+                            ->get();
 
-        return $query->getResult();
+        $results = $query->getResult();
+        $totalExpense = array_sum(array_column($results, 'total_transaksi'));
+
+        foreach ($results as &$result) {
+            $result->percentage = $totalExpense > 0 ? number_format(($result->total_transaksi / $totalExpense) * 100, 2, ',', '.') . '%' : '0,00%';
+        }
+
+        return $results;
     }
 }

@@ -13,15 +13,39 @@ export const useStatisticStore = defineStore('statistic', {
     },
     dateRange: Date.now(),
     dateRangeText: '',
+    balanceSummary: [],
     totalIncome: 0,
     totalExpense: 0,
+    netIncome: 0,
     biggestTransaction: {
       response: [],
       category: [],
       totalTransaction: [],
     },
+    allTransactions: {
+      income: [],
+      expense: [],
+    },
   }),
   actions: {
+    getTotalBalance() {
+      api
+        .get(`${this.baseUrl}get-total-balance/${this.dateRange}`, {
+          headers: { Authorization: bearerToken },
+        })
+        .then(({ data }) => {
+          this.balanceSummary = data
+        })
+    },
+    getAllTransactionByCategory(dateRange) {
+      api
+        .get(`${this.baseUrl}get-all-transaction-by-category/${dateRange}`, {
+          headers: { Authorization: bearerToken },
+        })
+        .then(({ data }) => {
+          this.allTransactions = data
+        })
+    },
     getBiggestTransactionByCategory() {
       api
         .get(
@@ -42,6 +66,7 @@ export const useStatisticStore = defineStore('statistic', {
         .then(({ data }) => {
           this.totalIncome = data.total_income
           this.totalExpense = data.total_expense
+          this.netIncome = data.net_income
         })
     },
     setDateRange() {

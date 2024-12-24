@@ -2,27 +2,13 @@
   <div :class="wrapperPadding()">
     <q-card class="content-card">
       <q-card-section class="q-mb-md">
-        <div class="row">
-          <q-btn
-            color="teal"
-            flat
-            class="back-button q-mb-md"
-            rounded
-            icon="arrow_back"
-            @click="$router.push('/dashboard')"
-            v-if="$q.screen.lt.sm"
-          />
-
-          <div
-            class="text-subtitle1 text-uppercase q-mt-xs page-title-pl-5"
-            v-if="$q.screen.lt.sm"
-          >
-            {{ cardTitle }}
-          </div>
-          <div class="text-h6 text-capitalize" v-else>
-            {{ cardTitle }}
-          </div>
+        <div
+          class="text-subtitle1 text-uppercase q-mb-sm"
+          v-if="$q.screen.lt.sm"
+        >
+          {{ cardTitle }}
         </div>
+        <div class="text-h6 text-capitalize" v-else>{{ cardTitle }}</div>
         <div :class="['row', titleSpacing()]">
           <DateFilter v-if="$q.screen.gt.md && !hideDateFilter" />
           <RangeType v-if="!hideDateFilter" />
@@ -44,6 +30,7 @@
       </q-card-section>
       <!-- Main content goes here -->
       <RangeNavigator />
+      <BalanceInfo />
       <TotalIncomeExpense />
       <BiggestCategoryExpense />
     </q-card>
@@ -59,6 +46,7 @@ import { useStatisticStore } from 'src/stores/statistic-store'
 import RangeNavigator from './RangeNavigator.vue'
 import TotalIncomeExpense from './TotalIncomeExpense.vue'
 import BiggestCategoryExpense from './BiggestCategoryExpense.vue'
+import BalanceInfo from './BalanceInfo.vue'
 
 const store = useStatisticStore()
 

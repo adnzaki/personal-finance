@@ -25,10 +25,21 @@
 <script setup>
 import { ref } from 'vue'
 import { wrapperPadding, titleSpacing } from 'src/composables/screen.js'
+import { useTransactionStore } from 'src/stores/transaction-store'
 import ButtonGroup from './ButtonGroup.vue'
 import DataTable from './DataTable.vue'
 import FormDialog from './FormDialog.vue'
 import DateFilter from './DateFilter.vue'
 
+const store = useTransactionStore()
+
 const cardTitle = ref('Transaksi')
+
+store.filter = {
+  fundId: 'all',
+  ownerId: 'all',
+  transactionType: 'all',
+  category: 'all',
+  date: 'all',
+}
 </script>
