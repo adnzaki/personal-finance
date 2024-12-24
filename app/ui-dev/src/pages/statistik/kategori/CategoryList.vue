@@ -57,16 +57,13 @@
 import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useStatisticStore } from 'src/stores/statistic-store'
-import { useTransactionStore } from 'src/stores/transaction-store'
 
 const store = useStatisticStore()
-const transactionStore = useTransactionStore()
 const route = useRoute()
 const router = useRouter()
 
 const viewTransactions = (id) => {
-  transactionStore.filter.category = id
-  router.push('/statistik/kategori/transaksi')
+  router.push(`/statistik/kategori/transaksi/${id}/${route.params.dateRange}`)
 }
 store.getAllTransactionByCategory(route.params.dateRange)
 const income = computed(() => store.allTransactions.income)

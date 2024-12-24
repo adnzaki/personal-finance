@@ -108,7 +108,7 @@ const routes = [
             beforeEnter: () => validatePage(),
           },
           {
-            path: 'kategori/transaksi',
+            path: 'kategori/transaksi/:categoryId/:dateRange',
             component: () =>
               import('pages/statistik/kategori/TransactionList.vue'),
             beforeEnter: () => validatePage(),

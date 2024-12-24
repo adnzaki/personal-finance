@@ -279,7 +279,7 @@ const save = () => {
 
 const closeForm = () => {
   if (props.mobile) {
-    router.push('/transaksi')
+    router.back()
   } else {
     store.showForm = false
   }
