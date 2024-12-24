@@ -1,6 +1,6 @@
 <template>
   <div :class="wrapperPadding()">
-    <q-card class="content-card">
+    <q-card class="content-card q-mb-lg">
       <q-card-section class="q-mb-md">
         <div
           class="text-subtitle1 text-uppercase q-mb-sm"
