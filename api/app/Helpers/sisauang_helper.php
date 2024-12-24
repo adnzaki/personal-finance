@@ -1,5 +1,20 @@
 <?php
 
+// buat sebuah fungsi dengan nama idr_number_format
+if (!function_exists('idr_number_format')) {
+    function idr_number_format($number, $decimals = 0)
+    {
+        return $number > 0 ? 'Rp. ' . number_format($number, $decimals, ',', '.') : 'Rp. -';
+    }
+}
+
+if (!function_exists('plain_number_format')) {
+    function plain_number_format($number, $decimals = 0)
+    {
+        return $number === 0 ? '-' : number_format($number, $decimals, ',', '.');
+    }
+}
+
 if (!function_exists('os_date')) {
     function os_date()
     {

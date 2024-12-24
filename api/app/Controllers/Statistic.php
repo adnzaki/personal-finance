@@ -11,6 +11,13 @@ class Statistic extends BaseController
         $this->model = new StatisticModel;
     }
 
+    public function getTotalBalance($dateRange)
+    {
+        $balance = $this->model->getTotalBalance($dateRange);
+
+        return $this->createResponse($balance);
+    }
+
     public function getAllTransactionByCategory($dateRange)
     {
         if (strpos($dateRange, '_') !== false) {
@@ -67,16 +74,23 @@ class Statistic extends BaseController
         $response = $this->model->getTotalIncomeExpense($date1, $date2);
         $transformed = [
             'total_income' => 0, // Default value
-            'total_expense' => 0 // Default value
+            'total_expense' => 0, // Default value
+            'net_income' => 0
         ];
 
         foreach ($response as $row) {
             if ($row->jenis_transaksi === 'income') {
-                $transformed['total_income'] = $row->total === 0 ? 'Rp. - ' : 'Rp. '. number_format($row->total, 0, ',', '.');
+                $transformed['total_income'] = plain_number_format($row->total);
             } elseif ($row->jenis_transaksi === 'expense') {
-                $transformed['total_expense'] = $row->total === 0 ? 'Rp. - ' : 'Rp. ' . number_format($row->total, 0, ',', '.');
+                $transformed['total_expense'] = plain_number_format($row->total);
             }
         }
+
+        $totalIncome = str_replace(['Rp. ', '.'], '', $transformed['total_income']);
+        $totalExpense = str_replace(['Rp. ', '.'], '', $transformed['total_expense']);
+        $netIncome = $totalIncome - $totalExpense;
+
+        $transformed['net_income'] = $netIncome < 0 ? plain_number_format($netIncome) : ($netIncome === 0 ? plain_number_format($netIncome) : '+' . plain_number_format($netIncome));
 
         return $this->createResponse($transformed);
     }

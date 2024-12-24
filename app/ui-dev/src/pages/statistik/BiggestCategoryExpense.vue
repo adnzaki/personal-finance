@@ -29,7 +29,7 @@
     </div>
     <div class="row q-col-gutter-sm" v-else>
       <div class="col-12">
-        <div class="text-subtitle-1">
+        <div class="text-subtitle-1 q-mb-lg">
           Tidak ada data pengeluaran di periode ini.
         </div>
       </div>

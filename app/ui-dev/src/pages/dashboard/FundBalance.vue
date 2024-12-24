@@ -40,12 +40,6 @@
     </div>
   </div>
 </template>
-<style lang="sass" scoped>
-.see-more
-  width: 100%
-  padding-top: 10px
-  padding-bottom: 10px
-</style>
 <script setup>
 import { useDashboardStore } from 'src/stores/dashboard-store'
 

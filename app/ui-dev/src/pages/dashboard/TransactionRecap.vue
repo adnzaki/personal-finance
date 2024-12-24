@@ -18,12 +18,7 @@
           separator
           v-if="data.length > 0"
         >
-          <q-item
-            clickable
-            v-for="(item, index) in data"
-            to="/statistik"
-            :key="index"
-          >
+          <q-item clickable v-for="(item, index) in data" :key="index">
             <q-item-section avatar><q-icon :name="icon" /></q-item-section>
             <q-item-section>
               <q-item-label>{{ item.category_name }}</q-item-label>
@@ -32,6 +27,15 @@
           </q-item>
         </q-list>
         <p v-else>Belum ada transaksi.</p>
+      </div>
+      <div class="q-px-md">
+        <q-btn
+          flat
+          label="Lihat Statistik"
+          to="/statistik"
+          class="save-btn q-my-md see-more"
+          color="primary"
+        />
       </div>
     </q-card>
   </div>

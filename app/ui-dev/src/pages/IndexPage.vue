@@ -2,16 +2,22 @@
   <div class="q-pa-md">
     <greetings-text />
     <fund-balance />
-    <transaction-recap
-      :data="store.transactions.expense"
-      icon="o_payments"
-      title="Pengeluaran Bulan Ini"
-    />
-    <transaction-recap
-      :data="store.transactions.income"
-      icon="o_account_balance_wallet"
-      title="Pemasukan Bulan Ini"
-    />
+    <div class="row q-col-gutter-sm">
+      <div class="col-12 col-md-6">
+        <transaction-recap
+          :data="store.transactions.expense"
+          icon="o_payments"
+          title="Pengeluaran Bulan Ini"
+        />
+      </div>
+      <div class="col-12 col-md-6">
+        <transaction-recap
+          :data="store.transactions.income"
+          icon="o_account_balance_wallet"
+          title="Pemasukan Bulan Ini"
+        />
+      </div>
+    </div>
     <!-- <transaction-recap
       :data="store.transactions.transfer"
       icon="label_important_outline"
