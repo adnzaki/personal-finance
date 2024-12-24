@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+
 use App\Models\TransactionModel;
 use App\Models\CategoryModel;
 use App\Models\FundModel;
@@ -12,7 +13,7 @@ class StatisticModel extends TransactionModel
         $fund = new FundModel();
         $limit = $fund->getTotalRows();
         $data = $fund->getData($limit, 0);
-        foreach($data as $d) {
+        foreach ($data as $d) {
             $balance = array_sum(array_column($fund->getTotalFund($d->id), 'jumlah_dana'));
             $d->balance = $balance ?? 0;
         }
@@ -21,7 +22,7 @@ class StatisticModel extends TransactionModel
 
         // split the $dateRange first if it contains '_'
         // otherwise, do not split $dateRange
-        if(strpos($dateRange, '_') !== false) {
+        if (strpos($dateRange, '_') !== false) {
             $date = explode('_', $dateRange);
             $startDate = date('Y-m-d', strtotime($date[0]) + 86400);
             $endDate = date('Y-m-d', strtotime($date[1]) + 86400);
@@ -49,7 +50,7 @@ class StatisticModel extends TransactionModel
         $totalIncomeTransactionsEnd = array_sum(array_column($incomeTransactionsEnd, 'nominal'));
         $totalExpenseTransactionsEnd = array_sum(array_column($expenseTransactionsEnd, 'nominal'));
         $endBalance = $totalBalance - $totalIncomeTransactionsEnd + $totalExpenseTransactionsEnd;
-        
+
         return [
             'total_balance'     => idr_number_format($totalBalance),
             'start_balance'     => idr_number_format($startBalance),
@@ -67,7 +68,7 @@ class StatisticModel extends TransactionModel
         $field = 'jenis_transaksi, SUM(nominal) as total';
         $select = $this->builder->select($field);
         $select->join($this->pemilikSumberDana, $this->pemilikSumberDana . '.id = ' . $this->transaksi . '.id_pemilik_sumber_dana')
-               ->join($this->sumberDana, $this->sumberDana . '.id = ' . $this->pemilikSumberDana . '.id_sumber_dana');
+            ->join($this->sumberDana, $this->sumberDana . '.id = ' . $this->pemilikSumberDana . '.id_sumber_dana');
         $select->where($this->defaultFilter);
         $select->where([
             'tgl_transaksi >= ' => $date1 . ' 00:00:00',
@@ -77,27 +78,31 @@ class StatisticModel extends TransactionModel
         return $select->groupBy('jenis_transaksi')->get()->getResult();
     }
 
-    public function getAllTransactionByCategory(string $date1, string $date2, string $categoryType, int $limit) 
+    public function getAllTransactionByCategory(string $date1, string $date2, string $categoryType, int $limit)
     {
         $categoryModel = new CategoryModel();
 
         $select = "id_kategori, category_name, SUM(nominal) as total_transaksi, CONCAT('Rp. ', REPLACE(FORMAT(SUM(nominal), 0), ',', '.')) AS total_nominal";
         $query = $this->builder->select($select)
-                            ->join($this->kategori, $this->kategori . '.id = ' . $this->transaksi . '.id_kategori')
-                            ->where('jenis_transaksi', $categoryType)
-                            ->where([
-                                    "{$this->transaksi}.deleted"    => 0,
-                                    "{$this->kategori}.deleted"     => 0,
-                            ])
-                            ->whereIn("{$this->kategori}.user_id", [$categoryModel->defaultUserCategory, auth()->id()])
-                            ->where([
-                                'tgl_transaksi >= ' => $date1 . ' 00:00:00',
-                                'tgl_transaksi <= ' => $date2 . ' 23:59:59'
-                            ])
-                            ->groupBy('id_kategori')
-                            ->orderBy('total_transaksi', 'DESC')
-                            ->limit($limit)
-                            ->get();
+            ->join($this->pemilikSumberDana, $this->pemilikSumberDana . '.id = ' . $this->transaksi . '.id_pemilik_sumber_dana')
+            ->join($this->sumberDana, $this->sumberDana . '.id = ' . $this->pemilikSumberDana . '.id_sumber_dana')
+            ->join($this->kategori, $this->kategori . '.id = ' . $this->transaksi . '.id_kategori')
+            ->join($this->kepemilikan, $this->kepemilikan . '.id = ' . $this->pemilikSumberDana . '.id_kepemilikan')
+            ->where('jenis_transaksi', $categoryType)
+            ->where($this->defaultFilter)
+            ->where([
+                "{$this->transaksi}.deleted"    => 0,
+                "{$this->kategori}.deleted"     => 0,
+            ])
+            ->whereIn("{$this->kategori}.user_id", [$categoryModel->defaultUserCategory, auth()->id()])
+            ->where([
+                'tgl_transaksi >= ' => $date1 . ' 00:00:00',
+                'tgl_transaksi <= ' => $date2 . ' 23:59:59'
+            ])
+            ->groupBy('id_kategori')
+            ->orderBy('total_transaksi', 'DESC')
+            ->limit($limit)
+            ->get();
 
         $results = $query->getResult();
         $totalExpense = array_sum(array_column($results, 'total_transaksi'));
