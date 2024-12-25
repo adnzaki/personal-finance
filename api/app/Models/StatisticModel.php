@@ -24,12 +24,12 @@ class StatisticModel extends TransactionModel
         // otherwise, do not split $dateRange
         if (strpos($dateRange, '_') !== false) {
             $date = explode('_', $dateRange);
-            $startDate = date('Y-m-d', strtotime($date[0]) + 86400);
-            $endDate = date('Y-m-d', strtotime($date[1]) + 86400);
+            $startDate = date('Y-m-d', strtotime($date[0]));
+            $endDate = date('Y-m-d', strtotime($date[1]));
             $startDateRange = $startDate . '_2999-12-31';
             $endDateRange = $endDate . '_2999-12-31';
         } else {
-            $startDate = date('Y-m-d', strtotime($dateRange) + 86400);
+            $startDate = date('Y-m-d', strtotime($dateRange));
             $startDateRange = $startDate . '_2999-12-31';
             $endDateRange = $startDate . '_2999-12-31';
         }
