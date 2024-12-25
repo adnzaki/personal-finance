@@ -58,6 +58,7 @@ const backgroundColors = ref([
   '#00D8FF',
   '#DD1B16',
   '#FFC0CB',
+  '#FF69B4',
 ])
 
 ChartJS.register(ArcElement, Tooltip, Legend)

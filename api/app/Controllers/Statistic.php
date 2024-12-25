@@ -29,8 +29,8 @@ class Statistic extends BaseController
             $date2 = $dateRange;
         }
 
-        $income = $this->model->getAllTransactionByCategory($date1, $date2, 'income', 100);
-        $expense = $this->model->getAllTransactionByCategory($date1, $date2, 'expense', 100);
+        $income = $this->model->getAllTransactionByCategory($date1, $date2, 'income', 1000);
+        $expense = $this->model->getAllTransactionByCategory($date1, $date2, 'expense', 1000);
 
         return $this->createResponse([
             'income' => $income,
@@ -40,24 +40,39 @@ class Statistic extends BaseController
 
     public function getBiggestTransactionByCategory($dateRange)
     {
-        if(strpos($dateRange, '_') !== false) {
-            $date = explode('_', $dateRange);
-            $date1 = $date[0];
-            $date2 = $date[1];
-        } else {
-            $date1 = $dateRange;
-            $date2 = $dateRange;
+        if(valid_access()) {
+            if(strpos($dateRange, '_') !== false) {
+                $date = explode('_', $dateRange);
+                $date1 = $date[0];
+                $date2 = $date[1];
+            } else {
+                $date1 = $dateRange;
+                $date2 = $dateRange;
+            }
+    
+            $response = $this->model->getAllTransactionByCategory($date1, $date2, 'expense', 1000);
+            $sliceResponse = array_slice($response, 0, 5);
+            $otherTransactions = array_sum(array_column($response, 'total_transaksi')) - array_sum(array_column($sliceResponse, 'total_transaksi'));
+            // now what about the percentage of the other transactions?
+            $othersPercentage = ($otherTransactions / array_sum(array_column($response, 'total_transaksi'))) * 100;
+    
+            $sliceResponse[] = (object)[
+                'id_kategori'       => 'none',
+                'category_name'     => 'Lain-lain',
+                'total_transaksi'   => $otherTransactions,
+                'total_nominal'     => idr_number_format($otherTransactions),
+                'percentage'        => plain_number_format($othersPercentage, 2) . '%'
+            ];
+    
+            $categoryName = array_column($sliceResponse, 'category_name');
+            $totalTransaction = array_column($sliceResponse, 'total_transaksi');
+    
+            return $this->createResponse([
+                'response'          => $sliceResponse,
+                'category'          => $categoryName,
+                'totalTransaction'  => array_map('intval', $totalTransaction),
+            ]);
         }
-
-        $response = $this->model->getAllTransactionByCategory($date1, $date2, 'expense', 5);
-        $categoryName = array_column($response, 'category_name');
-        $totalTransaction = array_column($response, 'total_transaksi');
-
-        return $this->createResponse([
-            'response'          => $response,
-            'category'          => $categoryName,
-            'totalTransaction'  => array_map('intval', $totalTransaction),
-        ]);
     }
 
     public function getTotalIncomeExpense($dateRange)
