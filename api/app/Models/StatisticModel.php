@@ -25,7 +25,7 @@ class StatisticModel extends TransactionModel
         if (strpos($dateRange, '_') !== false) {
             $date = explode('_', $dateRange);
             $startDate = date('Y-m-d', strtotime($date[0]));
-            $endDate = date('Y-m-d', strtotime($date[1]));
+            $endDate = date('Y-m-d', strtotime($date[1]) + 86399);
             $startDateRange = $startDate . '_2999-12-31';
             $endDateRange = $endDate . '_2999-12-31';
         } else {
