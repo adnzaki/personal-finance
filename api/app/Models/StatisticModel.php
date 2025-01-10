@@ -25,13 +25,17 @@ class StatisticModel extends TransactionModel
         if (strpos($dateRange, '_') !== false) {
             $date = explode('_', $dateRange);
             $startDate = date('Y-m-d', strtotime($date[0]));
-            $endDate = date('Y-m-d', strtotime($date[1]) + 86399);
+            $endDate = date('Y-m-d', strtotime($date[1]) + 86400);
             $startDateRange = $startDate . '_2999-12-31';
             $endDateRange = $endDate . '_2999-12-31';
+
+            // it is just a helper for us, not for users
+            $endDateLong = date('Y-m-d H:i:s', strtotime($date[1]) + 86400);
         } else {
             $startDate = date('Y-m-d', strtotime($dateRange));
             $startDateRange = $startDate . '_2999-12-31';
             $endDateRange = $startDate . '_2999-12-31';
+            $endDateLong = date('Y-m-d H:i:s', strtotime($dateRange) + 86400);
         }
 
         // now get the transactions that will be excluded from the total balance
@@ -60,6 +64,8 @@ class StatisticModel extends TransactionModel
             'net_income'        => idr_number_format($totalIncomeTransactionsStart - $totalExpenseTransactionsStart),
             'income_end'        => idr_number_format($totalIncomeTransactionsEnd),
             'expense_end'       => idr_number_format($totalExpenseTransactionsEnd),
+            'end_date'          => $endDateRange,
+            'end_date_long'     => $endDateLong,
         ];
     }
 

@@ -54,7 +54,7 @@ class Statistic extends BaseController
             $sliceResponse = array_slice($response, 0, 5);
             $otherTransactions = array_sum(array_column($response, 'total_transaksi')) - array_sum(array_column($sliceResponse, 'total_transaksi'));
             // now what about the percentage of the other transactions?
-            $othersPercentage = ($otherTransactions / array_sum(array_column($response, 'total_transaksi'))) * 100;
+            $othersPercentage = $otherTransactions > 0 ? ($otherTransactions / array_sum(array_column($response, 'total_transaksi'))) * 100 : 0;
     
             $sliceResponse[] = (object)[
                 'id_kategori'       => 'none',
