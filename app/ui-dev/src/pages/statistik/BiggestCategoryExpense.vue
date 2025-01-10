@@ -65,7 +65,6 @@ ChartJS.register(ArcElement, Tooltip, Legend)
 store.getBiggestTransactionByCategory()
 
 watch(store, () => {
-  console.log('Biggest transaction changed!')
   const { category, totalTransaction } = toRefs(store.biggestTransaction)
   data.value = {
     labels: category.value,
