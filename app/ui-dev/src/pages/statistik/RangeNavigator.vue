@@ -118,6 +118,8 @@ const navigateMonth = (navType) => {
     })
   }
 
+  monthEnd.value = date.endOfDate(monthEnd.value, 'month')
+
   store.dateRange = `${store.formatDateValue(monthStart.value)}_${store.formatDateValue(monthEnd.value)}`
   store.dateRangeText = `${store.formatDateStr(monthStart.value)} - ${store.formatDateStr(monthEnd.value)}`
 }
