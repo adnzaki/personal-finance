@@ -1,5 +1,10 @@
 <template>
-  <q-list bordered class="rounded-borders" separator v-if="data.length > 0">
+  <q-list
+    bordered
+    class="rounded-borders"
+    separator
+    v-if="data.length > 0 && data[0].total_transaksi > 0"
+  >
     <q-item clickable v-for="(item, index) in data" :key="index">
       <q-item-section avatar><q-icon name="o_payments" /></q-item-section>
       <q-item-section>
