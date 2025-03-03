@@ -185,6 +185,7 @@ export const useTransactionStore = defineStore('transaction', {
         timeout: 0,
       })
 
+      this.data.nominal = this.data.nominal.toString()
       this.data.nominal = this.data.nominal.replace(/,/g, '')
 
       api

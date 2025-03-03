@@ -2,10 +2,7 @@
   <div :class="wrapperPadding()">
     <q-card class="content-card">
       <q-card-section>
-        <div class="text-subtitle1 text-uppercase" v-if="$q.screen.lt.sm">
-          {{ cardTitle }}
-        </div>
-        <div class="text-h6 text-capitalize" v-else>
+        <div class="text-h6 text-capitalize" v-if="$q.screen.gt.xs">
           {{ cardTitle }}
         </div>
       </q-card-section>

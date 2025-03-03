@@ -2,25 +2,8 @@
   <div :class="wrapperPadding()">
     <q-card class="content-card">
       <q-card-section class="q-mb-md">
-        <div class="row">
-          <q-btn
-            color="teal"
-            flat
-            class="back-button q-mb-md"
-            rounded
-            icon="arrow_back"
-            @click="$router.back()"
-          />
-
-          <div
-            class="text-subtitle1 text-uppercase q-mt-xs page-title-pl-5"
-            v-if="$q.screen.lt.sm"
-          >
-            {{ cardTitle }}
-          </div>
-          <div class="text-h6 text-capitalize" v-else>
-            {{ cardTitle }}
-          </div>
+        <div class="text-h6 text-capitalize" v-if="$q.screen.gt.xs">
+          {{ cardTitle }}
         </div>
         <div :class="['row', titleSpacing()]">
           <div class="col-12 col-md-8"></div>
