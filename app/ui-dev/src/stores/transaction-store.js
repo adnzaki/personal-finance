@@ -112,10 +112,7 @@ export const useTransactionStore = defineStore('transaction', {
         sort: 'DESC',
         search: '',
         url: `${conf.apiPublicPath}${this.baseUrl}get-data/${params}/`,
-        autoReset: {
-          active: true,
-          timeout: 500,
-        },
+        autoReset: 500,
       })
     },
     deleteTransaction(id) {

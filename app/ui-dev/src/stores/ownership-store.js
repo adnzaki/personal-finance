@@ -151,10 +151,7 @@ export const useOwnershipStore = defineStore('ownership', {
         sort: 'ASC',
         search: '',
         url: `${conf.apiPublicPath}${this.baseUrl}get-data/`,
-        autoReset: {
-          active: true,
-          timeout: 500,
-        },
+        autoReset: 500,
       })
     },
     resetForm() {
