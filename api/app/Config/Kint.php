@@ -2,9 +2,7 @@
 
 namespace Config;
 
-use CodeIgniter\Config\BaseConfig;
 use Kint\Parser\ConstructablePluginInterface;
-use Kint\Renderer\AbstractRenderer;
 use Kint\Renderer\Rich\TabPluginInterface;
 use Kint\Renderer\Rich\ValuePluginInterface;
 
@@ -42,7 +40,6 @@ class Kint
     */
     public string $richTheme = 'aante-light.css';
     public bool $richFolder  = false;
-    public int $richSort     = AbstractRenderer::SORT_FULL;
 
     /**
      * @var array<string, class-string<ValuePluginInterface>>|null
