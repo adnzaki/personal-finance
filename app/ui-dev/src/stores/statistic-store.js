@@ -69,11 +69,18 @@ export const useStatisticStore = defineStore('statistic', {
           this.netIncome = data.net_income
         })
     },
+    setDateFromTodayDate() {
+      let splitDateRange = this.dateRange.split('-')
+      splitDateRange[2] = new Date().getDate()
+      this.dateRange = splitDateRange.join('-')
+    },
     setDateRange() {
       if (this.range.value === 'daily') {
+        this.setDateFromTodayDate()
         this.dateRangeText = this.formatDateStr(this.dateRange)
         this.dateRange = this.formatDateValue(this.dateRange)
       } else if (this.range.value === 'weekly') {
+        this.setDateFromTodayDate()
         const weekInterval = this.getWeeklyRange(this.dateRange)
         const startDate = weekInterval.start
         const endDate = weekInterval.end

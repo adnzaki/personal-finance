@@ -64,8 +64,6 @@ const navigateDay = (numberOfDays, navType) => {
     })
   }
 
-  console.log(newDate.value)
-
   store.dateRange = store.formatDateValue(newDate.value)
   store.dateRangeText = store.formatDateStr(newDate.value)
 }
