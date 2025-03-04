@@ -1,7 +1,8 @@
 <template>
   <div :class="wrapperPadding()">
+    <account-chooser v-if="$q.screen.lt.sm" class="q-mt-md" />
     <q-card class="content-card">
-      <q-card-section>
+      <q-card-section :class="$q.screen.lt.sm ? 'q-pt-none' : ''">
         <div class="text-h6 text-capitalize" v-if="$q.screen.gt.xs">
           {{ cardTitle }}
         </div>
@@ -10,6 +11,7 @@
       <change-password v-if="$q.screen.gt.xs" />
       <settings-menu v-else />
     </q-card>
+    <account-chooser v-if="$q.screen.gt.xs" class="q-mt-md" />
     <logout-mobile v-if="$q.screen.lt.sm" />
   </div>
 </template>
@@ -20,6 +22,7 @@ import { wrapperPadding } from 'src/composables/screen'
 import ChangePassword from './ChangePassword.vue'
 import LogoutMobile from './LogoutMobile.vue'
 import SettingsMenu from './SettingsMenu.vue'
+import AccountChooser from '../dashboard/AccountChooser.vue'
 import { useQuasar } from 'quasar'
 
 const $q = useQuasar()

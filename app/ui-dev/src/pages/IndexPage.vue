@@ -18,6 +18,7 @@
         />
       </div>
     </div>
+    <account-chooser card-style="custom-round" />
     <!-- <transaction-recap
       :data="store.transactions.transfer"
       icon="label_important_outline"
@@ -30,6 +31,7 @@
 import GreetingsText from './dashboard/GreetingsText.vue'
 import FundBalance from './dashboard/FundBalance.vue'
 import TransactionRecap from './dashboard/TransactionRecap.vue'
+import AccountChooser from './dashboard/AccountChooser.vue'
 import { useDashboardStore } from 'src/stores/dashboard-store'
 
 const store = useDashboardStore()

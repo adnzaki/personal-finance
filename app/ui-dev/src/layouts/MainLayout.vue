@@ -133,7 +133,6 @@ const mobileSubRoute = (currentPath) => {
     /(\/\d+)?\/\d{4}-\d{2}-\d{2}_\d{4}-\d{2}-\d{2}$/,
     '',
   )
-  console.log(route.matched[0]?.path)
 
   const paths = [
     '/kepemilikan',
