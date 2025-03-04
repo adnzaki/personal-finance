@@ -11,6 +11,7 @@ import SearchBox from 'components/SearchBox.vue'
 import DataNavigator from 'components/DataNavigator.vue'
 import LogoutButton from 'components/LogoutButton.vue'
 import DropdownSearch from 'components/DropdownSearch.vue'
+import SaveButton from 'components/SaveButton.vue'
 // import RowDropdown from 'components/RowDropdown.vue'
 // import DeleteConfirm from 'components/DeleteConfirm.vue'
 // import ErrorMsg from 'src/components/ErrorMessage.vue'
@@ -23,6 +24,7 @@ export default ({ app }) => {
   app.component('data-nav', DataNavigator)
   app.component('logout-btn', LogoutButton)
   app.component('dropdown-search', DropdownSearch)
+  app.component('save-btn', SaveButton)
   // app.component('row-dropdown', RowDropdown)
   // app.component('delete-confirm', DeleteConfirm)
   // app.component('ac-error', ErrorMsg)

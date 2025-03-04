@@ -96,6 +96,13 @@ class Auth extends BaseController
         }
     }
 
+    public function deleteDefaultCookie() 
+    {
+        delete_cookie('sisauang_api_session');
+
+        return $this->response->setJSON(['status' => 'success']);
+    }
+
     public function logout()
     {
         if(auth()->loggedIn()) {

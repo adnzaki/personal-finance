@@ -12,7 +12,44 @@
           v-if="$q.screen.gt.xs"
         />
 
-        <q-toolbar-title> SisaUang </q-toolbar-title>
+        <q-toolbar-title>
+          <div class="row">
+            <div class="col-10">
+              <div class="row">
+                <q-btn
+                  color="white"
+                  flat
+                  class="back-button"
+                  rounded
+                  icon="arrow_back"
+                  @click="$router.back()"
+                  v-if="$q.screen.lt.sm && mobileSubRoute($route.path)"
+                />
+                <div
+                  :class="[
+                    'text-subtitle1 text-uppercase q-ml-sm',
+                    mobileSubRoute($route.path) ? 'q-mt-xs' : '',
+                  ]"
+                  :style="
+                    isFormPage($route.path) ? 'margin-top: 7px !important' : ''
+                  "
+                >
+                  {{ toolbarTitle() }}
+                </div>
+              </div>
+            </div>
+            <div class="col-2 text-right" v-if="isFormPage($route.path)">
+              <q-btn
+                flat
+                round
+                color="white"
+                class="mobile-save-btn"
+                icon="o_close"
+                @click="$router.back()"
+              />
+            </div>
+          </div>
+        </q-toolbar-title>
       </q-toolbar>
     </q-header>
     <q-footer v-if="$q.screen.lt.sm" class="su-box-shadow">
@@ -62,11 +99,7 @@
           >!
         </q-item-label> -->
 
-        <EssentialLink
-          v-for="link in linksList"
-          :key="link.title"
-          v-bind="link"
-        />
+        <MenuItem v-for="link in linksList" :key="link.title" v-bind="link" />
         <q-item class="q-mt-md">
           <logout-btn />
         </q-item>
@@ -82,19 +115,51 @@
 <script setup>
 import { ref } from 'vue'
 import { useQuasar } from 'quasar'
-import EssentialLink from 'components/EssentialLink.vue'
-
-defineOptions({
-  name: 'MainLayout',
-})
+import MenuItem from 'src/components/MenuItem.vue'
+import { useRoute } from 'vue-router'
 
 const $q = useQuasar()
+const route = useRoute()
 
 const activeMobileMenu = ref('dashboard')
 
 const activeClass = (menu) =>
   menu === activeMobileMenu.value ? 'text-primary' : ''
 
+const isFormPage = (str) => /(add|edit)/.test(str)
+
+const mobileSubRoute = (currentPath) => {
+  let cleanPath = currentPath.replace(
+    /(\/\d+)?\/\d{4}-\d{2}-\d{2}_\d{4}-\d{2}-\d{2}$/,
+    '',
+  )
+
+  const paths = [
+    '/kepemilikan',
+    '/kategori',
+    '/pengaturan/reset-password',
+    '/statistik/kategori',
+    '/statistik/kategori/transaksi',
+    // '/sumber-dana/add',
+    // '/sumber-dana/edit',
+    // '/transaksi/add',
+    // '/transaksi/edit',
+    // '/kategori/add',
+    // '/kategori/edit',
+    // '/kepemilikan/add',
+    // '/kepemilikan/edit',
+  ]
+
+  return paths.includes(cleanPath)
+}
+
+const toolbarTitle = () => {
+  if ($q.screen.lt.sm) {
+    return route.name
+  } else {
+    return 'SisaUang'
+  }
+}
 const linksList = [
   {
     title: 'Dashboard',

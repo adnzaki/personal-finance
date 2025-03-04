@@ -4,19 +4,28 @@
       class="row q-col-gutter-sm"
       v-if="store.biggestTransaction.response.length > 0"
     >
-      <div class="col-12">
+      <div
+        class="col-12"
+        v-if="store.biggestTransaction.totalTransaction[0] > 0"
+      >
         <div class="text-h6">Pengeluaran terbesar</div>
       </div>
       <div class="col-12 col-md-6">
         <div class="container">
-          <Doughnut :data="data" v-if="loaded" :options="options"
+          <Doughnut
+            :data="data"
+            v-if="loaded && store.biggestTransaction.totalTransaction[0] > 0"
+            :options="options"
             >No data to display</Doughnut
           >
         </div>
       </div>
       <div class="col-12 col-md-6">
         <BiggestCategoryList />
-        <div class="col-12">
+        <div
+          class="col-12"
+          v-if="store.biggestTransaction.totalTransaction[0] > 0"
+        >
           <q-btn
             flat
             label="Lihat Detail"

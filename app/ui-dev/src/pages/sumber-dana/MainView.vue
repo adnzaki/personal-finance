@@ -2,13 +2,9 @@
   <div :class="wrapperPadding()">
     <q-card class="content-card">
       <q-card-section class="q-mb-md">
-        <div
-          class="text-subtitle1 text-uppercase q-mb-sm"
-          v-if="$q.screen.lt.sm"
-        >
+        <div class="text-h6 text-capitalize" v-if="$q.screen.gt.xs">
           {{ cardTitle }}
         </div>
-        <div class="text-h6 text-capitalize" v-else>{{ cardTitle }}</div>
         <div :class="['row', titleSpacing()]">
           <ButtonGroup />
           <search-box label="Cari sumber dana..." />

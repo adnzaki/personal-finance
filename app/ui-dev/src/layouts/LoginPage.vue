@@ -22,23 +22,23 @@
             <div class="q-gutter-lg q-mt-lg">
               <q-input
                 outlined
-                v-model="username"
+                v-model="store.username"
                 label="Username"
-                @keyup.enter="validate"
+                @keyup.enter="store.validate()"
                 class="rounded-field"
               />
               <q-input
                 outlined
-                v-model="password"
+                v-model="store.password"
                 label="Password"
-                @keyup.enter="validate"
+                @keyup.enter="store.validate()"
                 class="rounded-field"
-                :type="showPassword ? 'text' : 'password'"
+                :type="store.showPassword ? 'text' : 'password'"
                 ><template v-slot:append>
                   <q-icon
-                    :name="showPassword ? 'visibility_off' : 'visibility'"
+                    :name="store.showPassword ? 'visibility_off' : 'visibility'"
                     class="cursor-pointer"
-                    @click="showPassword = !showPassword"
+                    @click="store.showPassword = !store.showPassword"
                   /> </template
               ></q-input>
             </div>
@@ -51,10 +51,10 @@
             /> -->
 
             <p
-              v-if="showMsg"
-              :class="[`text-bold text-${msgClass}`, 'q-mt-md']"
+              v-if="store.showMsg"
+              :class="[`text-bold text-${store.msgClass}`, 'q-mt-md']"
             >
-              {{ msg }}
+              {{ store.msg }}
             </p>
 
             <q-btn
@@ -63,7 +63,7 @@
               icon="r_login"
               label="Sign In"
               class="full-width q-mt-xl custom-round"
-              @click="validate"
+              @click="store.validate()"
             />
             <p class="q-mt-xl">
               Belum punya akun? Daftar
@@ -96,77 +96,18 @@
 </style>
 
 <script setup>
-import { ref, computed } from 'vue'
-import { conf, api, createFormData } from 'src/router/http'
+import { computed } from 'vue'
+import { onBeforeRouteLeave } from 'vue-router'
+import { conf } from 'src/router/http'
 import { useQuasar } from 'quasar'
+import { useLoginStore } from 'src/stores/login-store'
 
 const $q = useQuasar()
+const store = useLoginStore()
 
-const username = ref('')
-const password = ref('')
-const showMsg = ref(false)
-const msg = ref('')
-const msgClass = ref('black')
+onBeforeRouteLeave(() => {
+  localStorage.removeItem('addAccount')
+})
+
 const cardMobileSize = computed(() => ($q.screen.lt.sm ? 'col-12 q-ml-sm' : ''))
-
-const showPassword = ref(false)
-
-const validate = () => {
-  msg.value = ''
-  showMsg.value = true
-  const hideMsg = () => (showMsg.value = false)
-
-  if (username.value === '' || password.value === '') {
-    msg.value = 'Username dan password wajib diisi'
-    msgClass.value = 'negative'
-    setTimeout(hideMsg, 6000)
-  } else {
-    const postData = {
-      username: username.value,
-      password: password.value,
-    }
-
-    msgClass.value = 'black'
-    msg.value = 'Memroses autentikasi...'
-    api
-      .post('validate-login', postData, {
-        transformRequest: [(data) => createFormData(data)],
-      })
-      .then(({ data }) => {
-        if (data.status === 'failed') {
-          msg.value = data.message
-          msgClass.value = 'negative'
-        } else {
-          msg.value = 'Login berhasil. Mengalihkan ke halaman utama...'
-          msgClass.value = 'positive'
-
-          // if (rememberMe.value) {
-          // }
-          conf.cookieExp *= 12 * 360 // keep cookie valid for 360 days
-
-          const dt = new Date(),
-            now = dt.getTime(),
-            expMs = now + conf.cookieExp,
-            exp = new Date(expMs),
-            cookieOptions = {
-              expires: exp.toUTCString(),
-              path: '/',
-              sameSite: 'None',
-              secure: true,
-            }
-
-          $q.cookies.set(conf.cookieName, data.token, cookieOptions)
-          localStorage.setItem('username', data.user.username)
-
-          // redirect to dashboard
-          window.location.href = conf.homeUrl()
-        }
-      })
-      .catch((err) => {
-        msg.value = err
-        msgClass.value = 'negative'
-        setTimeout(hideMsg, 6000)
-      })
-  }
-}
 </script>

@@ -30,7 +30,7 @@ export const validatePage = (isLoginPage = false) => {
                 'Successfully established connection to SisaUang API.',
             )
 
-            if (isLoginPage) {
+            if (isLoginPage && localStorage.getItem('addAccount') === null) {
               window.location.href = conf.homeUrl()
             }
           }

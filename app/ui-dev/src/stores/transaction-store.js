@@ -112,10 +112,7 @@ export const useTransactionStore = defineStore('transaction', {
         sort: 'DESC',
         search: '',
         url: `${conf.apiPublicPath}${this.baseUrl}get-data/${params}/`,
-        autoReset: {
-          active: true,
-          timeout: 500,
-        },
+        autoReset: 500,
       })
     },
     deleteTransaction(id) {
@@ -188,6 +185,7 @@ export const useTransactionStore = defineStore('transaction', {
         timeout: 0,
       })
 
+      this.data.nominal = this.data.nominal.toString()
       this.data.nominal = this.data.nominal.replace(/,/g, '')
 
       api

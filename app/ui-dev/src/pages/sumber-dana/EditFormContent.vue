@@ -94,17 +94,18 @@
         flat
         label="Tutup"
         @click="closeForm"
-        class="custom-round"
+        class="custom-round close-btn"
         color="negative"
       />
       <q-btn
         unelevated
         label="Simpan"
         @click="save"
-        class="save-btn"
+        class="save-btn mobile-hide"
         color="primary"
       />
     </q-card-actions>
+    <save-btn @click="save" />
   </div>
 </template>
 <script setup>

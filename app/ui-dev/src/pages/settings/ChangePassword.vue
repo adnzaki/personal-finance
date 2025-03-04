@@ -52,15 +52,6 @@
     </q-form>
   </q-card-section>
 
-  <q-card-actions align="center">
-    <q-btn
-      color="primary"
-      class="btn-w95 save-btn q-mb-md"
-      :label="btnLabel"
-      v-if="$q.screen.lt.sm"
-      @click="store.updatePassword()"
-    />
-  </q-card-actions>
   <q-card-actions align="left" class="q-ml-sm">
     <q-btn
       color="primary"
@@ -70,6 +61,7 @@
       @click="store.updatePassword()"
     />
   </q-card-actions>
+  <save-btn @click="store.updatePassword()" />
 </template>
 
 <script setup>
