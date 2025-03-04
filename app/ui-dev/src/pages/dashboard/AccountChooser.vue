@@ -143,6 +143,7 @@ const removeAccount = (name) => {
 }
 
 const switchAccount = (name, token) => {
+  $q.cookies.remove('sisauang_api_session')
   store.setCookieOptions()
   localStorage.setItem('username', name)
   $q.cookies.set(conf.cookieName, token, store.cookieOptions)
