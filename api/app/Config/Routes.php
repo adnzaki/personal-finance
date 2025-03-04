@@ -8,6 +8,7 @@ use CodeIgniter\Router\RouteCollection;
 $routes->add('validate-page', 'Auth::validatePageRequest');
 $routes->post('validate-login', 'Auth::validateLogin');
 $routes->add('logout-user', 'Auth::logout');
+$routes->add('delete-default-cookie', 'Auth::deleteDefaultCookie');
 $routes->add('signup', 'Registration::signup');
 $routes->group('ownership', function (RouteCollection $routes) {
     $routes->add('get-data/(:any)/(:any)/(:any)/(:any)/(:any)', 'Ownership::getData/$1/$2/$3/$4/$5');

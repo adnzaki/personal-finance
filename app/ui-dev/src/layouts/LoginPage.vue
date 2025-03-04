@@ -97,12 +97,17 @@
 
 <script setup>
 import { computed } from 'vue'
+import { onBeforeRouteLeave } from 'vue-router'
 import { conf } from 'src/router/http'
 import { useQuasar } from 'quasar'
 import { useLoginStore } from 'src/stores/login-store'
 
 const $q = useQuasar()
 const store = useLoginStore()
+
+onBeforeRouteLeave(() => {
+  localStorage.removeItem('addAccount')
+})
 
 const cardMobileSize = computed(() => ($q.screen.lt.sm ? 'col-12 q-ml-sm' : ''))
 </script>

@@ -16,7 +16,7 @@ export const useLoginStore = defineStore('login', () => {
     let accounts = JSON.parse(localStorage.getItem('multiAccounts')) || []
 
     // Cek apakah user sudah ada dalam daftar
-    if (!accounts.some((acc) => acc.userId === user.id)) {
+    if (!accounts.some((acc) => acc.name === user.username)) {
       accounts.push({
         userId: user.id,
         name: user.username,

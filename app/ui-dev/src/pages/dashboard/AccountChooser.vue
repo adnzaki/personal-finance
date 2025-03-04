@@ -87,7 +87,6 @@
             <q-btn
               flat
               label="Tambahkan Akun"
-              to="/login"
               class="save-btn q-mb-md see-more"
               color="primary"
               @click="addAccount"
@@ -102,11 +101,13 @@
 <script setup>
 import { dashboardWrapperPadding } from 'src/composables/screen'
 import { ref, onMounted, computed } from 'vue'
+import { useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
-import { conf } from 'src/router/http'
+import { conf, api } from 'src/router/http'
 import { useLoginStore } from 'src/stores/login-store'
 
 const $q = useQuasar()
+const router = useRouter()
 const store = useLoginStore()
 const title = ref('Akun Lainnya')
 const accounts = ref([])
@@ -134,7 +135,11 @@ onMounted(() => {
 })
 
 const addAccount = () => {
-  localStorage.setItem('addAccount', 1)
+  $q.cookies.remove('sisauang_api_session')
+  api.get('delete-default-cookie').then(() => {
+    localStorage.setItem('addAccount', 1)
+    router.push('/login')
+  })
 }
 
 const removeAccount = (name) => {

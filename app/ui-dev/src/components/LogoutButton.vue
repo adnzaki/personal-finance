@@ -25,8 +25,6 @@ const logout = () => {
     })
     .then(({ data }) => {
       if (data.status === 'success') {
-        const accounts = store.getSavedAccounts()
-
         // remove current logged in account first
         store.removeAccount()
         $q.cookies.remove(conf.cookieName, { path: '/' })
@@ -34,6 +32,7 @@ const logout = () => {
         localStorage.removeItem('username')
 
         // then we check if there is any saved account
+        const accounts = store.getSavedAccounts()
         if (accounts.length > 0) {
           store.setCookieOptions()
           localStorage.setItem('username', accounts[0].name)
