@@ -81,7 +81,8 @@
         </q-item>
         <!-- #END Desktop and Tablet View -->
       </q-list>
-      <data-nav v-model="current" />
+      <data-nav v-model="current" v-if="$q.screen.gt.sm" />
+      <data-nav-mobile v-model="current" v-else />
     </div>
   </div>
 </template>

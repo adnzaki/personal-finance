@@ -12,12 +12,7 @@ import DataNavigator from 'components/DataNavigator.vue'
 import LogoutButton from 'components/LogoutButton.vue'
 import DropdownSearch from 'components/DropdownSearch.vue'
 import SaveButton from 'components/SaveButton.vue'
-// import RowDropdown from 'components/RowDropdown.vue'
-// import DeleteConfirm from 'components/DeleteConfirm.vue'
-// import ErrorMsg from 'src/components/ErrorMessage.vue'
-// import EmployeePhoto from 'src/pages/employee/EmployeePhoto.vue'
-// import BtnTooltip from 'components/BtnTooltip.vue'
-// import SpinnerLoading from 'components/Spinner.vue'
+import DataNavMobile from 'components/DataNavMobile.vue'
 
 export default ({ app }) => {
   app.component('search-box', SearchBox)
@@ -25,10 +20,5 @@ export default ({ app }) => {
   app.component('logout-btn', LogoutButton)
   app.component('dropdown-search', DropdownSearch)
   app.component('save-btn', SaveButton)
-  // app.component('row-dropdown', RowDropdown)
-  // app.component('delete-confirm', DeleteConfirm)
-  // app.component('ac-error', ErrorMsg)
-  // app.component('employee-photo', EmployeePhoto)
-  // app.component('btn-tooltip', BtnTooltip)
-  // app.component('ac-spinner', SpinnerLoading)
+  app.component('data-nav-mobile', DataNavMobile)
 }
