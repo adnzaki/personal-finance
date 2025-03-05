@@ -1,6 +1,6 @@
 <template>
   <div :class="spaces" :style="{ marginTop: navWrapper }">
-    <div class="row">
+    <div class="row" v-if="totalPages > 0">
       <div class="col-2 col-sm-1 text-center prev-bg">
         <q-btn
           color="primary"
