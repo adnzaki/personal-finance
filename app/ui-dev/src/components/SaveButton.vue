@@ -2,7 +2,8 @@
   <q-page-sticky
     position="bottom"
     :offset="fabPos"
-    class="mobile-only mobile-save-btn-wrapper"
+    class="mobile-save-btn-wrapper"
+    v-if="$q.screen.lt.sm"
   >
     <q-btn fab label="Simpan" class="mobile-save-btn" color="primary" />
   </q-page-sticky>

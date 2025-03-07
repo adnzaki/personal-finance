@@ -2,9 +2,8 @@
   <div>
     <div class="q-px-md q-pb-md">
       <q-list bordered class="rounded-borders" separator>
-        <!-- Desktop View -->
         <q-item clickable v-for="(item, index) in data" :key="index">
-          <q-item-section avatar
+          <q-item-section avatar @click="getDetail(item.id)"
             ><p
               class="text-subtitle1 text-weight-bold text-center"
               style="font-size: 1.4rem; margin-bottom: 0 !important"
@@ -17,7 +16,7 @@
               >
             </p>
           </q-item-section>
-          <q-item-section>
+          <q-item-section @click="getDetail(item.id)">
             {{ item.deskripsi }}
             <q-item-label
               caption
@@ -35,42 +34,6 @@
 
           <q-item-section side>
             <q-btn
-              class="custom-round mobile-hide"
-              flat
-              color="primary"
-              icon="r_edit"
-              @click="getDetail(item.id)"
-            />
-            <q-btn
-              class="custom-round mobile-only"
-              flat
-              color="primary"
-              icon="r_edit"
-            >
-              <q-menu>
-                <q-list style="min-width: 150px">
-                  <q-item clickable v-close-popup @click="getDetail(item.id)">
-                    <q-item-section avatar
-                      ><q-icon name="r_edit"
-                    /></q-item-section>
-                    <q-item-section>Edit</q-item-section>
-                  </q-item>
-                  <q-separator />
-                  <q-item
-                    clickable
-                    v-close-popup
-                    @click="store.deleteTransaction(item.id)"
-                    ><q-item-section avatar
-                      ><q-icon name="r_delete_outline"
-                    /></q-item-section>
-                    <q-item-section>Hapus</q-item-section>
-                  </q-item>
-                </q-list>
-              </q-menu>
-            </q-btn>
-          </q-item-section>
-          <q-item-section side class="mobile-hide">
-            <q-btn
               class="custom-round"
               flat
               color="primary"
@@ -79,7 +42,6 @@
             />
           </q-item-section>
         </q-item>
-        <!-- #END Desktop and Tablet View -->
       </q-list>
       <data-nav v-model="current" v-if="$q.screen.gt.sm" />
       <data-nav-mobile v-model="current" v-else />

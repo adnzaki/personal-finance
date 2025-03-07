@@ -26,8 +26,9 @@
         unelevated
         label="Simpan"
         @click="save"
-        class="save-btn mobile-hide"
+        class="save-btn"
         color="primary"
+        v-if="$q.screen.gt.xs"
       />
     </q-card-actions>
     <save-btn @click="save" />

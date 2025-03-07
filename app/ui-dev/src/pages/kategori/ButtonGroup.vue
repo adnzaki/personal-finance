@@ -7,7 +7,7 @@
         unelevated
         color="primary"
         label="Tambah"
-        @click="store.showAddForm = true"
+        @click="showForm"
       />
       <q-btn
         :icon="visibleIcon"
@@ -30,7 +30,7 @@
         icon="add"
         class="custom-round"
         color="primary"
-        to="/kategori/add"
+        @click="showForm"
       />
     </q-page-sticky>
   </div>
@@ -40,10 +40,12 @@
 import { fabPos } from 'src/composables/fab'
 import { computed } from 'vue'
 import { useQuasar } from 'quasar'
+import { useRouter } from 'vue-router'
 import { useCategoryStore } from 'src/stores/category-store'
 
-const store = useCategoryStore()
 const $q = useQuasar()
+const router = useRouter()
+const store = useCategoryStore()
 
 const visibleIcon = computed(() => {
   return store.hideDefault === 1 ? 'visibility' : 'visibility_off'
@@ -60,5 +62,13 @@ const visibleClass = computed(() => {
 const toggleDefault = () => {
   store.hideDefault = store.hideDefault === 1 ? 0 : 1
   store.toggleDefaultCategory()
+}
+
+const showForm = () => {
+  if ($q.screen.lt.sm) {
+    router.push('/kategori/add')
+  } else {
+    store.showAddForm = true
+  }
 }
 </script>

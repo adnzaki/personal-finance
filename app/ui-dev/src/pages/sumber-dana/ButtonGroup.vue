@@ -7,7 +7,7 @@
         unelevated
         color="primary"
         label="Tambah"
-        @click="store.showAddForm = true"
+        @click="showForm"
       />
     </div>
 
@@ -22,7 +22,7 @@
         icon="add"
         class="custom-round"
         color="primary"
-        to="/sumber-dana/add"
+        @click="showForm"
       />
     </q-page-sticky>
   </div>
@@ -31,6 +31,18 @@
 <script setup>
 import { fabPos } from 'src/composables/fab'
 import { useFundStore } from 'src/stores/fund-store'
+import { useQuasar } from 'quasar'
+import { useRouter } from 'vue-router'
 
+const $q = useQuasar()
+const router = useRouter()
 const store = useFundStore()
+
+const showForm = () => {
+  if ($q.screen.lt.sm) {
+    router.push('/sumber-dana/add')
+  } else {
+    store.showAddForm = true
+  }
+}
 </script>
