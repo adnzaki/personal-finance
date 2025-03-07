@@ -39,7 +39,7 @@ const $q = useQuasar()
 let search = computed(() => paging.state.search)
 watch(search, () => paging.onSearchChanged())
 
-const rounded = computed(() => ($q.screen.lt.sm ? 'rounded-field' : ''))
+const rounded = computed(() => ($q.screen.lt.md ? 'rounded-field' : ''))
 
 const filter = () => {
   if ($q.cookies.has(conf.cookieName)) {

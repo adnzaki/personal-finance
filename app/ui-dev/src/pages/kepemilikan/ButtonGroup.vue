@@ -7,7 +7,7 @@
         unelevated
         color="primary"
         label="Tambah"
-        @click="store.showAddForm = true"
+        @click="showForm"
       />
     </div>
 
@@ -22,7 +22,7 @@
         icon="add"
         class="custom-round"
         color="primary"
-        to="/kepemilikan/add"
+        @click="showForm"
       />
     </q-page-sticky>
   </div>
@@ -31,6 +31,18 @@
 <script setup>
 import { fabPos } from 'src/composables/fab'
 import { useOwnershipStore } from 'stores/ownership-store'
+import { useQuasar } from 'quasar'
+import { useRouter } from 'vue-router'
 
+const $q = useQuasar()
+const router = useRouter()
 const store = useOwnershipStore()
+
+const showForm = () => {
+  if ($q.screen.lt.sm) {
+    router.push('/kepemilikan/add')
+  } else {
+    store.showAddForm = true
+  }
+}
 </script>

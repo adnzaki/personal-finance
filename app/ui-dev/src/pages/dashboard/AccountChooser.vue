@@ -15,23 +15,23 @@
           <div class="q-px-md q-pb-md" v-if="accounts.length > 0">
             <q-list bordered class="rounded-borders" separator>
               <q-item clickable v-for="(item, index) in accounts" :key="index">
-                <q-item-section avatar
+                <q-item-section
+                  avatar
+                  @click="switchAccount(item.name, item.token)"
                   ><q-icon color="primary" name="r_account_circle"
                 /></q-item-section>
-                <q-item-section>
+                <q-item-section @click="switchAccount(item.name, item.token)">
                   <q-item-label class="text-bold">{{ item.name }}</q-item-label>
                 </q-item-section>
                 <q-item-section avatar>
-                  <div
-                    class="row"
-                    v-if="$route.path !== '/pengaturan' || $q.screen.gt.xs"
-                  >
+                  <div class="row">
                     <q-btn
                       class="custom-round"
                       flat
                       color="primary"
                       icon="r_login"
                       size="lg"
+                      v-if="$route.path !== '/pengaturan'"
                       @click="switchAccount(item.name, item.token)"
                     />
                     <q-btn
@@ -41,44 +41,11 @@
                       icon="r_delete_outline"
                       size="lg"
                       @click="removeAccount(item.name)"
-                      v-if="$route.path === '/pengaturan' && $q.screen.gt.xs"
+                      v-else
                     />
                   </div>
-                  <q-btn
-                    class="custom-round mobile-only"
-                    flat
-                    color="primary"
-                    icon="r_edit"
-                    v-else
-                  >
-                    <q-menu>
-                      <q-list style="min-width: 150px">
-                        <q-item
-                          clickable
-                          v-close-popup
-                          @click="switchAccount(item.name, item.token)"
-                        >
-                          <q-item-section avatar
-                            ><q-icon name="r_login"
-                          /></q-item-section>
-                          <q-item-section>Login</q-item-section>
-                        </q-item>
-                        <q-separator />
-                        <q-item
-                          clickable
-                          v-close-popup
-                          @click="removeAccount(item.name)"
-                          ><q-item-section avatar
-                            ><q-icon name="r_delete_outline"
-                          /></q-item-section>
-                          <q-item-section>Hapus</q-item-section>
-                        </q-item>
-                      </q-list>
-                    </q-menu>
-                  </q-btn>
-                </q-item-section>
-              </q-item></q-list
-            >
+                </q-item-section> </q-item
+            ></q-list>
           </div>
           <div class="q-px-md q-pb-md text-center" v-else>
             <p>Belum ada akun lain yang tersimpan.</p>
@@ -143,8 +110,15 @@ const addAccount = () => {
 }
 
 const removeAccount = (name) => {
-  store.removeAccount(false, name)
-  setAccounts()
+  $q.dialog({
+    title: 'Hapus Akun',
+    message: 'Anda yakin ingin menghapus akun ini dari perangkat anda?',
+    cancel: true,
+    persistent: true,
+  }).onOk(() => {
+    store.removeAccount(name)
+    setAccounts()
+  })
 }
 
 const switchAccount = (name, token) => {
