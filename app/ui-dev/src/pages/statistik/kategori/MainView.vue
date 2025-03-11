@@ -2,9 +2,27 @@
   <div :class="wrapperPadding()">
     <q-card class="content-card">
       <q-card-section class="q-mb-md">
-        <div class="text-h6 text-capitalize" v-if="$q.screen.gt.xs">
-          {{ cardTitle }}
+        <div class="row">
+          <q-btn
+            color="teal"
+            flat
+            class="back-button q-mb-md"
+            style="padding-right: 8px !important; margin-right: 5px"
+            rounded
+            icon="arrow_back"
+            @click="$router.push('/statistik')"
+          />
+
+          <div
+            class="text-subtitle1 text-uppercase q-mt-xs page-title-pl-5"
+            v-if="$q.screen.gt.xs"
+          >
+            {{ cardTitle }}
+          </div>
         </div>
+        <!-- <div class="text-h6 text-capitalize" v-if="$q.screen.gt.xs">
+          {{ cardTitle }}
+        </div> -->
         <div :class="['row', titleSpacing()]">
           <!-- <DateFilter v-if="$q.screen.gt.md && !hideDateFilter" />
           <RangeType v-if="!hideDateFilter" />

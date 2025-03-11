@@ -30,18 +30,25 @@ class StatisticModel extends TransactionModel
             $endDateRange = $endDate . '_2999-12-31';
 
             // it is just a helper for us, not for users
+            $startDateLong = date('Y-m-d H:i:s', strtotime($date[0]));
             $endDateLong = date('Y-m-d H:i:s', strtotime($date[1]) + 86400);
         } else {
             $startDate = date('Y-m-d', strtotime($dateRange));
+            $endDate = $startDate;
             $startDateRange = $startDate . '_2999-12-31';
             $endDateRange = $startDate . '_2999-12-31';
+
+            $startDateLong = date('Y-m-d H:i:s', strtotime($dateRange));
             $endDateLong = date('Y-m-d H:i:s', strtotime($dateRange) + 86400);
         }
 
+        // the total records of transactions
+        $totalTransactionRows = $this->getTotalRows('all', 'all', 'all', 'all', $startDateRange);
+
         // now get the transactions that will be excluded from the total balance
         // and separate between income and expense
-        $incomeTransactionsStart = $this->getData('all', 'all', 'income', 'all', $startDateRange, $limit, 0);
-        $expenseTransactionsStart = $this->getData('all', 'all', 'expense', 'all', $startDateRange, $limit, 0);
+        $incomeTransactionsStart = $this->getData('all', 'all', 'income', 'all', $startDateRange, $totalTransactionRows, 0);
+        $expenseTransactionsStart = $this->getData('all', 'all', 'expense', 'all', $startDateRange, $totalTransactionRows, 0);
         $totalIncomeTransactionsStart = array_sum(array_column($incomeTransactionsStart, 'nominal'));
         $totalExpenseTransactionsStart = array_sum(array_column($expenseTransactionsStart, 'nominal'));
 
@@ -49,11 +56,11 @@ class StatisticModel extends TransactionModel
         $startBalance = $totalBalance + $totalExpenseTransactionsStart - $totalIncomeTransactionsStart;
 
         // now let's calculate the ending balance
-        $incomeTransactionsEnd = $this->getData('all', 'all', 'income', 'all', $endDateRange, $limit, 0);
-        $expenseTransactionsEnd = $this->getData('all', 'all', 'expense', 'all', $endDateRange, $limit, 0);
+        $incomeTransactionsEnd = $this->getData('all', 'all', 'income', 'all', $endDateRange, $totalTransactionRows, 0);
+        $expenseTransactionsEnd = $this->getData('all', 'all', 'expense', 'all', $endDateRange, $totalTransactionRows, 0);
         $totalIncomeTransactionsEnd = array_sum(array_column($incomeTransactionsEnd, 'nominal'));
         $totalExpenseTransactionsEnd = array_sum(array_column($expenseTransactionsEnd, 'nominal'));
-        $endBalance = $totalBalance - $totalIncomeTransactionsEnd + $totalExpenseTransactionsEnd;
+        $endBalance = $totalBalance + $totalExpenseTransactionsEnd - $totalIncomeTransactionsEnd;
 
         return [
             'total_balance'     => idr_number_format($totalBalance),
@@ -64,8 +71,16 @@ class StatisticModel extends TransactionModel
             'net_income'        => idr_number_format($totalIncomeTransactionsStart - $totalExpenseTransactionsStart),
             'income_end'        => idr_number_format($totalIncomeTransactionsEnd),
             'expense_end'       => idr_number_format($totalExpenseTransactionsEnd),
+            'start_date'        => $startDateRange,
             'end_date'          => $endDateRange,
+            'start_date_long'   => $startDateLong,
             'end_date_long'     => $endDateLong,
+            'transactions'      => [
+                'incomeStart'   => $incomeTransactionsStart,
+                'expenseStart'  => $expenseTransactionsStart,
+                'incomeEnd'     => $incomeTransactionsEnd,
+                'expenseEnd'    => $expenseTransactionsEnd
+            ]
         ];
     }
 

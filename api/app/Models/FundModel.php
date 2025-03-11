@@ -96,21 +96,25 @@ class FundModel extends Connector
     public function insertOwnership(array $data)
     {
         // automatically insert or update ownership
-        $isExist = $this->builder2->where([
-            'id_sumber_dana' => $data['id_sumber_dana'], 
-            'id_kepemilikan' => $data['id_kepemilikan'],
-        ]);
-        if($isExist->countAllResults() > 0) {
-            $this->builder2->update([
-                'jumlah_dana' => $data['jumlah_dana'], 
-                'deleted' => 0
-            ], [
-                'id_sumber_dana' => $data['id_sumber_dana'],
-                'id_kepemilikan' => $data['id_kepemilikan']
-            ]);
-        } else {
-            $this->builder2->insert($data);
-        }
+        // $isExist = $this->builder2->where([
+        //     'id_sumber_dana' => $data['id_sumber_dana'], 
+        //     'id_kepemilikan' => $data['id_kepemilikan'],
+        // ]);
+        // if($isExist->countAllResults() > 0) {
+        //     $this->builder2->update([
+        //         // 'jumlah_dana' => $data['jumlah_dana'], 
+        //         'deleted' => 0
+        //     ], [
+        //         'id_sumber_dana' => $data['id_sumber_dana'],
+        //         'id_kepemilikan' => $data['id_kepemilikan']
+        //     ]);
+        //     $note = 'update';
+        // } else {
+        //     $note = 'insert';
+        //     $this->builder2->insert($data);
+        // }
+
+        $this->builder2->insert($data);
     }
 
     public function deleteOwnership(int $fundId, int $ownershipId)

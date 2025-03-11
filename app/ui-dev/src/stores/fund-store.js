@@ -35,7 +35,8 @@ export const useFundStore = defineStore('fund', {
         this.data.kepemilikan.push({
           name: this.data.ownerName,
           id_kepemilikan: this.data.ownerId,
-          jumlah_dana: this.data.balance.replace(/,/g, ''),
+          jumlah_dana: '0',
+          status: 'new',
         })
 
         // remove selected owner
@@ -51,9 +52,6 @@ export const useFundStore = defineStore('fund', {
           this.data.ownerId = this.ownerList[0].id
           this.data.ownerName = this.ownerList[0].kepemilikan
         }
-
-        // reset balance
-        this.data.balance = '0'
       }
     },
     removeBalance(owner) {
@@ -69,6 +67,8 @@ export const useFundStore = defineStore('fund', {
         ownerId: owner.id_kepemilikan,
         fundId: owner.id_sumber_dana,
       })
+
+      this.getPemilik()
     },
     getPemilik() {
       api
@@ -76,10 +76,16 @@ export const useFundStore = defineStore('fund', {
           headers: { Authorization: bearerToken },
         })
         .then(({ data }) => {
-          this.ownerList = data
-          if (data.length > 0) {
-            this.data.ownerName = data[0].kepemilikan
-            this.data.ownerId = data[0].id
+          // filter existing ID first
+          const existingIds = new Set(
+            this.data.kepemilikan.map((item) => item.id_kepemilikan),
+          )
+          const filteredData = data.filter((item) => !existingIds.has(item.id))
+          this.ownerList = filteredData
+
+          if (this.ownerList.length > 0) {
+            this.data.ownerName = this.ownerList[0].kepemilikan
+            this.data.ownerId = this.ownerList[0].id
           }
         })
         .catch((error) => {
@@ -179,9 +185,13 @@ export const useFundStore = defineStore('fund', {
         timeout: 0,
       })
 
+      const ownership = this.data.kepemilikan.filter(
+        (item) => item.status === 'new',
+      )
+
       const data = {
         nama: this.data.nama,
-        kepemilikan: JSON.stringify(this.data.kepemilikan),
+        kepemilikan: JSON.stringify(ownership),
         ownerName: this.data.ownerName,
         ownerId: this.data.ownerId,
         balance: this.data.balance,
