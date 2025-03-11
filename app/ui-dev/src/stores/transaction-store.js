@@ -111,7 +111,7 @@ export const useTransactionStore = defineStore('transaction', {
         searchBy: 'deskripsi',
         sort: 'DESC',
         search: '',
-        url: `${conf.apiPublicPath}${this.baseUrl}get-data/${params}/`,
+        url: `${conf.apiPublicPath}${this.baseUrl}get-data/${params}`,
         autoReset: 500,
       })
     },

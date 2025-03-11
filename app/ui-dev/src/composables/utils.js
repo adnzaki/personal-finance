@@ -5,7 +5,9 @@ export const formatter = (numberFormat, options) => {
 }
 
 export const formatDecimal = (value) =>
-  formatter('en-US', { style: 'decimal' }).format(value)
+  value === '0' || value === null
+    ? '-'
+    : formatter('en-US', { style: 'decimal' }).format(value)
 
 export const validateNumber = (val) => {
   const regex = /^\d+(,\d+)*$/

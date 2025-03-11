@@ -19,7 +19,7 @@
           v-if="showOwnerInput"
         />
 
-        <q-input
+        <!-- <q-input
           outlined
           v-model="store.data.balance"
           class="rounded-field q-mt-md"
@@ -28,7 +28,7 @@
           :rules="[(val) => validateNumber(val) || 'Jumlah Saldo Tidak Valid']"
           @keyup.enter="addBalance"
           v-if="showOwnerInput"
-        />
+        /> -->
 
         <q-list
           bordered
@@ -38,11 +38,7 @@
         >
           <q-item clickable v-for="(item, index) in kepemilikan" :key="index">
             <q-item-section avatar><q-icon name="credit_card" /></q-item-section
-            ><q-item-section
-              >{{ item.name }}
-              <q-item-label caption>{{
-                formatDecimal(item.jumlah_dana)
-              }}</q-item-label></q-item-section
+            ><q-item-section>{{ item.name }} </q-item-section
             ><q-item-section side>
               <q-btn
                 class="custom-round"
@@ -56,7 +52,7 @@
 
         <q-btn
           unelevated
-          label="Tambah Saldo"
+          label="Tambah Kepemilikan"
           @click="addOwner"
           class="save-btn q-mt-md"
           color="blue"
@@ -67,7 +63,7 @@
 
         <q-btn
           unelevated
-          label="Simpan Saldo"
+          label="Simpan Kepemilikan"
           @click="addBalance"
           class="save-btn q-mt-md"
           color="blue"
@@ -114,8 +110,6 @@ import { useFundStore } from 'stores/fund-store'
 import { useRouter } from 'vue-router'
 import { ref, computed } from 'vue'
 import { useQuasar } from 'quasar'
-import { formatDecimal, validateNumber } from 'src/composables/utils'
-import { formatNumeral } from 'cleave-zen'
 
 const props = defineProps({
   mobile: {
@@ -150,15 +144,6 @@ const addBalance = () => {
 const addOwner = () => {
   if (store.ownerList.length > 0) {
     showOwnerInput.value = true
-
-    const amountInput = ref(null)
-    setTimeout(() => {
-      amountInput.value = document.querySelector('.saldo')
-      amountInput.value.addEventListener('input', (e) => {
-        const value = e.target.value
-        store.data.balance = formatNumeral(value)
-      })
-    }, 500)
   } else {
     $q.notify({
       type: 'negative',

@@ -89,7 +89,7 @@ class Fund extends BaseController
                         $this->model->insertOwnership([
                             'id_sumber_dana' => $insertId,
                             'id_kepemilikan' => $b->id_kepemilikan,
-                            'jumlah_dana' => (int)$b->jumlah_dana
+                            'jumlah_dana' => 0
                         ]);
                     }
                     $message = 'Berhasil menambahkan sumber dana';
@@ -102,7 +102,7 @@ class Fund extends BaseController
                         $this->model->insertOwnership([
                             'id_sumber_dana' => $id,
                             'id_kepemilikan' => $b->id_kepemilikan,
-                            'jumlah_dana' => (int)$b->jumlah_dana
+                            'jumlah_dana' => 0
                         ]);
                     }
 
@@ -111,10 +111,10 @@ class Fund extends BaseController
                 }
     
                 return $this->response->setJSON([
-                    'code'      => 200,
-                    'msg'       => $message,
-                    'data'      => $data,
-                    'kepemilikan' => $balance
+                    'code'          => 200,
+                    'msg'           => $message,
+                    'data'          => $data,
+                    'kepemilikan'   => $balance
                 ]);
             }
         }
