@@ -2,7 +2,7 @@
   <div :class="wrapperPadding()">
     <q-card class="content-card">
       <q-card-section class="q-mb-md">
-        <div class="row">
+        <div class="row" v-if="$q.screen.gt.xs">
           <q-btn
             color="teal"
             flat
@@ -13,10 +13,7 @@
             @click="$router.back()"
           />
 
-          <div
-            class="text-subtitle1 text-uppercase q-mt-xs page-title-pl-5"
-            v-if="$q.screen.gt.xs"
-          >
+          <div class="text-subtitle1 text-uppercase q-mt-xs page-title-pl-5">
             {{ cardTitle }}
           </div>
         </div>
