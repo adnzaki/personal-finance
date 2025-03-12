@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@quasar/extras": "^1.16.17",
-    "axios": "^1.8.1",
+    "axios": "^1.8.2",
     "chart.js": "^4.4.8",
     "cleave-zen": "^0.0.17",
     "cleave.js": "^1.6.0",
@@ -25,7 +25,7 @@
     "ss-paging-vue": "^3.0.2",
     "vue": "^3.5.13",
     "vue-chartjs": "^5.3.2",
-    "vue-i18n": "^11.1.1",
+    "vue-i18n": "^11.1.2",
     "vue-router": "^4.5.0"
   },
   "devDependencies": {
@@ -36,7 +36,7 @@
     "autoprefixer": "^10.4.20",
     "eslint": "^9.21.0",
     "eslint-config-prettier": "^10.0.2",
-    "eslint-plugin-vue": "^9.32.0",
+    "eslint-plugin-vue": "^9.33.0",
     "globals": "^16.0.0",
     "postcss": "^8.5.3",
     "prettier": "^3.5.2",
