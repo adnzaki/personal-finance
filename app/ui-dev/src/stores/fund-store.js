@@ -8,6 +8,7 @@ import {
 } from 'src/router/http'
 import { Notify, Dialog } from 'quasar'
 import { usePagingStore as paging } from 'ss-paging-vue'
+import LocalStorageHelper from 'src/composables/storage'
 
 export const useFundStore = defineStore('fund', {
   state: () => ({
@@ -247,6 +248,13 @@ export const useFundStore = defineStore('fund', {
         search: '',
         url: `${conf.apiPublicPath}${this.baseUrl}get-data/`,
         autoReset: 500,
+        afterRequest: () => {
+          const storage = new LocalStorageHelper('sumber-dana')
+          storage.set([])
+          paging().state.data.forEach((item) => {
+            storage.append({ value: item.id, label: item.nama })
+          })
+        },
       })
     },
     resetForm() {

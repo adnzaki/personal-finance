@@ -1,4 +1,7 @@
 import colors from './color-pallete'
+import LocalStorageHelper from './storage'
+
+export const storage = (key) => new LocalStorageHelper(key)
 
 export const formatter = (numberFormat, options) => {
   return new Intl.NumberFormat(numberFormat, options)
