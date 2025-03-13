@@ -10,7 +10,7 @@ class TransactionModel extends Connector
 
     protected $fundOwner;
 
-    protected $fundModel; // FundingModel
+    public $fundModel; // FundingModel
 
     protected $defaultFilter;
 
@@ -262,7 +262,7 @@ class TransactionModel extends Connector
         return $this->fundModel->getDaftarKepemilikan($fundId);
     }
 
-    public function getFundSource($id = null): array
+    public function getFundSource(?int $id = null): array
     {
         $query = $this->fundModel->builder->select('id as value, nama as label')->where($this->basicFilter);
         if ($id !== null) {

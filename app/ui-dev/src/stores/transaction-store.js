@@ -56,6 +56,7 @@ export const useTransactionStore = defineStore('transaction', {
           const {
             id_transaksi,
             id_sumber_dana,
+            id_pemilik_sumber_dana,
             sumber_dana,
             category_name,
             nama_tujuan_transfer,
@@ -81,7 +82,7 @@ export const useTransactionStore = defineStore('transaction', {
           }
 
           // get fund owner
-          this.getOwnerByFundSource(id_sumber_dana)
+          this.getOwnerByFundSource(id_sumber_dana, id_pemilik_sumber_dana)
 
           this.data = { ...this.data, ...filteredResponse }
 
@@ -299,16 +300,22 @@ export const useTransactionStore = defineStore('transaction', {
           }
         })
     },
-    getOwnerByFundSource(val) {
+    getOwnerByFundSource(val, selected = null) {
+      const fundOwnerId = selected === null ? '' : `/${selected}`
       api
-        .get(`${this.baseUrl}get-owner-by-fund-id/${val}`, {
+        .get(`${this.baseUrl}get-owner-by-fund-id/${val}${fundOwnerId}`, {
           headers: { Authorization: bearerToken },
         })
         .then(({ data }) => {
-          this.owners = data
-          if (data.length > 0) {
-            this.ownerId = data[0]
-            this.data.id_pemilik_sumber_dana = data[0].value
+          this.owners = data.owners
+          if (this.owners.length > 0) {
+            if (selected === null) {
+              this.ownerId = this.owners[0]
+              this.data.id_pemilik_sumber_dana = this.owners[0].value
+            } else {
+              this.ownerId = data.selected
+              this.data.id_pemilik_sumber_dana = data.selected.value
+            }
           } else {
             this.ownerId = null
             this.data.id_pemilik_sumber_dana = ''
