@@ -270,11 +270,11 @@ export const useTransactionStore = defineStore('transaction', {
           headers: { Authorization: bearerToken },
         })
         .then(({ data }) => {
-          this.targetOwners = data
-          if (data.length > 0) {
+          this.targetOwners = data.owners
+          if (this.targetOwners.length > 0) {
             if (!skipDefault) {
-              this.destinationOwnerId = data[0]
-              this.data.pemilik_dana_tujuan = data[0].value
+              this.destinationOwnerId = this.targetOwners[0]
+              this.data.pemilik_dana_tujuan = this.targetOwners[0].value
             }
           } else {
             this.destinationFundId = null
