@@ -66,6 +66,16 @@ class FundModel extends Connector
         return $ownership->getData($rows, 0);
     }
 
+    public function getSelectedOwner(int $fundOwnerId): object
+    {
+        $query = $this->builder2->select($this->pemilikSumberDana . '.id as value, kepemilikan as label')
+                      ->join($this->kepemilikan, $this->pemilikSumberDana . '.id_kepemilikan = ' . $this->kepemilikan . '.id')
+                      ->where($this->pemilikSumberDana . '.id', $fundOwnerId)
+                      ->get()->getResult()[0];
+
+        return $query;
+    }
+
     public function getDaftarKepemilikan(int $idSumberDana): array
     {
         $query = $this->builder
@@ -95,25 +105,6 @@ class FundModel extends Connector
 
     public function insertOwnership(array $data)
     {
-        // automatically insert or update ownership
-        // $isExist = $this->builder2->where([
-        //     'id_sumber_dana' => $data['id_sumber_dana'], 
-        //     'id_kepemilikan' => $data['id_kepemilikan'],
-        // ]);
-        // if($isExist->countAllResults() > 0) {
-        //     $this->builder2->update([
-        //         // 'jumlah_dana' => $data['jumlah_dana'], 
-        //         'deleted' => 0
-        //     ], [
-        //         'id_sumber_dana' => $data['id_sumber_dana'],
-        //         'id_kepemilikan' => $data['id_kepemilikan']
-        //     ]);
-        //     $note = 'update';
-        // } else {
-        //     $note = 'insert';
-        //     $this->builder2->insert($data);
-        // }
-
         $this->builder2->insert($data);
     }
 

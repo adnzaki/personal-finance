@@ -6,7 +6,7 @@
         <q-select
           filled
           v-model="store.fundId"
-          :options="store.fundSource"
+          :options="storage('sumber-dana').get()"
           label="Sumber Dana"
           class="rounded-field q-mb-md"
           @update:model-value="onFundSelected"
@@ -171,7 +171,7 @@ import { onMounted, ref } from 'vue'
 import { useRouter, onBeforeRouteLeave } from 'vue-router'
 import { date, useQuasar } from 'quasar'
 import { useTransactionStore } from 'stores/transaction-store'
-import { indonesiaDate, validateNumber } from 'src/composables/utils'
+import { indonesiaDate, validateNumber, storage } from 'src/composables/utils'
 import { formatNumeral } from 'cleave-zen'
 
 const props = defineProps({
@@ -184,8 +184,6 @@ const store = useTransactionStore()
 const router = useRouter()
 const $q = useQuasar()
 const showCategory = ref(true)
-
-store.getFundSource()
 
 const onTransactionTypeChanged = (v) => {
   if (v === 'transfer') {

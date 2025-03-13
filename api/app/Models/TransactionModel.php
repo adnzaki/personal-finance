@@ -10,7 +10,7 @@ class TransactionModel extends Connector
 
     protected $fundOwner;
 
-    protected $fundModel; // FundingModel
+    public $fundModel; // FundingModel
 
     protected $defaultFilter;
 
@@ -170,7 +170,7 @@ class TransactionModel extends Connector
             }
 
             if ($data['jenis_transaksi'] === 'transfer') {
-                $previousDestinationId = $previousTransaction->pemilik_dana_tujuan;
+                $previousDestinationId = (int)$previousTransaction->pemilik_dana_tujuan;
                 if($previousDestinationId === $destinationFundId) {
                     // if the destination ID is the same as the previous destination ID
                     // then new amount should be the difference between the previous amount and the new amount
@@ -193,6 +193,8 @@ class TransactionModel extends Connector
 
                 if($previousFundOwner === $fundOwnerId) {
                     $newAmount = $difference;
+                } else {
+                    $newAmount = $amount;
                 }
                 
                 // Update the source fund ID balance by decreasing its amount with the transaction nominal
@@ -219,7 +221,15 @@ class TransactionModel extends Connector
 
             $transactionData[] = [
                 'previousTransaction' => $previousTransaction,
-                'updatedTransaction' => $data
+                'updatedTransaction' => $data,
+                'checkSource' => [
+                    $previousFundOwner ?? null,
+                    $fundOwnerId ?? null
+                ],
+                'checkDestination' => [
+                    $previousDestinationId ?? null,
+                    $destinationFundId ?? null
+                ]
             ];
         }
 
@@ -262,7 +272,7 @@ class TransactionModel extends Connector
         return $this->fundModel->getDaftarKepemilikan($fundId);
     }
 
-    public function getFundSource($id = null): array
+    public function getFundSource(?int $id = null): array
     {
         $query = $this->fundModel->builder->select('id as value, nama as label')->where($this->basicFilter);
         if ($id !== null) {

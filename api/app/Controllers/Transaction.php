@@ -132,9 +132,15 @@ class Transaction extends BaseController
         return $this->createResponse($categories);
     }
 
-    public function getOwnerByFundId($fundId)
+    public function getOwnerByFundId($fundId, $selected = null)
     {
-        return $this->createResponse($this->model->getOwnerByFundId($fundId));
+        $data = $this->model->getOwnerByFundId($fundId);
+        $response = [
+            'owners' => $data,
+            'selected' => $selected !== null ? $this->model->fundModel->getSelectedOwner($selected) : (object)[]
+        ];
+
+        return $this->createResponse($response);
     }
 
     public function getTargetFunds($id)
