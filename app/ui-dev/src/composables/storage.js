@@ -33,21 +33,12 @@ class LocalStorageHelper {
   /**
    * Retrieve the value from local storage.
    *
-   * @param {*} defaultValue
-   * The default value to be returned if the data does not exist or
-   * if an error occurs.
-   *
    * @returns {*}
    * The retrieved value, or the default value if an error occurs.
    */
-  get(defaultValue = null) {
-    try {
-      const data = localStorage.getItem(this.key)
-      return data !== null ? JSON.parse(data) : defaultValue
-    } catch (error) {
-      console.error('Failed to retrieve data:', error)
-      return defaultValue
-    }
+  get() {
+    const data = localStorage.getItem(this.key)
+    return data ? JSON.parse(data) : null
   }
 
   /**
@@ -82,27 +73,32 @@ class LocalStorageHelper {
    * appending the value.
    */
   append(value) {
-    try {
-      let data = this.get([])
+    let data = this.get()
 
-      if (!Array.isArray(data)) {
-        console.error('Stored data is not an array, cannot append value.')
-        return
-      }
-
-      if (typeof value === 'object' && value !== null && 'value' in value) {
-        const exists = data.some((item) => item.value === value.value)
-        if (exists) {
-          console.warn('Item with this value already exists, not added.')
-          return
-        }
-      }
-
-      data.push(value)
-      this.set(data)
-    } catch (error) {
-      console.error('Failed to append data:', error)
+    if (!Array.isArray(data)) {
+      console.warn(
+        `Data in localStorage key "${this.key}" is not an array. Resetting to an empty array.`,
+      )
+      data = []
     }
+
+    if (typeof value !== 'object' || value === null || Array.isArray(value)) {
+      console.error(
+        'Only objects can be added. Strings, numbers, or arrays are not allowed.',
+      )
+      return
+    }
+
+    const exists = data.some(
+      (item) => JSON.stringify(item) === JSON.stringify(value),
+    )
+    if (exists) {
+      console.warn('Item already exists, not added.')
+      return
+    }
+
+    data.push(value)
+    this.set(data)
   }
 
   /**
@@ -118,26 +114,25 @@ class LocalStorageHelper {
    * If the stored data is not an array, or if an error occurs while
    * retrieving the item.
    */
-  getAt(index) {
-    try {
-      const data = this.get([])
-
-      if (!Array.isArray(data)) {
-        console.error('Stored data is not an array, cannot get by index.')
-        return null
-      }
-
-      return index >= 0 && index < data.length ? data[index] : null
-    } catch (error) {
-      console.error('Failed to get data by index:', error)
+  getByIndex(index) {
+    const data = this.get()
+    if (!Array.isArray(data)) {
+      console.error(`Data in localStorage key "${this.key}" is not an array.`)
       return null
     }
+
+    if (index < 0 || index >= data.length) {
+      console.warn('Index out of bounds.')
+      return null
+    }
+
+    return data[index]
   }
 
   /**
    * Filters the stored array with the given predicate function.
    *
-   * @param {function} predicate
+   * @param {function} callback
    * The function to be used as the predicate for the filter.
    *
    * @returns {array}
@@ -147,19 +142,14 @@ class LocalStorageHelper {
    * If the stored data is not an array, or if an error occurs while
    * filtering the data.
    */
-  filter(predicate) {
-    try {
-      const data = this.get([])
-      if (!Array.isArray(data)) {
-        console.error('Stored data is not an array, cannot filter.')
-        return []
-      }
-
-      return data.filter(predicate)
-    } catch (error) {
-      console.error('Failed to filter data:', error)
+  filter(callback) {
+    const data = this.get()
+    if (!Array.isArray(data)) {
+      console.error(`Data in localStorage key "${this.key}" is not an array.`)
       return []
     }
+
+    return data.filter(callback)
   }
 }
 

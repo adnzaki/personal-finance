@@ -29,6 +29,8 @@ import DateFilter from './DateFilter.vue'
 
 const store = useTransactionStore()
 
+store.getFundSource()
+
 const cardTitle = ref('Transaksi')
 
 store.filter = {
