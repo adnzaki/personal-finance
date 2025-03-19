@@ -24,6 +24,9 @@
       icon="label_important_outline"
       title="Transfer"
     /> -->
+    <p class="text-center version mobile-hide q-mt-md q-py-md">
+      Made with ❤️ by <strong>Adnan Zaki</strong>
+    </p>
   </div>
 </template>
 
