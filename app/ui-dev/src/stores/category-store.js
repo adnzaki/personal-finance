@@ -36,7 +36,7 @@ export const useCategoryStore = defineStore('category', {
             spinner: true,
             message: 'Menghapus kategori...',
             color: 'info',
-            position: 'center',
+            position: 'top',
             timeout: 0,
           })
 
@@ -101,7 +101,7 @@ export const useCategoryStore = defineStore('category', {
         spinner: true,
         message: 'Menyimpan kategori...',
         color: 'info',
-        position: 'center',
+        position: 'top',
         timeout: 0,
       })
 

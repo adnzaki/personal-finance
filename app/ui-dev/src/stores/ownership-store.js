@@ -34,7 +34,7 @@ export const useOwnershipStore = defineStore('ownership', {
             spinner: true,
             message: 'Menghapus data kepemilikan...',
             color: 'info',
-            position: 'center',
+            position: 'top',
             timeout: 0,
           })
 
@@ -99,7 +99,7 @@ export const useOwnershipStore = defineStore('ownership', {
         spinner: true,
         message: 'Menyimpan data kepemilikan...',
         color: 'info',
-        position: 'center',
+        position: 'top',
         timeout: 0,
       })
 
