@@ -10,6 +10,8 @@
       </ul>
     </q-card-section>
 
+    <q-separator class="mobile-hide" />
+
     <q-card-actions align="right">
       <q-btn
         flat
@@ -21,6 +23,13 @@
     </q-card-actions>
   </div>
 </template>
+
+<style lang="sass" scoped>
+.changelog-content
+  border: solid 2px $primary
+  border-radius: 15px
+  box-shadow: 0 0 5px rgba(209, 48, 121, 0.3)
+</style>
 
 <script setup>
 import { useRouter } from 'vue-router'

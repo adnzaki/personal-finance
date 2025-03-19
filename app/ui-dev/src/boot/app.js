@@ -1,6 +1,6 @@
 import { defineBoot } from '#q-app/wrappers'
 
-const appVersion = 'Versi 1.0.0-alpha.8'
+const appVersion = '1.0.0-alpha.8'
 
 export default defineBoot(({ app }) => {
   app.config.globalProperties.$appVersion = appVersion
