@@ -1,6 +1,7 @@
 import { validatePage } from './http'
+import { RouteRecordRaw } from 'vue-router'
 
-const routes = [
+const routes: RouteRecordRaw[] = [
   {
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
@@ -12,8 +13,21 @@ const routes = [
       {
         path: 'dashboard',
         component: () => import('pages/IndexPage.vue'),
-        beforeEnter: () => validatePage(),
+        beforeEnter: () => {
+          if (localStorage.getItem('force_reload') !== null) {
+            localStorage.removeItem('force_reload')
+            window.location.reload()
+          }
+
+          validatePage()
+        },
         name: 'Dashboard',
+      },
+      {
+        path: 'changelog',
+        component: () => import('pages/changelog/MobilePage.vue'),
+        beforeEnter: () => validatePage(),
+        name: 'Daftar Pembaruan',
       },
       {
         path: 'kepemilikan',
