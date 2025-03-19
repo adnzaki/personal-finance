@@ -153,7 +153,7 @@ const addOwner = () => {
     $q.notify({
       type: 'negative',
       message: 'Silakan tambah data pemilik terlebih dahulu',
-      position: 'center',
+      position: 'top',
     })
   }
 }

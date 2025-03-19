@@ -129,7 +129,7 @@ export const useTransactionStore = defineStore('transaction', {
             spinner: true,
             message: 'Menghapus transaksi...',
             color: 'info',
-            position: 'center',
+            position: 'top',
             timeout: 0,
           })
 
@@ -182,7 +182,7 @@ export const useTransactionStore = defineStore('transaction', {
         spinner: true,
         message: 'Menyimpan transaksi...',
         color: 'info',
-        position: 'center',
+        position: 'top',
         timeout: 0,
       })
 

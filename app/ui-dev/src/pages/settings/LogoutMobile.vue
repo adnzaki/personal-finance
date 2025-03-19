@@ -18,6 +18,7 @@
     <div class="q-px-md row items-start logout-mobile">
       <logout-btn />
     </div>
+    <app-version />
   </q-page-container>
 </template>
 

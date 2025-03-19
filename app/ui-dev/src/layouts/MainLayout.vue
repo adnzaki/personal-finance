@@ -50,6 +50,7 @@
             </div>
           </div>
         </q-toolbar-title>
+        <ChangeLog />
       </q-toolbar>
     </q-header>
     <q-footer v-if="$q.screen.lt.sm" class="su-box-shadow">
@@ -103,6 +104,7 @@
         <q-item class="q-mt-md">
           <logout-btn />
         </q-item>
+        <app-version />
       </q-list>
     </q-drawer>
 
@@ -117,6 +119,7 @@ import { ref } from 'vue'
 import { useQuasar } from 'quasar'
 import MenuItem from 'src/components/MenuItem.vue'
 import { useRoute } from 'vue-router'
+import ChangeLog from 'pages/changelog/MainView.vue'
 
 const $q = useQuasar()
 const route = useRoute()
@@ -137,6 +140,7 @@ const mobileSubRoute = (currentPath) => {
   const paths = [
     '/kepemilikan',
     '/kategori',
+    '/changelog',
     '/pengaturan/reset-password',
     '/statistik/kategori',
     '/statistik/kategori/transaksi',

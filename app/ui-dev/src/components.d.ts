@@ -7,6 +7,7 @@ declare module '@vue/runtime-core' {
     DropdownSearch: (typeof import('components/DropdownSearch.vue'))['default']
     SaveBtn: (typeof import('components/SaveButton.vue'))['default']
     DataNavMobile: (typeof import('components/DataNavMobile.vue'))['default']
+    AppVersion: (typeof import('src/components/AppVersion.vue'))['default']
   }
 }
 

@@ -105,9 +105,13 @@ import { useLoginStore } from 'src/stores/login-store'
 const $q = useQuasar()
 const store = useLoginStore()
 
-onBeforeRouteLeave(() => {
-  localStorage.removeItem('addAccount')
+onBeforeRouteLeave((to) => {
+  if (to.path !== '/register') {
+    localStorage.removeItem('addAccount')
+  }
 })
+
+localStorage.setItem('force_reload', 1)
 
 const cardMobileSize = computed(() => ($q.screen.lt.sm ? 'col-12 q-ml-sm' : ''))
 </script>

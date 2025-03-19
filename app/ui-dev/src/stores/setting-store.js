@@ -20,7 +20,7 @@ export const useSettingStore = defineStore('setting', {
         spinner: true,
         message: 'Mengubah password...',
         color: 'info',
-        position: 'center',
+        position: 'top',
         timeout: 0,
       })
 

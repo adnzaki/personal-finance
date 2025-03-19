@@ -105,7 +105,7 @@ export const useFundStore = defineStore('fund', {
             spinner: true,
             message: 'Menghapus data sumber dana...',
             color: 'info',
-            position: 'center',
+            position: 'top',
             timeout: 0,
           })
 
@@ -181,7 +181,7 @@ export const useFundStore = defineStore('fund', {
         spinner: true,
         message: 'Menyimpan data sumber dana...',
         color: 'info',
-        position: 'center',
+        position: 'top',
         timeout: 0,
       })
 

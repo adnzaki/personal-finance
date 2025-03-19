@@ -119,7 +119,7 @@ const signup = () => {
     spinner: true,
     message: 'Mendaftarkan akun...',
     color: 'info',
-    position: 'center',
+    position: 'top',
     timeout: 0,
   })
 
