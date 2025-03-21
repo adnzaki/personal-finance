@@ -44,5 +44,7 @@ const showForm = () => {
   } else {
     store.showForm = true
   }
+
+  store.formType = 'add'
 }
 </script>

@@ -16,6 +16,7 @@ export const useTransactionStore = defineStore('transaction', {
     current: 1,
     showForm: false,
     disableButton: false,
+    formType: '',
     formTitle: 'Tambah Transaksi',
     transactionId: null,
     fundSource: [],
@@ -220,7 +221,7 @@ export const useTransactionStore = defineStore('transaction', {
           }
         })
     },
-    resetForm() {
+    resetForm(fromEditPage = false) {
       // ensure that the form is reset to "Add" mode
       this.transactionId = null
 
@@ -231,8 +232,11 @@ export const useTransactionStore = defineStore('transaction', {
       this.categories = []
 
       this.error = {}
-      this.current = 1
-      paging().reloadData()
+      if (!fromEditPage) {
+        this.current = 1
+        paging().reloadData()
+      }
+
       this.data = {
         id_pemilik_sumber_dana: '',
         jenis_transaksi: 'expense',

@@ -50,7 +50,7 @@
             </div>
           </div>
         </q-toolbar-title>
-        <ChangeLog />
+        <ChangeLog v-if="!isFormPage($route.path)" />
       </q-toolbar>
     </q-header>
     <q-footer v-if="$q.screen.lt.sm" class="su-box-shadow">

@@ -1,18 +1,11 @@
 export default [
   {
     title: 'App',
-    detail: 'Menambahkan informasi versi aplikasi',
+    detail: 'Memperbaiki menu "Changelog" tetap tampil di form data',
   },
   {
     title: 'App',
-    detail: 'Menambahkan daftar pembaruan aplikasi',
-  },
-  {
-    title: 'App',
-    detail: 'Memindahkan posisi notifikasi saat menyimpan data ke bagian atas',
-  },
-  {
-    title: 'App',
-    detail: 'Memperbaiki bug kesalahan memuat data setelah login',
+    detail:
+      'Memperbaiki bug data detail tidak kembali ke default setelah menutup form',
   },
 ]
