@@ -19,7 +19,7 @@ export const useCategoryStore = defineStore('category', {
     showEditForm: false,
     disableButton: false,
     formTitle: 'Tambah Kategori',
-    data: { category_name: '', category_type: 'income' },
+    data: { category_name: '', category_type: 'expense' },
   }),
 
   actions: {
@@ -134,7 +134,7 @@ export const useCategoryStore = defineStore('category', {
 
             this.data = {
               category_name: '',
-              category_type: 'income',
+              category_type: 'expense',
             }
 
             // next action from the component

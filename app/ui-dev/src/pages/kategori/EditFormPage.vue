@@ -9,4 +9,15 @@
 <script setup>
 import { wrapperPadding } from 'src/composables/screen'
 import EditFormContent from './EditFormContent.vue'
+import { onBeforeRouteLeave } from 'vue-router'
+import { useCategoryStore } from 'src/stores/category-store'
+
+const store = useCategoryStore()
+
+onBeforeRouteLeave(() => {
+  store.data = {
+    category_name: '',
+    category_type: 'expense',
+  }
+})
 </script>

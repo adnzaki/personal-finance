@@ -72,6 +72,8 @@ const getDetail = (id) => {
     } else {
       store.showForm = true
     }
+
+    store.formType = 'edit'
   })
 }
 
