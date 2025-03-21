@@ -34,7 +34,7 @@ register(process.env.SERVICE_WORKER_FILE, {
       color: 'grey-10',
       position: 'top',
       icon: 'warning',
-      timeout: 5000,
+      timeout: 0,
       actions: [
         {
           icon: 'refresh',
