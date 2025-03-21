@@ -30,11 +30,11 @@ register(process.env.SERVICE_WORKER_FILE, {
 
   updated(/* registration */) {
     Notify.create({
-      message: 'Update telah tersedia, silakan refresh halaman ini.',
-      color: 'warning',
+      message: 'Update telah tersedia, silakan muat ulang halaman ini.',
+      color: 'grey-10',
       position: 'top',
       icon: 'warning',
-      timeout: 0,
+      timeout: 5000,
       actions: [
         {
           icon: 'refresh',
