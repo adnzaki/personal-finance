@@ -13,6 +13,7 @@ class UserModel
                 'username' => $data['username'],
                 'email'    => $data['email'],
                 'password' => $data['password'],
+                'active'   => 1
             ]);
         $users->save($user);
 

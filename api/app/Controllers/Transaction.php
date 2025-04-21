@@ -24,7 +24,7 @@ class Transaction extends BaseController
             $response->nama_tujuan_transfer = $this->model->getDestinationTransferName($response->pemilik_dana_tujuan);
         }
 
-        return $this->createResponse($response);
+        return $this->response->setJSON($response);
     }
 
     public function getData($sumberDana, $kepemilikan, $jenisTransaksi, $kategori, $tanggal, $limit, $offset, $orderBy, $searchBy, $sort, $search = '')
@@ -49,7 +49,7 @@ class Transaction extends BaseController
             $d->tgl_transaksi_monthYear = substr(os_date()->create($transactionDate, 'd-M-y'), 3, 8);
         }
 
-        return $this->createResponse([
+        return $this->response->setJSON([
             'container' => $data,
             'totalRows' => $totalRows
         ]);
@@ -57,40 +57,31 @@ class Transaction extends BaseController
 
     public function delete($id)
     {
-        if (valid_access()) {
-            $this->model->deleteTransaction($id);
-            
-            return $this->response->setJSON([
-                'code' => 200,
-                'msg' => 'Transaksi berhasil dihapus',
-            ]);
-        } else {
-            return $this->response->setJSON([
-                'code' => 500,
-                'msg' => lang('Messages.invalid_access'),
-            ]);
-        }
+        $this->model->deleteTransaction($id);
+        
+        return $this->response->setJSON([
+            'code' => 200,
+            'msg' => 'Transaksi berhasil dihapus',
+        ]);
     }
 
     public function save($id = null)
     {
-        if(valid_access()) {
-            $transactionType = $this->request->getPost('jenis_transaksi');
-            $validation = $this->validation($transactionType);
-            $data = $this->request->getPost(array_keys($validation->rules));
-            if (! $this->validateData($data, $validation->rules, $validation->messages)) {
-                return $this->response->setJSON([
-                    'code'  => 500,
-                    'msg'   => $this->validator->getErrors(),
-                ]);
-            } else {
-                $save = $this->model->save($data, $id);
-                return $this->response->setJSON([
-                    'code' => 200,
-                    'msg' => 'Transaksi berhasil disimpan',
-                    'data' => $save
-                ]);
-            }
+        $transactionType = $this->request->getPost('jenis_transaksi');
+        $validation = $this->validation($transactionType);
+        $data = $this->request->getPost(array_keys($validation->rules));
+        if (! $this->validateData($data, $validation->rules, $validation->messages)) {
+            return $this->response->setJSON([
+                'code'  => 500,
+                'msg'   => $this->validator->getErrors(),
+            ]);
+        } else {
+            $save = $this->model->save($data, $id);
+            return $this->response->setJSON([
+                'code' => 200,
+                'msg' => 'Transaksi berhasil disimpan',
+                'data' => $save
+            ]);
         }
     }
 
@@ -129,7 +120,7 @@ class Transaction extends BaseController
     {
         $model = new CategoryModel;
         $categories = $model->getData(9999, 0, '', $type);
-        return $this->createResponse($categories);
+        return $this->response->setJSON($categories);
     }
 
     public function getOwnerByFundId($fundId, $selected = null)
@@ -140,16 +131,16 @@ class Transaction extends BaseController
             'selected' => $selected !== null ? $this->model->fundModel->getSelectedOwner($selected) : (object)[]
         ];
 
-        return $this->createResponse($response);
+        return $this->response->setJSON($response);
     }
 
     public function getTargetFunds($id)
     {
-        return $this->createResponse($this->model->getFundSource($id));
+        return $this->response->setJSON($this->model->getFundSource($id));
     }
 
     public function getFundSource()
     {
-        return $this->createResponse($this->model->getFundSource());
+        return $this->response->setJSON($this->model->getFundSource());
     }
 }
