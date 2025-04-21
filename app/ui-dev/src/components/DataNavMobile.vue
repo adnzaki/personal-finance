@@ -82,6 +82,7 @@ const totalPages = computed(() => {
 
 const navigate = (direction) => {
   if ($q.cookies.has(conf.cookieName)) {
+    store.state.token = $q.cookies.get(conf.cookieName)
     store.nav(direction)
     emit('update:modelValue', direction + 1)
   } else {

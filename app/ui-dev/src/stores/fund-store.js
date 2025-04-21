@@ -1,13 +1,8 @@
 import { defineStore } from 'pinia'
-import {
-  api,
-  conf,
-  timeout,
-  bearerToken,
-  createFormData,
-} from 'src/router/http'
-import { Notify, Dialog } from 'quasar'
+import { api, conf, timeout, createFormData } from 'src/router/http'
+import { Notify, Dialog, Cookies } from 'quasar'
 import { usePagingStore as paging } from 'ss-paging-vue'
+import { errorNotif } from 'src/composables/notify'
 
 export const useFundStore = defineStore('fund', {
   state: () => ({
@@ -72,9 +67,7 @@ export const useFundStore = defineStore('fund', {
     },
     getPemilik() {
       api
-        .get(`${this.baseUrl}get-pemilik`, {
-          headers: { Authorization: bearerToken },
-        })
+        .get(`${this.baseUrl}get-pemilik`)
         .then(({ data }) => {
           // filter existing ID first
           const existingIds = new Set(
@@ -88,8 +81,8 @@ export const useFundStore = defineStore('fund', {
             this.data.ownerId = this.ownerList[0].id
           }
         })
-        .catch((error) => {
-          console.error(error)
+        .catch(() => {
+          errorNotif()
         })
     },
     deleteFund(id) {
@@ -110,9 +103,7 @@ export const useFundStore = defineStore('fund', {
           })
 
           api
-            .get(`${this.baseUrl}delete/${id}`, {
-              headers: { Authorization: bearerToken },
-            })
+            .get(`${this.baseUrl}delete/${id}`)
             .then(({ data }) => {
               notifyProgress({
                 timeout,
@@ -133,14 +124,9 @@ export const useFundStore = defineStore('fund', {
               }
               paging().reloadData()
             })
-            .catch((error) => {
-              console.error(error)
-              notifyProgress({
-                message: error.message,
-                color: 'negative',
-                spinner: false,
-                timeout,
-              })
+            .catch(() => {
+              notifyProgress()
+              errorNotif()
             })
         })
         .onCancel(() => {
@@ -149,9 +135,7 @@ export const useFundStore = defineStore('fund', {
     },
     getDetail(id, next) {
       api
-        .get(`${this.baseUrl}detail/${id}`, {
-          headers: { Authorization: bearerToken },
-        })
+        .get(`${this.baseUrl}detail/${id}`)
         .then(({ data }) => {
           this.data.nama = data.fundSource.nama
           this.data.kepemilikan = data.ownership
@@ -166,8 +150,8 @@ export const useFundStore = defineStore('fund', {
           this.formTitle = 'Perbarui Sumber Dana'
           next()
         })
-        .catch((error) => {
-          console.error(error)
+        .catch(() => {
+          errorNotif()
         })
     },
     save(afterSuccess) {
@@ -200,7 +184,6 @@ export const useFundStore = defineStore('fund', {
 
       api
         .post(endpoint, data, {
-          headers: { Authorization: bearerToken },
           transformRequest: [
             (data) => {
               return createFormData(data)
@@ -231,13 +214,16 @@ export const useFundStore = defineStore('fund', {
             afterSuccess()
           }
         })
+        .catch(() => {
+          notifyProgress()
+          errorNotif()
+        })
     },
     getFund() {
       const limit = 25
       paging().state.rows = limit
 
       paging().getData({
-        token: bearerToken,
         lang: 'indonesia',
         limit,
         offset: this.current - 1,
@@ -247,6 +233,12 @@ export const useFundStore = defineStore('fund', {
         search: '',
         url: `${conf.apiPublicPath}${this.baseUrl}get-data/`,
         autoReset: 500,
+        beforeRequest: () => {
+          paging().state.token = `Bearer ${Cookies.get(conf.cookieName)}`
+        },
+        onError: () => {
+          errorNotif()
+        },
       })
     },
     resetForm() {

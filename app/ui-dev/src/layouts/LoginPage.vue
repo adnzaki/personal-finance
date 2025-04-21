@@ -68,7 +68,7 @@
             <p class="q-mt-xl">
               Belum punya akun? Daftar
               <strong
-                ><a class="link-style" :href="conf.registerUrl()"
+                ><a class="link-style cursor-pointer" @click="register"
                   >di sini</a
                 ></strong
               >
@@ -112,6 +112,11 @@ onBeforeRouteLeave((to) => {
 })
 
 localStorage.setItem('force_reload', 1)
+
+const register = () => {
+  localStorage.setItem('canRegister', 1)
+  window.location.href = conf.registerUrl()
+}
 
 const cardMobileSize = computed(() => ($q.screen.lt.sm ? 'col-12 q-ml-sm' : ''))
 </script>

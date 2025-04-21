@@ -10,7 +10,10 @@ function flashAlert(message, color = 'positive', position = 'top') {
 }
 
 function errorNotif() {
-  flashAlert('Something went wrong, please refresh this page.', 'negative')
+  flashAlert(
+    'Tidak dapat terhubung dengan server, silakan refresh halaman ini.',
+    'negative',
+  )
 }
 
 const timeout = 3500

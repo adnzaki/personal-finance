@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { api, timeout, bearerToken, createFormData } from 'src/router/http'
+import { api, timeout, createFormData } from 'src/router/http'
 import { Notify } from 'quasar'
 
 export const useSettingStore = defineStore('setting', {
@@ -26,7 +26,6 @@ export const useSettingStore = defineStore('setting', {
 
       api
         .post(endpoint, this.data, {
-          headers: { Authorization: bearerToken },
           transformRequest: [
             (data) => {
               return createFormData(data)

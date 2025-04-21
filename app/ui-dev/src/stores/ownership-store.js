@@ -1,13 +1,8 @@
 import { defineStore } from 'pinia'
-import {
-  api,
-  conf,
-  timeout,
-  bearerToken,
-  createFormData,
-} from 'src/router/http'
-import { Notify, Dialog } from 'quasar'
+import { api, conf, timeout, createFormData } from 'src/router/http'
+import { Notify, Dialog, Cookies } from 'quasar'
 import { usePagingStore as paging } from 'ss-paging-vue'
+import { errorNotif } from 'src/composables/notify'
 
 export const useOwnershipStore = defineStore('ownership', {
   state: () => ({
@@ -39,9 +34,7 @@ export const useOwnershipStore = defineStore('ownership', {
           })
 
           api
-            .get(`${this.baseUrl}delete/${id}`, {
-              headers: { Authorization: bearerToken },
-            })
+            .get(`${this.baseUrl}delete/${id}`)
             .then(({ data }) => {
               notifyProgress({
                 timeout,
@@ -62,14 +55,9 @@ export const useOwnershipStore = defineStore('ownership', {
               }
               paging().reloadData()
             })
-            .catch((error) => {
-              console.error(error)
-              notifyProgress({
-                message: error.message,
-                color: 'negative',
-                spinner: false,
-                timeout,
-              })
+            .catch(() => {
+              notifyProgress()
+              errorNotif()
             })
         })
         .onCancel(() => {
@@ -78,16 +66,14 @@ export const useOwnershipStore = defineStore('ownership', {
     },
     getDetail(id, next) {
       api
-        .get(`${this.baseUrl}detail/${id}`, {
-          headers: { Authorization: bearerToken },
-        })
+        .get(`${this.baseUrl}detail/${id}`)
         .then(({ data }) => {
           this.data = data
           this.formTitle = 'Perbarui Kepemilikan'
           next()
         })
-        .catch((error) => {
-          console.error(error)
+        .catch(() => {
+          errorNotif()
         })
     },
     save({ id, afterSuccess }) {
@@ -105,7 +91,6 @@ export const useOwnershipStore = defineStore('ownership', {
 
       api
         .post(endpoint, this.data, {
-          headers: { Authorization: bearerToken },
           transformRequest: [
             (data) => {
               return createFormData(data)
@@ -136,13 +121,16 @@ export const useOwnershipStore = defineStore('ownership', {
             afterSuccess()
           }
         })
+        .catch(() => {
+          notifyProgress()
+          errorNotif()
+        })
     },
     getOwnership() {
       const limit = 25
       paging().state.rows = limit
 
       paging().getData({
-        token: bearerToken,
         lang: 'indonesia',
         limit,
         offset: this.current - 1,
@@ -152,6 +140,12 @@ export const useOwnershipStore = defineStore('ownership', {
         search: '',
         url: `${conf.apiPublicPath}${this.baseUrl}get-data/`,
         autoReset: 500,
+        beforeRequest: () => {
+          paging().state.token = `Bearer ${Cookies.get(conf.cookieName)}`
+        },
+        onError: () => {
+          errorNotif()
+        },
       })
     },
     resetForm() {
