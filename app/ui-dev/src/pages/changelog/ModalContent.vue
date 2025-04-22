@@ -1,13 +1,7 @@
 <template>
   <div>
     <q-card-section class="scroll card-section">
-      <ul>
-        <li v-for="(item, index) in changelog" :key="index">
-          <strong>{{ item.title }}</strong
-          >:
-          {{ item.detail }}
-        </li>
-      </ul>
+      <q-markdown :src="updates" />
     </q-card-section>
 
     <q-separator class="mobile-hide" />
@@ -33,7 +27,7 @@
 
 <script setup>
 import { useRouter } from 'vue-router'
-import changelog from 'src/composables/changelog'
+import updates from 'src/assets/updates.md'
 
 const router = useRouter()
 

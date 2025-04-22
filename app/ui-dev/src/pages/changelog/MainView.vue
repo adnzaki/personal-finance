@@ -16,7 +16,7 @@
     <q-dialog no-backdrop-dismiss v-model="show">
       <q-card class="q-pa-sm" :style="dialogSize()">
         <q-card-section class="row items-center q-pb-none">
-          <div class="text-h6 text-capitalize">Daftar Pembaruan</div>
+          <div class="text-h6 text-capitalize">Informasi</div>
           <q-space />
           <q-btn icon="close" flat round dense v-close-popup />
         </q-card-section>

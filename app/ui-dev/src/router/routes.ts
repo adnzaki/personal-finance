@@ -27,7 +27,7 @@ const routes: RouteRecordRaw[] = [
         path: 'changelog',
         component: () => import('pages/changelog/MobilePage.vue'),
         beforeEnter: () => validatePage(),
-        name: 'Daftar Pembaruan',
+        name: 'Informasi',
       },
       {
         path: 'kepemilikan',
