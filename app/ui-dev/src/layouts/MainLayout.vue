@@ -144,6 +144,7 @@ const mobileSubRoute = (currentPath) => {
     '/pengaturan/reset-password',
     '/statistik/kategori',
     '/statistik/kategori/transaksi',
+    '/dukungan',
     // '/sumber-dana/add',
     // '/sumber-dana/edit',
     // '/transaksi/add',
