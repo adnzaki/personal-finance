@@ -162,6 +162,12 @@ const routes: RouteRecordRaw[] = [
           },
         ],
       },
+      {
+        path: 'dukungan',
+        component: () => import('pages/support/MainView.vue'),
+        beforeEnter: () => validatePage(),
+        name: 'Dukungan',
+      },
     ],
   },
   {

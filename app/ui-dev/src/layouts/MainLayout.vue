@@ -200,6 +200,11 @@ const linksList = [
     icon: 'r_settings',
     link: '/pengaturan',
   },
+  {
+    title: 'Dukungan',
+    icon: 'r_volunteer_activism',
+    link: '/dukungan',
+  },
 ]
 
 const leftDrawerOpen = ref(false)
