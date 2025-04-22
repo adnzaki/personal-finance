@@ -144,6 +144,7 @@ const mobileSubRoute = (currentPath) => {
     '/pengaturan/reset-password',
     '/statistik/kategori',
     '/statistik/kategori/transaksi',
+    '/dukungan',
     // '/sumber-dana/add',
     // '/sumber-dana/edit',
     // '/transaksi/add',
@@ -199,6 +200,11 @@ const linksList = [
     title: 'Pengaturan',
     icon: 'r_settings',
     link: '/pengaturan',
+  },
+  {
+    title: 'Dukungan',
+    icon: 'r_volunteer_activism',
+    link: '/dukungan',
   },
 ]
 

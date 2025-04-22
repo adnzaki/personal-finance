@@ -1,13 +1,8 @@
 import { defineStore } from 'pinia'
-import {
-  api,
-  conf,
-  timeout,
-  bearerToken,
-  createFormData,
-} from 'src/router/http'
-import { Notify, Dialog } from 'quasar'
+import { api, conf, timeout, createFormData } from 'src/router/http'
+import { Notify, Dialog, Cookies } from 'quasar'
 import { usePagingStore as paging } from 'ss-paging-vue'
+import { errorNotif } from 'src/composables/notify'
 
 export const useTransactionStore = defineStore('transaction', {
   state: () => ({
@@ -50,9 +45,7 @@ export const useTransactionStore = defineStore('transaction', {
   actions: {
     getDetail(id, next) {
       api
-        .get(`${this.baseUrl}detail/${id}`, {
-          headers: { Authorization: bearerToken },
-        })
+        .get(`${this.baseUrl}detail/${id}`)
         .then(({ data }) => {
           const {
             id_transaksi,
@@ -94,8 +87,8 @@ export const useTransactionStore = defineStore('transaction', {
           this.formTitle = 'Perbarui Transaksi'
           next()
         })
-        .catch((error) => {
-          console.error(error)
+        .catch(() => {
+          errorNotif()
         })
     },
     getTransactions() {
@@ -105,7 +98,6 @@ export const useTransactionStore = defineStore('transaction', {
       const params = `${this.filter.fundId}/${this.filter.ownerId}/${this.filter.transactionType}/${this.filter.category}/${this.filter.date}`
 
       paging().getData({
-        token: bearerToken,
         lang: 'indonesia',
         limit,
         offset: this.current - 1,
@@ -115,6 +107,12 @@ export const useTransactionStore = defineStore('transaction', {
         search: '',
         url: `${conf.apiPublicPath}${this.baseUrl}get-data/${params}`,
         autoReset: 500,
+        beforeRequest: () => {
+          paging().state.token = `Bearer ${Cookies.get(conf.cookieName)}`
+        },
+        onError: () => {
+          errorNotif()
+        },
       })
     },
     deleteTransaction(id) {
@@ -135,9 +133,7 @@ export const useTransactionStore = defineStore('transaction', {
           })
 
           api
-            .get(`${this.baseUrl}delete/${id}`, {
-              headers: { Authorization: bearerToken },
-            })
+            .get(`${this.baseUrl}delete/${id}`)
             .then(({ data }) => {
               notifyProgress({
                 timeout,
@@ -158,14 +154,9 @@ export const useTransactionStore = defineStore('transaction', {
               }
               paging().reloadData()
             })
-            .catch((error) => {
-              console.error(error)
-              notifyProgress({
-                message: error.message,
-                color: 'negative',
-                spinner: false,
-                timeout,
-              })
+            .catch(() => {
+              notifyProgress()
+              errorNotif()
             })
         })
         .onCancel(() => {
@@ -192,7 +183,6 @@ export const useTransactionStore = defineStore('transaction', {
 
       api
         .post(endpoint, this.data, {
-          headers: { Authorization: bearerToken },
           transformRequest: [
             (data) => {
               return createFormData(data)
@@ -219,6 +209,10 @@ export const useTransactionStore = defineStore('transaction', {
             // next action from the component
             afterSuccess()
           }
+        })
+        .catch(() => {
+          notifyProgress()
+          errorNotif()
         })
     },
     resetForm(fromEditPage = false) {
@@ -249,9 +243,7 @@ export const useTransactionStore = defineStore('transaction', {
     },
     getTargetFunds(from, skipDefault = false, targetFundId = null) {
       api
-        .get(`${this.baseUrl}get-target-funds/${from}`, {
-          headers: { Authorization: bearerToken },
-        })
+        .get(`${this.baseUrl}get-target-funds/${from}`)
         .then(({ data }) => {
           this.targetFunds = data
           if (data.length > 0) {
@@ -267,12 +259,13 @@ export const useTransactionStore = defineStore('transaction', {
             this.data.sumber_dana_tujuan = ''
           }
         })
+        .catch(() => {
+          errorNotif()
+        })
     },
     getTargetOwners(destinationFundId, skipDefault = false) {
       api
-        .get(`${this.baseUrl}get-owner-by-fund-id/${destinationFundId}`, {
-          headers: { Authorization: bearerToken },
-        })
+        .get(`${this.baseUrl}get-owner-by-fund-id/${destinationFundId}`)
         .then(({ data }) => {
           this.targetOwners = data.owners
           if (this.targetOwners.length > 0) {
@@ -285,12 +278,13 @@ export const useTransactionStore = defineStore('transaction', {
             this.data.pemilik_dana_tujuan = ''
           }
         })
+        .catch(() => {
+          errorNotif()
+        })
     },
     getCategories(categoryId = null) {
       api
-        .get(`${this.baseUrl}get-categories/${this.data.jenis_transaksi}`, {
-          headers: { Authorization: bearerToken },
-        })
+        .get(`${this.baseUrl}get-categories/${this.data.jenis_transaksi}`)
         .then(({ data }) => {
           this.categories = data
           if (data.length > 0) {
@@ -303,13 +297,14 @@ export const useTransactionStore = defineStore('transaction', {
             }
           }
         })
+        .catch(() => {
+          errorNotif()
+        })
     },
     getOwnerByFundSource(val, selected = null) {
       const fundOwnerId = selected === null ? '' : `/${selected}`
       api
-        .get(`${this.baseUrl}get-owner-by-fund-id/${val}${fundOwnerId}`, {
-          headers: { Authorization: bearerToken },
-        })
+        .get(`${this.baseUrl}get-owner-by-fund-id/${val}${fundOwnerId}`)
         .then(({ data }) => {
           this.owners = data.owners
           if (this.owners.length > 0) {
@@ -325,17 +320,18 @@ export const useTransactionStore = defineStore('transaction', {
             this.data.id_pemilik_sumber_dana = ''
           }
         })
+        .catch(() => {
+          errorNotif()
+        })
     },
     getFundSource() {
       api
-        .get(`${this.baseUrl}get-fund-source`, {
-          headers: { Authorization: bearerToken },
-        })
+        .get(`${this.baseUrl}get-fund-source`)
         .then(({ data }) => {
           this.fundSource = data
         })
-        .catch((error) => {
-          console.error(error)
+        .catch(() => {
+          errorNotif()
         })
     },
   },

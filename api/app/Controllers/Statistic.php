@@ -15,7 +15,7 @@ class Statistic extends BaseController
     {
         $balance = $this->model->getTotalBalance($dateRange);
 
-        return $this->createResponse($balance);
+        return $this->response->setJSON($balance);
     }
 
     public function getAllTransactionByCategory($dateRange)
@@ -32,7 +32,7 @@ class Statistic extends BaseController
         $income = $this->model->getAllTransactionByCategory($date1, $date2, 'income', 1000);
         $expense = $this->model->getAllTransactionByCategory($date1, $date2, 'expense', 1000);
 
-        return $this->createResponse([
+        return $this->response->setJSON([
             'income' => $income,
             'expense' => $expense
         ]);
@@ -40,39 +40,37 @@ class Statistic extends BaseController
 
     public function getBiggestTransactionByCategory($dateRange)
     {
-        if(valid_access()) {
-            if(strpos($dateRange, '_') !== false) {
-                $date = explode('_', $dateRange);
-                $date1 = $date[0];
-                $date2 = $date[1];
-            } else {
-                $date1 = $dateRange;
-                $date2 = $dateRange;
-            }
-    
-            $response = $this->model->getAllTransactionByCategory($date1, $date2, 'expense', 1000);
-            $sliceResponse = array_slice($response, 0, 5);
-            $otherTransactions = array_sum(array_column($response, 'total_transaksi')) - array_sum(array_column($sliceResponse, 'total_transaksi'));
-            // now what about the percentage of the other transactions?
-            $othersPercentage = $otherTransactions > 0 ? ($otherTransactions / array_sum(array_column($response, 'total_transaksi'))) * 100 : 0;
-    
-            $sliceResponse[] = (object)[
-                'id_kategori'       => 'none',
-                'category_name'     => 'Lain-lain',
-                'total_transaksi'   => $otherTransactions,
-                'total_nominal'     => idr_number_format($otherTransactions),
-                'percentage'        => plain_number_format($othersPercentage, 2) . '%'
-            ];
-    
-            $categoryName = array_column($sliceResponse, 'category_name');
-            $totalTransaction = array_column($sliceResponse, 'total_transaksi');
-    
-            return $this->createResponse([
-                'response'          => $sliceResponse,
-                'category'          => $categoryName,
-                'totalTransaction'  => array_map('intval', $totalTransaction),
-            ]);
+        if(strpos($dateRange, '_') !== false) {
+            $date = explode('_', $dateRange);
+            $date1 = $date[0];
+            $date2 = $date[1];
+        } else {
+            $date1 = $dateRange;
+            $date2 = $dateRange;
         }
+
+        $response = $this->model->getAllTransactionByCategory($date1, $date2, 'expense', 1000);
+        $sliceResponse = array_slice($response, 0, 5);
+        $otherTransactions = array_sum(array_column($response, 'total_transaksi')) - array_sum(array_column($sliceResponse, 'total_transaksi'));
+        // now what about the percentage of the other transactions?
+        $othersPercentage = $otherTransactions > 0 ? ($otherTransactions / array_sum(array_column($response, 'total_transaksi'))) * 100 : 0;
+
+        $sliceResponse[] = (object)[
+            'id_kategori'       => 'none',
+            'category_name'     => 'Lain-lain',
+            'total_transaksi'   => $otherTransactions,
+            'total_nominal'     => idr_number_format($otherTransactions),
+            'percentage'        => plain_number_format($othersPercentage, 2) . '%'
+        ];
+
+        $categoryName = array_column($sliceResponse, 'category_name');
+        $totalTransaction = array_column($sliceResponse, 'total_transaksi');
+
+        return $this->response->setJSON([
+            'response'          => $sliceResponse,
+            'category'          => $categoryName,
+            'totalTransaction'  => array_map('intval', $totalTransaction),
+        ]);
     }
 
     public function getTotalIncomeExpense($dateRange)
@@ -107,6 +105,6 @@ class Statistic extends BaseController
 
         $transformed['net_income'] = $netIncome < 0 ? plain_number_format($netIncome) : ($netIncome === 0 ? plain_number_format($netIncome) : '+' . plain_number_format($netIncome));
 
-        return $this->createResponse($transformed);
+        return $this->response->setJSON($transformed);
     }
 }

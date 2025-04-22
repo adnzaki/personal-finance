@@ -1,10 +1,10 @@
-# personal-finance
-A simple personal finance manager application
+# SisaUang
+**SisaUang** is a simple personal finance manager application. This application is built based on my needs in managing my personal finance. If you want to add more features, just contribute or make your own version.
 
 ## Dev Installation
 
 ### Database Config
-Before running API installation, make sure you have created a database named `sisa-uang` and it has been set in <strong>.env</strong> file. Skipping this step will make database migration fail to run. 
+Before running API installation, make sure you have created a database and it has been set in <strong>.env</strong> file. Skipping this step will make database migration fail to run. 
 
 ### API
 - Go to `/api` folder
@@ -36,6 +36,9 @@ And provide the following POST parameters:
     "password": "the developer password"
 }
 ```
+*Note:*<br/>
+- Developer username and password can be set in .env file with "dev_username" and "dev_password" key.
+- Do not forget to setup your database config.
 
 
 

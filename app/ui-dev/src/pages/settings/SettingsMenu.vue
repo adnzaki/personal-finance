@@ -28,6 +28,13 @@
 
         <q-item-section>Ubah Password</q-item-section>
       </q-item>
+      <q-item class="q-py-md" clickable v-ripple to="/dukungan">
+        <q-item-section avatar>
+          <q-icon name="r_volunteer_activism" />
+        </q-item-section>
+
+        <q-item-section>Dukungan</q-item-section>
+      </q-item>
     </q-list>
   </div>
 </template>

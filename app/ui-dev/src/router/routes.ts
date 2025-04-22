@@ -27,7 +27,7 @@ const routes: RouteRecordRaw[] = [
         path: 'changelog',
         component: () => import('pages/changelog/MobilePage.vue'),
         beforeEnter: () => validatePage(),
-        name: 'Daftar Pembaruan',
+        name: 'Informasi',
       },
       {
         path: 'kepemilikan',
@@ -162,6 +162,12 @@ const routes: RouteRecordRaw[] = [
           },
         ],
       },
+      {
+        path: 'dukungan',
+        component: () => import('pages/support/MainView.vue'),
+        beforeEnter: () => validatePage(),
+        name: 'Dukungan',
+      },
     ],
   },
   {
@@ -169,7 +175,11 @@ const routes: RouteRecordRaw[] = [
     component: () => import('layouts/LoginPage.vue'),
     beforeEnter: () => validatePage(true),
   },
-  { path: '/register', component: () => import('layouts/RegisterPage.vue') },
+  {
+    path: '/register',
+    component: () => import('layouts/RegisterPage.vue'),
+    beforeEnter: () => validatePage('register'),
+  },
 
   // Always leave this as last one,
   // but you can also remove it

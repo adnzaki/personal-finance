@@ -28,7 +28,7 @@ class Ownership extends BaseController
             }
         }
 
-        return $this->createResponse([
+        return $this->response->setJSON([
             'container' => $data,
             'totalRows' => $rows,
         ]);
@@ -36,19 +36,17 @@ class Ownership extends BaseController
 
     public function delete($id)
     {
-        if(valid_access()) {
-            if($this->model->delete($id)) {
-                return $this->response->setJSON([
-                    'code' => 200,
-                    'msg' => 'Data berhasil dihapus',
-                ]);
-            } else {
-                return $this->response->setJSON([
-                    'code' => 500,
-                    'msg' => 'Terjadi kesalahan saat menghapus data',
-                ]);
-            }            
-        }
+        if($this->model->delete($id)) {
+            return $this->response->setJSON([
+                'code' => 200,
+                'msg' => 'Data berhasil dihapus',
+            ]);
+        } else {
+            return $this->response->setJSON([
+                'code' => 500,
+                'msg' => 'Terjadi kesalahan saat menghapus data',
+            ]);
+        }            
     }
     
 
@@ -56,34 +54,32 @@ class Ownership extends BaseController
     {
         $data = $this->model->getDetail($id);
 
-        return $this->createResponse($data);
+        return $this->response->setJSON($data);
     }
 
     public function save($id = null)
     {
-        if(valid_access()) {
-            $validation = $this->validation();
-            $data = $this->request->getPost(array_keys($validation->rules));
-    
-            if(! $this->validateData($data, $validation->rules, $validation->messages)) {
-                return $this->response->setJSON([
-                    'code'  => 500,
-                    'msg'   => $this->validator->getErrors(),
-                ]);
+        $validation = $this->validation();
+        $data = $this->request->getPost(array_keys($validation->rules));
+
+        if(! $this->validateData($data, $validation->rules, $validation->messages)) {
+            return $this->response->setJSON([
+                'code'  => 500,
+                'msg'   => $this->validator->getErrors(),
+            ]);
+        } else {
+            if($id === null) {
+                $this->model = $this->model->insert(array_merge($data, ['user_id' => auth()->id()]));
+                $message = 'Berhasil menambahkan data kepemilikan';
             } else {
-                if($id === null) {
-                    $this->model = $this->model->insert(array_merge($data, ['user_id' => auth()->id()]));
-                    $message = 'Berhasil menambahkan data kepemilikan';
-                } else {
-                    $this->model = $this->model->update($data, $id);
-                    $message = 'Data kepemilikan berhasil diperbarui';
-                }
-    
-                return $this->response->setJSON([
-                    'code'      => 200,
-                    'msg'       => $message,
-                ]);
+                $this->model = $this->model->update($data, $id);
+                $message = 'Data kepemilikan berhasil diperbarui';
             }
+
+            return $this->response->setJSON([
+                'code'      => 200,
+                'msg'       => $message,
+            ]);
         }
     }
 

@@ -42,6 +42,15 @@ class Filters extends BaseConfig
             'cors',
             'forcehttps', // Force Global Secure Requests
             'pagecache',  // Web Page Caching
+            'tokens' => [
+                'except' => [
+                    'validate-login', 
+                    'validate-page', 
+                    'logout-user', 
+                    'delete-default-cookie', 
+                    'signup'
+                ],
+            ],
         ],
         'after' => [
             'pagecache',   // Web Page Caching

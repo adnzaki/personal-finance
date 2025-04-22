@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { api, bearerToken } from 'src/router/http'
+import { api } from 'src/router/http'
 import { date, Screen } from 'quasar'
 // import { usePagingStore as paging } from 'ss-paging-vue'
 import { indonesiaDate } from 'src/composables/utils'
@@ -30,18 +30,14 @@ export const useStatisticStore = defineStore('statistic', {
   actions: {
     getTotalBalance() {
       api
-        .get(`${this.baseUrl}get-total-balance/${this.dateRange}`, {
-          headers: { Authorization: bearerToken },
-        })
+        .get(`${this.baseUrl}get-total-balance/${this.dateRange}`)
         .then(({ data }) => {
           this.balanceSummary = data
         })
     },
     getAllTransactionByCategory(dateRange) {
       api
-        .get(`${this.baseUrl}get-all-transaction-by-category/${dateRange}`, {
-          headers: { Authorization: bearerToken },
-        })
+        .get(`${this.baseUrl}get-all-transaction-by-category/${dateRange}`)
         .then(({ data }) => {
           this.allTransactions = data
         })
@@ -50,9 +46,6 @@ export const useStatisticStore = defineStore('statistic', {
       api
         .get(
           `${this.baseUrl}get-biggest-transaction-by-category/${this.dateRange}`,
-          {
-            headers: { Authorization: bearerToken },
-          },
         )
         .then(({ data }) => {
           this.biggestTransaction = data
@@ -60,9 +53,7 @@ export const useStatisticStore = defineStore('statistic', {
     },
     getTotalIncomeExpense() {
       api
-        .get(`${this.baseUrl}get-total-income-expense/${this.dateRange}`, {
-          headers: { Authorization: bearerToken },
-        })
+        .get(`${this.baseUrl}get-total-income-expense/${this.dateRange}`)
         .then(({ data }) => {
           this.totalIncome = data.total_income
           this.totalExpense = data.total_expense

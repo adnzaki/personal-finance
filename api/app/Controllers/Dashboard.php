@@ -31,7 +31,7 @@ class Dashboard extends BaseController
             'transfer' => $transfer
         ];
         
-        return $this->createResponse($data);
+        return $this->response->setJSON($data);
     }
 
     public function getBiggestFunds()
@@ -62,7 +62,7 @@ class Dashboard extends BaseController
 
         $biggestBalance = array_slice($data, 0, 3);
 
-        return $this->createResponse([
+        return $this->response->setJSON([
             'funds' => $biggestBalance,
             'rows' => count($biggestBalance),
         ]);

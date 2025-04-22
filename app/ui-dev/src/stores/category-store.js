@@ -1,13 +1,8 @@
 import { defineStore } from 'pinia'
-import {
-  api,
-  conf,
-  timeout,
-  bearerToken,
-  createFormData,
-} from 'src/router/http'
-import { Notify, Dialog } from 'quasar'
+import { api, conf, timeout, createFormData } from 'src/router/http'
+import { Notify, Dialog, Cookies } from 'quasar'
 import { usePagingStore as paging } from 'ss-paging-vue'
+import { errorNotif } from 'src/composables/notify'
 
 export const useCategoryStore = defineStore('category', {
   state: () => ({
@@ -41,9 +36,7 @@ export const useCategoryStore = defineStore('category', {
           })
 
           api
-            .get(`${this.baseUrl}delete/${id}`, {
-              headers: { Authorization: bearerToken },
-            })
+            .get(`${this.baseUrl}delete/${id}`)
             .then(({ data }) => {
               notifyProgress({
                 timeout,
@@ -64,14 +57,9 @@ export const useCategoryStore = defineStore('category', {
               }
               paging().reloadData()
             })
-            .catch((error) => {
-              console.error(error)
-              notifyProgress({
-                message: error.message,
-                color: 'negative',
-                spinner: false,
-                timeout,
-              })
+            .catch(() => {
+              notifyProgress()
+              errorNotif()
             })
         })
         .onCancel(() => {
@@ -80,9 +68,7 @@ export const useCategoryStore = defineStore('category', {
     },
     getDetail(id, next) {
       api
-        .get(`${this.baseUrl}detail/${id}`, {
-          headers: { Authorization: bearerToken },
-        })
+        .get(`${this.baseUrl}detail/${id}`)
         .then(({ data }) => {
           this.data = data
           this.formTitle = 'Perbarui Kategori'
@@ -107,7 +93,6 @@ export const useCategoryStore = defineStore('category', {
 
       api
         .post(endpoint, this.data, {
-          headers: { Authorization: bearerToken },
           transformRequest: [
             (data) => {
               return createFormData(data)
@@ -153,7 +138,6 @@ export const useCategoryStore = defineStore('category', {
           `${this.baseUrl}update-default-visibility`,
           { value: this.hideDefault },
           {
-            headers: { Authorization: bearerToken },
             transformRequest: [
               (data) => {
                 return createFormData(data)
@@ -169,9 +153,7 @@ export const useCategoryStore = defineStore('category', {
     },
     getDefaultCategorySetting() {
       api
-        .get(`${this.baseUrl}get-default-category-setting`, {
-          headers: { Authorization: bearerToken },
-        })
+        .get(`${this.baseUrl}get-default-category-setting`)
         .then(({ data }) => {
           this.hideDefault = data.hideDefault
         })
@@ -181,7 +163,6 @@ export const useCategoryStore = defineStore('category', {
       paging().state.rows = limit
 
       paging().getData({
-        token: bearerToken,
         lang: 'indonesia',
         limit,
         offset: this.current - 1,
@@ -189,11 +170,18 @@ export const useCategoryStore = defineStore('category', {
         searchBy: 'category_name',
         sort: 'ASC',
         search: '',
-        url: `${conf.apiPublicPath}${this.baseUrl}get-data/`,
+        url: `${conf.apiPublicPath}${this.baseUrl}get-data`,
         autoReset: 500,
+        beforeRequest: () => {
+          paging().state.token = `Bearer ${Cookies.get(conf.cookieName)}`
+        },
         afterRequest: () => {
           this.getDefaultCategorySetting()
         },
+        onError: () => {
+          errorNotif()
+        },
+        debug: true,
       })
     },
   },

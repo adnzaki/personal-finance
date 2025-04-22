@@ -75,7 +75,7 @@
               icon="r_arrow_back"
               label="Kembali ke Halaman Login"
               class="full-width q-mt-md custom-round"
-              to="/login"
+              @click="backToLogin"
             />
           </q-card-section>
         </q-card>
@@ -88,7 +88,9 @@
 import { ref, computed } from 'vue'
 import { conf, api, createFormData, timeout } from 'src/router/http'
 import { useQuasar } from 'quasar'
+import { useRouter, onBeforeRouteLeave } from 'vue-router'
 
+const router = useRouter()
 const $q = useQuasar()
 const username = ref('')
 const email = ref('')
@@ -108,9 +110,18 @@ const disableButton = computed(() => {
     : false
 })
 
+onBeforeRouteLeave(() => {
+  // localStorage.removeItem('canRegister')
+})
+
 const isValidEmail = (email) => {
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
   return emailRegex.test(email)
+}
+
+const backToLogin = () => {
+  localStorage.removeItem('canRegister')
+  router.push('/login')
 }
 
 const signup = () => {
@@ -172,6 +183,8 @@ const signup = () => {
             message: 'Mengembalikan ke halaman login...',
             timeout: 0,
           })
+
+          localStorage.removeItem('canRegister')
 
           setTimeout(() => {
             window.location.href = conf.loginUrl()

@@ -43,6 +43,7 @@ const rounded = computed(() => ($q.screen.lt.md ? 'rounded-field' : ''))
 
 const filter = () => {
   if ($q.cookies.has(conf.cookieName)) {
+    paging.state.token = $q.cookies.get(conf.cookieName)
     paging.filter()
   } else {
     errorNotif()

@@ -71,6 +71,7 @@ const totalPages = () => {
 
 const onPaginationUpdate = (value) => {
   if ($q.cookies.has(conf.cookieName)) {
+    paging.state.token = $q.cookies.get(conf.cookieName)
     emit('update:modelValue', value)
     paging.nav(value - 1)
   } else {
