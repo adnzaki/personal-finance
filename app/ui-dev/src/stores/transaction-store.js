@@ -3,6 +3,7 @@ import { api, conf, timeout, createFormData } from 'src/router/http'
 import { Notify, Dialog, Cookies } from 'quasar'
 import { usePagingStore as paging } from 'ss-paging-vue'
 import { errorNotif } from 'src/composables/notify'
+import { evaluate } from 'mathjs'
 
 export const useTransactionStore = defineStore('transaction', {
   state: () => ({
@@ -180,6 +181,7 @@ export const useTransactionStore = defineStore('transaction', {
 
       this.data.nominal = this.data.nominal.toString()
       this.data.nominal = this.data.nominal.replace(/,/g, '')
+      this.data.nominal = evaluate(this.data.nominal)
 
       api
         .post(endpoint, this.data, {
