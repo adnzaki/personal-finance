@@ -119,6 +119,7 @@ class Transaction extends BaseController
     public function getCategories($type)
     {
         $model = new CategoryModel;
+        $type = $type === 'all' ? null : $type;
         $categories = $model->getData(9999, 0, '', $type);
         return $this->response->setJSON($categories);
     }

@@ -41,8 +41,8 @@ const route = useRoute()
 const store = useTransactionStore()
 const isReady = ref(false)
 
-store.filter.date = route.params.dateRange
-store.filter.category = route.params.categoryId
+store.filter.date.value = route.params.dateRange
+store.filter.category.value = route.params.categoryId
 isReady.value = true
 
 const cardTitle = ref('Rincian Transaksi')

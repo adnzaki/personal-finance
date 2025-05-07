@@ -8,12 +8,16 @@
         <div :class="['row', titleSpacing()]">
           <ButtonGroup />
           <DateFilter />
-          <search-box label="Cari transaksi..." />
+          <search-box
+            root-class="col-12 col-lg-3 col-md-4"
+            label="Cari transaksi..."
+          />
         </div>
       </q-card-section>
       <!-- Main content goes here -->
       <DataTable />
       <FormDialog />
+      <AdvanceFilter />
     </q-card>
   </div>
 </template>
@@ -26,6 +30,7 @@ import ButtonGroup from './ButtonGroup.vue'
 import DataTable from './DataTable.vue'
 import FormDialog from './FormDialog.vue'
 import DateFilter from './DateFilter.vue'
+import AdvanceFilter from './AdvanceFilter.vue'
 
 const store = useTransactionStore()
 
@@ -34,10 +39,10 @@ store.getFundSource()
 const cardTitle = ref('Transaksi')
 
 store.filter = {
-  fundId: 'all',
-  ownerId: 'all',
-  transactionType: 'all',
-  category: 'all',
-  date: 'all',
+  fundId: { label: 'Semua', value: 'all' },
+  ownerId: { label: 'Semua', value: 'all' },
+  transactionType: { label: 'Semua', value: 'all' },
+  category: { label: 'Semua', value: 'all' },
+  date: { label: 'Semua', value: 'all' },
 }
 </script>

@@ -99,7 +99,7 @@
           @update:model-value="onInput"
           :rules="[(val) => validateNumber(val, true) || 'Nominal Tidak Valid']"
         />
-        <!-- For Add New Transaction -->
+        <!-- For Add Transaction -->
         <dropdown-search
           @selected="onCategorySelected"
           label="Kategori"

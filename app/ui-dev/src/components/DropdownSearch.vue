@@ -17,6 +17,13 @@
           <q-item-section class="text-grey"> No results </q-item-section>
         </q-item>
       </template>
+      <template v-slot:append v-if="showReset">
+        <q-icon
+          name="close"
+          class="cursor-pointer"
+          @click.stop.prevent="onReset"
+        />
+      </template>
     </q-select>
   </div>
 </template>
@@ -26,20 +33,58 @@ import { computed, ref, watch } from 'vue'
 
 export default {
   name: 'DropdownSearch',
-  props: [
-    'loader', // provide only if loadOnRoute is not defined
-    'labelAsOption', // use option to be a label, "label" prop will be overriden if it is used
-    'label', // standard QSelect label
-    'list',
-    'optionsValue',
-    'flexGrid', // add one or more grid classes to make component responsive
-    'param', // add 1 optional parameter if needed
-    'loadOnRoute', // load data that to be fetched on route enter
-    'default', // default selected option -> useful when displaying in edit form
-    'disable',
-    'customClass', // custom class to be applied directly to QSelect component
-  ],
-  emits: ['selected'],
+  props: {
+    loader: {
+      type: Function,
+      required: false,
+    },
+    labelAsOption: {
+      type: [String, Boolean],
+      default: '',
+    },
+    showReset: {
+      type: Boolean,
+      default: false,
+    },
+    label: {
+      type: String,
+      default: '',
+    },
+    list: {
+      type: Array,
+      default: () => [],
+    },
+    optionsValue: {
+      type: Object,
+    },
+    flexGrid: {
+      type: String,
+      default: '',
+    },
+    param: {
+      type: [String, Number, Object],
+      default: null,
+    },
+    loadOnRoute: {
+      type: Boolean,
+      default: false,
+    },
+    default: Object,
+    disable: {
+      type: Boolean,
+      default: false,
+    },
+    customClass: {
+      type: String,
+      default: '',
+    },
+    disableAutoSelect: {
+      type: Boolean,
+      default: false,
+    },
+  },
+
+  emits: ['selected', 'action:reset'],
 
   setup(props, { emit }) {
     const options = ref([])
@@ -49,6 +94,11 @@ export default {
     const selectedHandler = (v) => {
       emit('selected', v)
       model.value = v
+    }
+
+    const onReset = () => {
+      model.value = null
+      emit('action:reset')
     }
 
     let modelValue = null
@@ -86,20 +136,25 @@ export default {
       const optionsList = computed(() => props.list)
       const pushOptions = async () => {
         stringOptions.value = []
-        await optionsList.value.forEach((item) => {
+        optionsList.value.forEach((item) => {
           stringOptions.value.push({
             label: item[props.optionsValue.label],
             value: item[props.optionsValue.value],
           })
         })
 
-        if (props.default === undefined) {
+        if (props.default === undefined && !props.disableAutoSelect) {
           model.value = stringOptions.value[0]
         }
       }
 
       await pushOptions()
-      watch(optionsList, pushOptions)
+      watch(optionsList, () => {
+        pushOptions()
+        if (props.disableAutoSelect) {
+          model.value = null
+        }
+      })
 
       // filter duplicate values, remove them if exist
       const filter = (item) => [item['value'], item]
@@ -107,6 +162,7 @@ export default {
     })
 
     return {
+      onReset,
       options,
       model,
       filterFn(val, update) {
