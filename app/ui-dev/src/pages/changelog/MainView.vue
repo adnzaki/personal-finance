@@ -6,7 +6,7 @@
       dense
       icon="bolt"
       @click="showChangelog"
-      v-if="$route.path !== '/changelog'"
+      v-if="$route.path !== '/changelog' && $route.path !== '/dukungan'"
     >
       <!-- <q-badge color="yellow" text-color="black" floating>{{
         changelog.length

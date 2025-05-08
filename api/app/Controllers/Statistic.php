@@ -73,7 +73,7 @@ class Statistic extends BaseController
         ]);
     }
 
-    public function getTotalIncomeExpense($dateRange)
+    public function getTotalIncomeExpense($dateRange, $fundId = null)
     {
         if(strpos($dateRange, '_') !== false) {
             $date = explode('_', $dateRange);

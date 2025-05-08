@@ -3,6 +3,7 @@ import { api, conf, timeout, createFormData } from 'src/router/http'
 import { Notify, Dialog, Cookies } from 'quasar'
 import { usePagingStore as paging } from 'ss-paging-vue'
 import { errorNotif } from 'src/composables/notify'
+import { evaluate } from 'mathjs'
 
 export const useTransactionStore = defineStore('transaction', {
   state: () => ({
@@ -25,11 +26,13 @@ export const useTransactionStore = defineStore('transaction', {
     destinationFundId: null,
     destinationOwnerId: null,
     filter: {
-      fundId: 'all',
-      ownerId: 'all',
-      transactionType: 'all',
-      category: 'all',
-      date: 'all',
+      fundId: { label: 'Semua', value: 'all' },
+      ownerId: { label: 'Semua', value: 'all' },
+      transactionType: { label: 'Semua', value: 'all' },
+      category: { label: 'Semua', value: 'all' },
+      date: { label: 'Semua', value: 'all' },
+      owners: [],
+      categories: [],
     },
     data: {
       id_pemilik_sumber_dana: '',
@@ -41,6 +44,8 @@ export const useTransactionStore = defineStore('transaction', {
       sumber_dana_tujuan: '',
       pemilik_dana_tujuan: '',
     },
+    showFilter: false,
+    filterMode: false, // whether advance filter active or not
   }),
   actions: {
     getDetail(id, next) {
@@ -95,7 +100,9 @@ export const useTransactionStore = defineStore('transaction', {
       const limit = 25
       paging().state.rows = limit
 
-      const params = `${this.filter.fundId}/${this.filter.ownerId}/${this.filter.transactionType}/${this.filter.category}/${this.filter.date}`
+      const { fundId, ownerId, transactionType, category, date } = this.filter
+
+      const params = `${fundId.value}/${ownerId.value}/${transactionType.value}/${category.value}/${date.value}`
 
       paging().getData({
         lang: 'indonesia',
@@ -180,6 +187,7 @@ export const useTransactionStore = defineStore('transaction', {
 
       this.data.nominal = this.data.nominal.toString()
       this.data.nominal = this.data.nominal.replace(/,/g, '')
+      this.data.nominal = evaluate(this.data.nominal)
 
       api
         .post(endpoint, this.data, {
@@ -283,18 +291,23 @@ export const useTransactionStore = defineStore('transaction', {
         })
     },
     getCategories(categoryId = null) {
+      const transactionType = this.filterMode
+        ? this.filter.transactionType.value
+        : this.data.jenis_transaksi
       api
-        .get(`${this.baseUrl}get-categories/${this.data.jenis_transaksi}`)
+        .get(`${this.baseUrl}get-categories/${transactionType}`)
         .then(({ data }) => {
-          this.categories = data
-          if (data.length > 0) {
-            if (categoryId === null) {
-              this.data.id_kategori = data[0].id
-              console.log('Kategori default: ' + this.data.id_kategori)
-            } else {
-              this.data.id_kategori = categoryId
-              console.log('Kategori dari detail: ' + categoryId)
+          if (!this.filterMode) {
+            this.categories = data
+            if (data.length > 0 && !this.filterMode) {
+              if (categoryId === null) {
+                this.data.id_kategori = data[0].id
+              } else {
+                this.data.id_kategori = categoryId
+              }
             }
+          } else {
+            this.filter.categories = data
           }
         })
         .catch(() => {
@@ -306,18 +319,22 @@ export const useTransactionStore = defineStore('transaction', {
       api
         .get(`${this.baseUrl}get-owner-by-fund-id/${val}${fundOwnerId}`)
         .then(({ data }) => {
-          this.owners = data.owners
-          if (this.owners.length > 0) {
-            if (selected === null) {
-              this.ownerId = this.owners[0]
-              this.data.id_pemilik_sumber_dana = this.owners[0].value
+          if (!this.filterMode) {
+            this.owners = data.owners
+            if (this.owners.length > 0) {
+              if (selected === null) {
+                this.ownerId = this.owners[0]
+                this.data.id_pemilik_sumber_dana = this.owners[0].value
+              } else {
+                this.ownerId = data.selected
+                this.data.id_pemilik_sumber_dana = data.selected.value
+              }
             } else {
-              this.ownerId = data.selected
-              this.data.id_pemilik_sumber_dana = data.selected.value
+              this.ownerId = null
+              this.data.id_pemilik_sumber_dana = ''
             }
           } else {
-            this.ownerId = null
-            this.data.id_pemilik_sumber_dana = ''
+            this.filter.owners = data.owners
           }
         })
         .catch(() => {

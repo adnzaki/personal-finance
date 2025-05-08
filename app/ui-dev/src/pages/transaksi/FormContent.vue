@@ -96,9 +96,10 @@
           class="rounded-field"
           input-class="nominal"
           label="Nominal"
-          :rules="[(val) => validateNumber(val) || 'Nominal Tidak Valid']"
+          @update:model-value="onInput"
+          :rules="[(val) => validateNumber(val, true) || 'Nominal Tidak Valid']"
         />
-        <!-- For Add New Transaction -->
+        <!-- For Add Transaction -->
         <dropdown-search
           @selected="onCategorySelected"
           label="Kategori"
@@ -167,12 +168,12 @@
   </div>
 </template>
 <script setup>
-import { onMounted, ref } from 'vue'
+import { ref } from 'vue'
 import { useRouter, onBeforeRouteLeave } from 'vue-router'
 import { date, useQuasar } from 'quasar'
 import { useTransactionStore } from 'stores/transaction-store'
 import { indonesiaDate, validateNumber } from 'src/composables/utils'
-import { formatNumeral } from 'cleave-zen'
+import { formatNumeral } from 'z-cleave-zen'
 
 const props = defineProps({
   mobile: {
@@ -233,17 +234,9 @@ if (store.transactionId !== null) {
   dateStr.value = formatDate(new Date(store.data.tgl_transaksi))
 }
 
-const amountInput = ref(null)
-onMounted(() => {
-  setTimeout(() => {
-    amountInput.value = document.querySelector('.nominal')
-
-    amountInput.value.addEventListener('input', (e) => {
-      const value = e.target.value
-      store.data.nominal = formatNumeral(value)
-    })
-  }, 500)
-})
+const onInput = (v) => {
+  store.data.nominal = formatNumeral(v, { allowArithmetic: true })
+}
 
 const onCategorySelected = (v) => {
   store.data.id_kategori = v.value

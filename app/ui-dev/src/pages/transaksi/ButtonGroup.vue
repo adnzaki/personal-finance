@@ -1,5 +1,5 @@
 <template>
-  <div class="col-12 col-md-5">
+  <div class="col-12 col-md-3 col-lg-5">
     <div class="q-gutter-xs mobile-hide">
       <q-btn
         icon="add"
@@ -39,6 +39,11 @@ const router = useRouter()
 const store = useTransactionStore()
 
 const showForm = () => {
+  if (store.filterMode) {
+    store.filterMode = false
+    store.resetForm()
+  }
+
   if ($q.screen.lt.sm) {
     router.push('/transaksi/add')
   } else {

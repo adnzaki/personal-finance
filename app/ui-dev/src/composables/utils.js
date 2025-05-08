@@ -12,8 +12,8 @@ export const formatDecimal = (value) =>
     ? '-'
     : formatter('en-US', { style: 'decimal' }).format(value)
 
-export const validateNumber = (val) => {
-  const regex = /^\d+(,\d+)*$/
+export const validateNumber = (val, allowArithmetic = false) => {
+  const regex = allowArithmetic ? /^(\d+(,\d+)*|[+\-*/])+$/ : /^\d+(,\d+)*$/
   return regex.test(val)
 }
 

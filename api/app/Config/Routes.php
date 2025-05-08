@@ -56,6 +56,7 @@ $routes->group('transaction', function (RouteCollection $routes) {
 
 $routes->group('statistic', function (RouteCollection $routes) {
     $routes->add('get-total-income-expense/(:any)', 'Statistic::getTotalIncomeExpense/$1');
+    $routes->add('get-total-income-expense/(:any)/(:any)', 'Statistic::getTotalIncomeExpense/$1/$2');
     $routes->add('get-biggest-transaction-by-category/(:any)', 'Statistic::getBiggestTransactionByCategory/$1');
     $routes->add('get-all-transaction-by-category/(:any)', 'Statistic::getAllTransactionByCategory/$1');
     $routes->add('get-total-balance/(:any)', 'Statistic::getTotalBalance/$1');
