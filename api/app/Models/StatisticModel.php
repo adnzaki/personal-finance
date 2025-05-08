@@ -8,6 +8,10 @@ use App\Models\FundModel;
 
 class StatisticModel extends TransactionModel
 {
+    public function getTotalTransactionByFund(int $fundId, string $dateRange)
+    {
+    }
+
     public function getTotalBalance(string $dateRange)
     {
         $fund = new FundModel();
@@ -84,7 +88,7 @@ class StatisticModel extends TransactionModel
         ];
     }
 
-    public function getTotalIncomeExpense(string $date1, string $date2)
+    public function getTotalIncomeExpense(string $date1, string $date2, ?int $fundId = null)
     {
         $field = 'jenis_transaksi, SUM(nominal) as total';
         $select = $this->builder->select($field);
@@ -95,6 +99,10 @@ class StatisticModel extends TransactionModel
             'tgl_transaksi >= ' => $date1 . ' 00:00:00',
             'tgl_transaksi <= ' => $date2 . ' 23:59:59'
         ]);
+
+        if($fundId !== null) {
+            $select->where($this->sumberDana . '.id', $fundId);
+        }
 
         return $select->groupBy('jenis_transaksi')->get()->getResult();
     }
