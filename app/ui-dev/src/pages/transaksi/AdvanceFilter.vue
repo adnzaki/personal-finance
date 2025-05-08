@@ -3,6 +3,7 @@
     no-backdrop-dismiss
     v-model="store.showFilter"
     @before-show="prepareFilter"
+    :maximized="maximizedDialog()"
   >
     <q-card class="q-pa-sm" :style="dialogSize()">
       <q-card-section class="row items-center q-pb-none">
@@ -114,7 +115,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useTransactionStore } from 'stores/transaction-store'
-import { dialogSize } from 'src/composables/screen'
+import { dialogSize, maximizedDialog } from 'src/composables/screen'
 
 const store = useTransactionStore()
 const disableCategory = ref(false)
