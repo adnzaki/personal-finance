@@ -162,8 +162,18 @@ class TransactionModel extends Connector
             // then return the balance of the previous owner that used by previous transaction
             if($previousFundOwner !== $fundOwnerId) {
                 $newAmount = $amount;
-                $this->fundOwner->update(['jumlah_dana' => $previousOwnerBalance + $previousAmount], ['id' => $previousFundOwner]);
-                $note = 'Event: [Update]. Ket: Saldo dikembalikan karena mengganti sumber dana. ID Transaksi: [' . $id . ']';
+                if($data['jenis_transaksi'] === 'income' && $previousTransaction->jenis_transaksi === 'income') {
+                    $newOwnerBalance = $previousOwnerBalance - $previousAmount;
+                } elseif($data['jenis_transaksi'] === 'expense' && $previousTransaction->jenis_transaksi === 'expense') {
+                    $newOwnerBalance = $previousOwnerBalance + $previousAmount;
+                } elseif($data['jenis_transaksi'] === 'income' && $previousTransaction->jenis_transaksi === 'expense') {
+                    $newOwnerBalance = $previousOwnerBalance + $previousAmount;
+                } elseif($data['jenis_transaksi'] === 'expense' && $previousTransaction->jenis_transaksi === 'income') {
+                    $newOwnerBalance = $previousOwnerBalance - $previousAmount;
+                }
+
+                $this->fundOwner->update(['jumlah_dana' => $newOwnerBalance], ['id' => $previousFundOwner]);
+                $note = 'Event: [Update]. Ket: Saldo dikembalikan ke asal karena mengganti kepemilikan. ID Transaksi: [' . $id . ']';
                 $this->addBalanceLogs($previousFundOwner, $previousOwnerBalance, $previousOwnerBalance + $previousAmount, $previousAmount, $id, $note);
             } else {
                 $newAmount = $difference;
@@ -288,8 +298,8 @@ class TransactionModel extends Connector
         $jenisTransaksi = 'all',
         $kategori = 'all',
         $tanggal = 'all',
-        int $limit,
-        int $offset,
+        int $limit = 25,
+        int $offset = 0,
         string $sort = 'DESC',
         string $searchBy = 'deskripsi',
         string $search = ''
