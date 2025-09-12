@@ -12,17 +12,17 @@ class StatisticModel extends TransactionModel
     {
     }
 
-    public function getTotalBalance(string $dateRange)
+    public function getTotalBalance(string $dateRange, int|string $idKepemilikan = 'all')
     {
         $fund = new FundModel();
         $limit = $fund->getTotalRows();
-        $data = $fund->getData($limit, 0);
-        foreach ($data as $d) {
-            $balance = array_sum(array_column($fund->getTotalFund($d->id), 'jumlah_dana'));
-            $d->balance = $balance ?? 0;
+        if($idKepemilikan !== 'all') {
+            $fund->setOwner($idKepemilikan);
         }
 
-        $totalBalance = array_sum(array_column($data, 'balance'));
+        $data = $fund->getData($limit, 0);
+        
+        $totalBalance = array_sum(array_column($data, 'jumlah_dana'));
 
         // split the $dateRange first if it contains '_'
         // otherwise, do not split $dateRange
@@ -47,12 +47,12 @@ class StatisticModel extends TransactionModel
         }
 
         // the total records of transactions
-        $totalTransactionRows = $this->getTotalRows('all', 'all', 'all', 'all', $startDateRange);
+        $totalTransactionRows = $this->getTotalRows('all', $idKepemilikan, 'all', 'all', $startDateRange);
 
         // now get the transactions that will be excluded from the total balance
         // and separate between income and expense
-        $incomeTransactionsStart = $this->getData('all', 'all', 'income', 'all', $startDateRange, $totalTransactionRows, 0);
-        $expenseTransactionsStart = $this->getData('all', 'all', 'expense', 'all', $startDateRange, $totalTransactionRows, 0);
+        $incomeTransactionsStart = $this->getData('all', $idKepemilikan, 'income', 'all', $startDateRange, $totalTransactionRows, 0);
+        $expenseTransactionsStart = $this->getData('all', $idKepemilikan, 'expense', 'all', $startDateRange, $totalTransactionRows, 0);
         $totalIncomeTransactionsStart = array_sum(array_column($incomeTransactionsStart, 'nominal'));
         $totalExpenseTransactionsStart = array_sum(array_column($expenseTransactionsStart, 'nominal'));
 
@@ -60,8 +60,8 @@ class StatisticModel extends TransactionModel
         $startBalance = $totalBalance + $totalExpenseTransactionsStart - $totalIncomeTransactionsStart;
 
         // now let's calculate the ending balance
-        $incomeTransactionsEnd = $this->getData('all', 'all', 'income', 'all', $endDateRange, $totalTransactionRows, 0);
-        $expenseTransactionsEnd = $this->getData('all', 'all', 'expense', 'all', $endDateRange, $totalTransactionRows, 0);
+        $incomeTransactionsEnd = $this->getData('all', $idKepemilikan, 'income', 'all', $endDateRange, $totalTransactionRows, 0);
+        $expenseTransactionsEnd = $this->getData('all', $idKepemilikan, 'expense', 'all', $endDateRange, $totalTransactionRows, 0);
         $totalIncomeTransactionsEnd = array_sum(array_column($incomeTransactionsEnd, 'nominal'));
         $totalExpenseTransactionsEnd = array_sum(array_column($expenseTransactionsEnd, 'nominal'));
         $endBalance = $totalBalance + $totalExpenseTransactionsEnd - $totalIncomeTransactionsEnd;
@@ -88,7 +88,7 @@ class StatisticModel extends TransactionModel
         ];
     }
 
-    public function getTotalIncomeExpense(string $date1, string $date2, ?int $fundId = null)
+    public function getTotalIncomeExpense(string $date1, string $date2, int|string $ownerId)
     {
         $field = 'jenis_transaksi, SUM(nominal) as total';
         $select = $this->builder->select($field);
@@ -100,16 +100,20 @@ class StatisticModel extends TransactionModel
             'tgl_transaksi <= ' => $date2 . ' 23:59:59'
         ]);
 
-        if($fundId !== null) {
-            $select->where($this->sumberDana . '.id', $fundId);
+        if($ownerId !== 'all') {
+            $select->where($this->pemilikSumberDana . '.id_kepemilikan', $ownerId);
         }
 
         return $select->groupBy('jenis_transaksi')->get()->getResult();
     }
 
-    public function getAllTransactionByCategory(string $date1, string $date2, string $categoryType, int $limit)
+    public function getAllTransactionByCategory(string $date1, string $date2, string $categoryType, int|string $ownerId, int $limit = 1000)
     {
         $categoryModel = new CategoryModel();
+        $filter = $this->defaultFilter;
+        if($ownerId !== 'all') {
+            $filter = array_merge($filter, [$this->pemilikSumberDana . '.id_kepemilikan' => $ownerId]);
+        }
 
         $select = "id_kategori, category_name, SUM(nominal) as total_transaksi, CONCAT('Rp. ', REPLACE(FORMAT(SUM(nominal), 0), ',', '.')) AS total_nominal";
         $query = $this->builder->select($select)
@@ -118,7 +122,7 @@ class StatisticModel extends TransactionModel
             ->join($this->kategori, $this->kategori . '.id = ' . $this->transaksi . '.id_kategori')
             ->join($this->kepemilikan, $this->kepemilikan . '.id = ' . $this->pemilikSumberDana . '.id_kepemilikan')
             ->where('jenis_transaksi', $categoryType)
-            ->where($this->defaultFilter)
+            ->where($filter)
             ->where([
                 "{$this->transaksi}.deleted"    => 0,
                 "{$this->kategori}.deleted"     => 0,

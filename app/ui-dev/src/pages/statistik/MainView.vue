@@ -15,6 +15,7 @@
               store.range.value === 'custom'
             "
           />
+          <SelectOwner />
           <q-btn
             color="primary"
             class="custom-round btn-w100"
@@ -38,6 +39,7 @@ import { ref } from 'vue'
 import { wrapperPadding, titleSpacing } from 'src/composables/screen'
 import RangeType from './RangeType.vue'
 import DateFilter from './DateFilter.vue'
+import SelectOwner from './SelectOwner.vue'
 import { useStatisticStore } from 'src/stores/statistic-store'
 import RangeNavigator from './RangeNavigator.vue'
 import TotalIncomeExpense from './TotalIncomeExpense.vue'

@@ -9,6 +9,8 @@ class FundModel extends Connector
     public $builder;
 
     private $builder2; // for tb_kepemilikan_sumber_dana
+
+    public $ownerId = null;
     
     public function __construct()
     {
@@ -16,6 +18,7 @@ class FundModel extends Connector
 
         $this->builder = $this->db->table($this->sumberDana);
         $this->builder2 = $this->db->table($this->pemilikSumberDana);
+        $this->basicFilter = [$this->sumberDana . '.deleted' => 0, 'user_id' => auth()->id()];
     }
 
     public function getDetail(int $id)
@@ -34,7 +37,12 @@ class FundModel extends Connector
 
     public function getTotalFund($id)
     {
-        $query = $this->builder2->select('jumlah_dana')->getWhere(['id_sumber_dana' => $id, 'deleted' => 0]);
+        $filter = ['id_sumber_dana' => $id, 'deleted' => 0];
+        if($this->ownerId !== null) {
+            array_merge($filter, ['id_kepemilikan' => $this->ownerId]);
+        }
+        
+        $query = $this->builder2->select('jumlah_dana')->getWhere($filter);
         
         return $query->getNumRows() > 0 ? $query->getResult() : null;
     }
@@ -53,9 +61,26 @@ class FundModel extends Connector
     public function getData(int $limit, int $offset, string $sort = 'ASC', string $search = ''): array
     {
         $field = 'nama';
-        $query = $this->search($field, $search)->where($this->basicFilter)->orderBy($field, $sort)->limit($limit, $offset);
+        $filter = $this->basicFilter;
+        
+        if($this->ownerId !== null) {
+            $filter = array_merge($filter, [$this->pemilikSumberDana . '.id_kepemilikan' => $this->ownerId]);
+        }
 
-        return $query->get()->getResult();
+        $result = $this->search($field, $search)
+                    ->join($this->pemilikSumberDana, $this->sumberDana . '.id = ' . $this->pemilikSumberDana . '.id_sumber_dana')
+                    ->where($filter)
+                    ->get($limit, $offset, false)
+                    ->getResult();
+
+        return $result;
+    }
+
+    public function setOwner(int $ownerId)
+    {
+        $this->ownerId = $ownerId;
+
+        return $this;
     }
 
     public function getPemilik(): array
@@ -128,7 +153,7 @@ class FundModel extends Connector
 
     private function search(string $searchBy, string $search)
     {
-        $select = $this->builder->select('id, nama, modified');
+        $select = $this->builder->select($this->sumberDana . '.id, nama, jumlah_dana');
         if(! empty($search)) {
             $select->like($searchBy, $search);           
         }

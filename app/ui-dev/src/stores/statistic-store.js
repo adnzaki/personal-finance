@@ -7,37 +7,38 @@ import { indonesiaDate } from 'src/composables/utils'
 export const useStatisticStore = defineStore('statistic', {
   state: () => ({
     baseUrl: 'statistic/',
-    range: {
-      label: 'Bulanan',
-      value: 'monthly',
-    },
+    range: { label: 'Bulanan', value: 'monthly' },
     dateRange: Date.now(),
     dateRangeText: '',
     balanceSummary: [],
     totalIncome: 0,
     totalExpense: 0,
     netIncome: 0,
-    biggestTransaction: {
-      response: [],
-      category: [],
-      totalTransaction: [],
-    },
-    allTransactions: {
-      income: [],
-      expense: [],
-    },
+    biggestTransaction: { response: [], category: [], totalTransaction: [] },
+    owners: [],
+    ownerId: { label: 'Semua', value: 'all' },
+    allTransactions: { income: [], expense: [] },
   }),
   actions: {
+    getOwners() {
+      api.get(`${this.baseUrl}get-owners`).then(({ data }) => {
+        this.owners = data
+      })
+    },
     getTotalBalance() {
       api
-        .get(`${this.baseUrl}get-total-balance/${this.dateRange}`)
+        .get(
+          `${this.baseUrl}get-total-balance/${this.dateRange}/${this.ownerId.value}`,
+        )
         .then(({ data }) => {
           this.balanceSummary = data
         })
     },
     getAllTransactionByCategory(dateRange) {
       api
-        .get(`${this.baseUrl}get-all-transaction-by-category/${dateRange}`)
+        .get(
+          `${this.baseUrl}get-all-transaction-by-category/${dateRange}/${this.ownerId.value}`,
+        )
         .then(({ data }) => {
           this.allTransactions = data
         })
@@ -45,7 +46,7 @@ export const useStatisticStore = defineStore('statistic', {
     getBiggestTransactionByCategory() {
       api
         .get(
-          `${this.baseUrl}get-biggest-transaction-by-category/${this.dateRange}`,
+          `${this.baseUrl}get-biggest-transaction-by-category/${this.dateRange}/${this.ownerId.value}`,
         )
         .then(({ data }) => {
           this.biggestTransaction = data
@@ -53,7 +54,9 @@ export const useStatisticStore = defineStore('statistic', {
     },
     getTotalIncomeExpense() {
       api
-        .get(`${this.baseUrl}get-total-income-expense/${this.dateRange}`)
+        .get(
+          `${this.baseUrl}get-total-income-expense/${this.dateRange}/${this.ownerId.value}`,
+        )
         .then(({ data }) => {
           this.totalIncome = data.total_income
           this.totalExpense = data.total_expense
