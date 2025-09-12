@@ -18,7 +18,7 @@ class FundModel extends Connector
 
         $this->builder = $this->db->table($this->sumberDana);
         $this->builder2 = $this->db->table($this->pemilikSumberDana);
-        $this->basicFilter = [$this->sumberDana . '.deleted' => 0, 'user_id' => auth()->id()];
+        $this->basicFilter = [$this->sumberDana . '.deleted' => 0, $this->sumberDana . '.user_id' => auth()->id()];
     }
 
     public function getDetail(int $id)
@@ -51,7 +51,7 @@ class FundModel extends Connector
     {
         $query = $this->builder->select('id, nama, jumlah_dana')
                                ->join($this->pemilikSumberDana, $this->sumberDana . '.id = ' . $this->pemilikSumberDana . '.id_sumber_dana')
-                               ->where([$this->pemilikSumberDana . '.deleted' => 0, 'user_id' => auth()->id()])
+                               ->where([$this->pemilikSumberDana . '.deleted' => 0, $this->sumberDana . '.user_id' => auth()->id()])
                                ->orderBy('jumlah_dana', 'DESC')
                                ->limit(3);
 
