@@ -1,14 +1,14 @@
 <template>
   <div>
     <q-list style="margin-top: -16px" bordered separator>
-      <q-item class="q-py-md" clickable v-ripple to="/kategori">
+      <q-item class="q-py-md" clickable v-ripple @click="goto('/kategori')">
         <q-item-section avatar>
           <q-icon name="r_category" />
         </q-item-section>
 
         <q-item-section>Kategori</q-item-section>
       </q-item>
-      <q-item class="q-py-md" clickable v-ripple to="/kepemilikan">
+      <q-item class="q-py-md" clickable v-ripple @click="goto('/kepemilikan')">
         <q-item-section avatar>
           <q-icon name="r_groups" />
         </q-item-section>
@@ -20,7 +20,7 @@
         class="q-py-md"
         clickable
         v-ripple
-        to="/pengaturan/reset-password"
+        @click="goto('/pengaturan/reset-password')"
       >
         <q-item-section avatar>
           <q-icon name="r_key" />
@@ -28,7 +28,7 @@
 
         <q-item-section>Ubah Password</q-item-section>
       </q-item>
-      <q-item class="q-py-md" clickable v-ripple to="/dukungan">
+      <q-item class="q-py-md" clickable v-ripple @click="goto('/dukungan')">
         <q-item-section avatar>
           <q-icon name="r_volunteer_activism" />
         </q-item-section>
@@ -39,4 +39,12 @@
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+const goto = (path) => {
+  localStorage.setItem('back_path', router.currentRoute.value.fullPath)
+  router.push(path)
+}
+</script>

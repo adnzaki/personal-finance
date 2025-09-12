@@ -181,7 +181,6 @@ export const useCategoryStore = defineStore('category', {
         onError: () => {
           errorNotif()
         },
-        debug: true,
       })
     },
   },
