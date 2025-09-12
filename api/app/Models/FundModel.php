@@ -61,17 +61,27 @@ class FundModel extends Connector
     public function getData(int $limit, int $offset, string $search = ''): array
     {
         $field = 'nama';
-        $filter = $this->basicFilter;
-        $result = $this->search($field, $search);
-        
-        if($this->ownerId !== null) {
-            $filter = array_merge($filter, [$this->pemilikSumberDana . '.id_kepemilikan' => $this->ownerId]);
-            $result = $result->join($this->pemilikSumberDana, $this->sumberDana . '.id = ' . $this->pemilikSumberDana . '.id_sumber_dana');
-        }
 
-        return $result->where($filter)
+        return $this->search($field, $search)
+                    ->where($this->basicFilter)
                     ->get($limit, $offset, false)
                     ->getResult();
+    }
+
+    public function getDataForBalance(): array
+    {
+        $field = 'nama';
+        $filter = $this->basicFilter;
+
+        if ($this->ownerId !== null) {
+            $filter = array_merge($filter, [$this->pemilikSumberDana . '.id_kepemilikan' => $this->ownerId]);
+        }
+
+        return $this->search($field, '', 'id, nama, jumlah_dana')
+            ->join($this->pemilikSumberDana, $this->sumberDana . '.id = ' . $this->pemilikSumberDana . '.id_sumber_dana')
+            ->where($filter)
+            ->get()
+            ->getResult();
     }
 
     public function getTotalRows(string $search = ''): int
@@ -154,11 +164,11 @@ class FundModel extends Connector
         return $this->builder->update(['deleted' => 1], ['id' => $id]);
     }
 
-    private function search(string $searchBy, string $search)
+    private function search(string $searchBy, string $search, string $customField = '')
     {
         $field = 'id, nama';
-        if($this->ownerId !== null) {
-            $field .= ', jumlah_dana';
+        if(! empty($customField)) {
+            $field = $customField;
         }
 
         $select = $this->builder->select($this->sumberDana . '.' . $field);
