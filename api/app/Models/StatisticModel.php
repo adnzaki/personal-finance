@@ -15,12 +15,11 @@ class StatisticModel extends TransactionModel
     public function getTotalBalance(string $dateRange, int|string $idKepemilikan = 'all')
     {
         $fund = new FundModel();
-        $limit = $fund->getTotalRows();
         if($idKepemilikan !== 'all') {
             $fund->setOwner($idKepemilikan);
         }
 
-        $data = $fund->getData($limit, 0);
+        $data = $fund->getDataForBalance();
         
         $totalBalance = array_sum(array_column($data, 'jumlah_dana'));
 
@@ -79,6 +78,7 @@ class StatisticModel extends TransactionModel
             'end_date'          => $endDateRange,
             'start_date_long'   => $startDateLong,
             'end_date_long'     => $endDateLong,
+            'funds'             => $data,
             'transactions'      => [
                 'incomeStart'   => $incomeTransactionsStart,
                 'expenseStart'  => $expenseTransactionsStart,
