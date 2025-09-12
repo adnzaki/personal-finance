@@ -16,7 +16,7 @@ class Fund extends BaseController
 
     public function getData($limit, $offset, $orderBy, $searchBy, $sort, $search = '')
     {
-        $data = $this->model->getData($limit, $offset, $sort, $search);
+        $data = $this->model->getData($limit, $offset, $search);
         $rows = $this->model->getTotalRows($search);
 
         foreach($data as $d) {
