@@ -38,7 +38,7 @@ export default [
 
   {
     languageOptions: {
-      ecmaVersion: 'latest',
+      ecmaVersion: 2021,
       sourceType: 'module',
 
       globals: {

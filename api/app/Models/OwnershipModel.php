@@ -7,6 +7,9 @@ class OwnershipModel extends Connector
     public $builder;
 
     private $builder2; // for tb_kepemilikan_sumber_dana
+
+    private $fieldAlias = '';
+
     public function __construct()
     {
         parent::__construct();
@@ -18,6 +21,13 @@ class OwnershipModel extends Connector
     public function getDetail(int $id)
     {
         return $this->builder->getWhere(['id' => $id])->getResult()[0];
+    }
+
+    public function setAlias($alias)
+    {
+        $this->fieldAlias = $alias;
+
+        return $this;
     }
 
     public function getTotalFund($id)
@@ -64,7 +74,12 @@ class OwnershipModel extends Connector
 
     private function search(string $searchBy, string $search)
     {
-        $select = $this->builder->select('id, kepemilikan, modified');
+        $field = 'id, kepemilikan, modified';
+        if(! empty($this->fieldAlias)) {
+            $field = $this->fieldAlias;
+        }
+
+        $select = $this->builder->select($field);
         if(! empty($search)) {
             $select->like($searchBy, $search);           
         }

@@ -187,6 +187,7 @@ const signup = () => {
           localStorage.removeItem('canRegister')
 
           setTimeout(() => {
+            notify({ timeout: 1 })
             window.location.href = conf.loginUrl()
           }, successTimeout)
         }, successTimeout)

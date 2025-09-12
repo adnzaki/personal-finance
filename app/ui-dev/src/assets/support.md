@@ -10,7 +10,9 @@ Saat ini **SisaUang** masih berjalan di atas platform [Actudent](https://actuden
 
 ### Solusi
 
-Solusi yang paling relevan untuk permasalahan ini adalah dengan mengumpulkan dana dalam rangka pengembangan **SisaUang** lebih lanjut serta migrasi ke server hosting mandiri tanpa terikat lagi dengan Actudent.
+Kami berencana menambahkan opsi langganan **SisaUang Pro** untuk menjaga eksistensi aplikasi dan _upgrade_ sistem jika pemasukan dari fitur ini mencukupi.
+
+Solusi lainnya untuk permasalahan ini adalah dengan mengumpulkan dana dalam rangka pengembangan **SisaUang** lebih lanjut serta migrasi ke server hosting mandiri tanpa terikat lagi dengan Actudent.
 
 Untuk itu, kami membuka akses dukungan finansial bagi **SobatUang** yang ingin mendukung keberlangsungan **SisaUang**. Untuk mengakomodasi hal tersebut, kami menggunakan platform [Trakteer.id](https://trakteer.id) untuk mengumpulkan dana. Dana ini nantinya akan digunakan untuk menyewa layanan hosting dan domain serta dukungan finansial secara langsung untuk pengembangan **SisaUang** dan _core library_-nya yaitu [SSPaging](https://lib.actudent.com/ss-paging).
 

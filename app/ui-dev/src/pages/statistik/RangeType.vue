@@ -1,21 +1,15 @@
 <template>
-  <div class="col-12 col-md-6">
+  <div :class="['col-12 col-md-3', $q.screen.gt.sm ? 'q-pr-sm' : '']">
     <q-select
       filled
       v-model="store.range"
       :options="options"
       label="Pilih rentang waktu"
-      class="rounded-field q-mb-md range-type"
+      class="rounded-field q-mb-md md-w99"
       @update:model-value="onRangeSelected"
     />
   </div>
 </template>
-
-<style lang="sass" scoped>
-@media(max-width: $breakpoint-md-min)
-  .range-type
-    width: 99%
-</style>
 
 <script setup>
 import { useStatisticStore } from 'src/stores/statistic-store'
@@ -23,26 +17,11 @@ import { useStatisticStore } from 'src/stores/statistic-store'
 const store = useStatisticStore()
 
 const options = [
-  {
-    label: 'Harian',
-    value: 'daily',
-  },
-  {
-    label: 'Mingguan',
-    value: 'weekly',
-  },
-  {
-    label: 'Bulanan',
-    value: 'monthly',
-  },
-  {
-    label: 'Tahunan',
-    value: 'yearly',
-  },
-  {
-    label: 'Custom',
-    value: 'custom',
-  },
+  { label: 'Harian', value: 'daily' },
+  { label: 'Mingguan', value: 'weekly' },
+  { label: 'Bulanan', value: 'monthly' },
+  { label: 'Tahunan', value: 'yearly' },
+  { label: 'Custom', value: 'custom' },
 ]
 
 const onRangeSelected = (model) => {
