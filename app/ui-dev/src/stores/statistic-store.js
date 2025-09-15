@@ -22,6 +22,7 @@ export const useStatisticStore = defineStore('statistic', {
   actions: {
     getOwners() {
       api.get(`${this.baseUrl}get-owners`).then(({ data }) => {
+        data.unshift({ label: 'Semua', value: 'all' })
         this.owners = data
       })
     },

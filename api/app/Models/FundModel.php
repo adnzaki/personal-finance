@@ -68,7 +68,7 @@ class FundModel extends Connector
                     ->getResult();
     }
 
-    public function getDataForBalance(): array
+    public function getDataForBalance()
     {
         $field = 'nama';
         $filter = $this->basicFilter;
@@ -82,6 +82,36 @@ class FundModel extends Connector
             ->where($filter)
             ->get()
             ->getResult();
+        // $query = $this->builder2->selectSum('jumlah_dana')
+        //             ->join('tb_sumber_dana', 'tb_sumber_dana.id = tb_kepemilikan_sumber_dana.id_sumber_dana')
+        //             ->where('tb_sumber_dana.user_id', 1)
+        //             ->where('tb_sumber_dana.deleted', 0)
+        //             ->where('tb_kepemilikan_sumber_dana.deleted', 0)
+        //             ->where('id_kepemilikan', 1)
+        //             ->get();
+
+        // return $query->getRow();
+
+        
+    }
+    public function getDataForBalance2(int|string $ownerId)
+    {
+        $params = [
+            $this->sumberDana . '.user_id' => auth()->id(),
+            $this->sumberDana . '.deleted' => 0,
+            $this->pemilikSumberDana . '.deleted' => 0
+        ];
+
+        if($ownerId !== 'all') {
+            $params[$this->pemilikSumberDana . '.id_kepemilikan'] = $ownerId;
+        }
+
+        $query = $this->builder2->selectSum('jumlah_dana')
+            ->join('tb_sumber_dana', 'tb_sumber_dana.id = tb_kepemilikan_sumber_dana.id_sumber_dana')
+            ->where($params)
+            ->get();
+
+        return $query->getRow();
     }
 
     public function getTotalRows(string $search = ''): int

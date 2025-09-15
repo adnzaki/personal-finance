@@ -14,6 +14,8 @@ class TransactionModel extends Connector
 
     protected $defaultFilter;
 
+    protected $ownerId = null;
+
     public function __construct()
     {
         parent::__construct();
@@ -24,6 +26,13 @@ class TransactionModel extends Connector
 
         $this->fundModel = new FundModel;
         $this->defaultFilter = [$this->transaksi . '.deleted' => 0, $this->sumberDana . '.user_id' => auth()->id()];
+    }
+
+    public function setOwner(int $ownerId)
+    {
+        $this->ownerId = $ownerId;
+
+        return $this;
     }
 
     public function getTransactionByCategory($categoryType, $date1, $date2)
@@ -294,7 +303,7 @@ class TransactionModel extends Connector
 
     public function getData(
         $sumberDana = 'all',
-        $kepemilikan = 'all',
+        $pemilikSumberDana = 'all',
         $jenisTransaksi = 'all',
         $kategori = 'all',
         $tanggal = 'all',
@@ -305,22 +314,28 @@ class TransactionModel extends Connector
         string $search = ''
     ): array {
         $query = $this->search($searchBy, $search);
+        $params = $this->defaultFilter;
 
-        if ($sumberDana !== 'all') {
-            $query->where($this->sumberDana . '.id', $sumberDana);
+        if($this->ownerId !== null) {
+            $params[$this->pemilikSumberDana . '.id_kepemilikan'] = $this->ownerId;            
         }
 
-        if ($kepemilikan !== 'all') {
-            $query->where('id_pemilik_sumber_dana', $kepemilikan);
+        if ($sumberDana !== 'all') {
+            $params[$this->sumberDana . '.id'] = $sumberDana;
+        }
+
+        if ($pemilikSumberDana !== 'all') {
+            $params['id_pemilik_sumber_dana'] = $pemilikSumberDana;
         }
 
         if ($jenisTransaksi !== 'all') {
-            $query->where('jenis_transaksi', $jenisTransaksi);
+            $params['jenis_transaksi'] = $jenisTransaksi;
         }
 
         if ($kategori !== 'all') {
-            $query->where('id_kategori', $kategori);
+            $params['id_kategori'] = $kategori;
         }
+
 
         if($tanggal !== 'all') {
             if(strpos($tanggal, '_') !== false) {
@@ -334,14 +349,14 @@ class TransactionModel extends Connector
             }
         }
 
-        $query->where($this->defaultFilter)->orderBy('tgl_transaksi', $sort)->limit($limit, $offset);
+        $query->where($params)->orderBy('tgl_transaksi', $sort);
 
-        return $query->get()->getResult();
+        return $query->get($limit, $offset)->getResult();
    }
 
     public function getTotalRows(
         $sumberDana = 'all',
-        $kepemilikan = 'all',
+        $pemilikSumberDana = 'all',
         $jenisTransaksi = 'all',
         $kategori = 'all',
         $tanggal = 'all',
@@ -350,20 +365,26 @@ class TransactionModel extends Connector
     ): int {
         $query = $this->search($searchBy, $search);
 
-        if ($sumberDana !== 'all') {
-            $query->where($this->sumberDana . '.id', $sumberDana);
+        $params = $this->defaultFilter;
+
+        if ($this->ownerId !== null) {
+            $params[$this->pemilikSumberDana . '.id_kepemilikan'] = $this->ownerId;
         }
 
-        if ($kepemilikan !== 'all') {
-            $query->where('id_pemilik_sumber_dana', $kepemilikan);
+        if ($sumberDana !== 'all') {
+            $params[$this->sumberDana . '.id'] = $sumberDana;
+        }
+
+        if ($pemilikSumberDana !== 'all') {
+            $params['id_pemilik_sumber_dana'] = $pemilikSumberDana;
         }
 
         if ($jenisTransaksi !== 'all') {
-            $query->where('jenis_transaksi', $jenisTransaksi);
+            $params['jenis_transaksi'] = $jenisTransaksi;
         }
 
         if ($kategori !== 'all') {
-            $query->where('id_kategori', $kategori);
+            $params['id_kategori'] = $kategori;
         }
 
         if ($tanggal !== 'all') {
@@ -378,7 +399,7 @@ class TransactionModel extends Connector
             }
         }
 
-        return $query->where($this->defaultFilter)->countAllResults();
+        return $query->where($params)->countAllResults();
     }
 
     private function search(string $searchBy, string $search)
