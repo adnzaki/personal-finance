@@ -17,11 +17,13 @@ class StatisticModel extends TransactionModel
         $fund = new FundModel();
         if($idKepemilikan !== 'all') {
             $fund->setOwner($idKepemilikan);
+            $this->setOwner($idKepemilikan);
         }
 
         $data = $fund->getDataForBalance();
         
         $totalBalance = array_sum(array_column($data, 'jumlah_dana'));
+        //$totalBalance = $fund->getDataForBalance();
 
         // split the $dateRange first if it contains '_'
         // otherwise, do not split $dateRange
@@ -46,12 +48,12 @@ class StatisticModel extends TransactionModel
         }
 
         // the total records of transactions
-        $totalTransactionRows = $this->getTotalRows('all', $idKepemilikan, 'all', 'all', $startDateRange);
+        $totalTransactionRows = $this->getTotalRows('all', 'all', 'all', 'all', $startDateRange);
 
         // now get the transactions that will be excluded from the total balance
         // and separate between income and expense
-        $incomeTransactionsStart = $this->getData('all', $idKepemilikan, 'income', 'all', $startDateRange, $totalTransactionRows, 0);
-        $expenseTransactionsStart = $this->getData('all', $idKepemilikan, 'expense', 'all', $startDateRange, $totalTransactionRows, 0);
+        $incomeTransactionsStart = $this->getData('all', 'all', 'income', 'all', $startDateRange, $totalTransactionRows, 0);
+        $expenseTransactionsStart = $this->getData('all', 'all', 'expense', 'all', $startDateRange, $totalTransactionRows, 0);
         $totalIncomeTransactionsStart = array_sum(array_column($incomeTransactionsStart, 'nominal'));
         $totalExpenseTransactionsStart = array_sum(array_column($expenseTransactionsStart, 'nominal'));
 
@@ -59,8 +61,8 @@ class StatisticModel extends TransactionModel
         $startBalance = $totalBalance + $totalExpenseTransactionsStart - $totalIncomeTransactionsStart;
 
         // now let's calculate the ending balance
-        $incomeTransactionsEnd = $this->getData('all', $idKepemilikan, 'income', 'all', $endDateRange, $totalTransactionRows, 0);
-        $expenseTransactionsEnd = $this->getData('all', $idKepemilikan, 'expense', 'all', $endDateRange, $totalTransactionRows, 0);
+        $incomeTransactionsEnd = $this->getData('all', 'all', 'income', 'all', $endDateRange, $totalTransactionRows, 0);
+        $expenseTransactionsEnd = $this->getData('all', 'all', 'expense', 'all', $endDateRange, $totalTransactionRows, 0);
         $totalIncomeTransactionsEnd = array_sum(array_column($incomeTransactionsEnd, 'nominal'));
         $totalExpenseTransactionsEnd = array_sum(array_column($expenseTransactionsEnd, 'nominal'));
         $endBalance = $totalBalance + $totalExpenseTransactionsEnd - $totalIncomeTransactionsEnd;
