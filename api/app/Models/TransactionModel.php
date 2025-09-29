@@ -316,16 +316,15 @@ class TransactionModel extends Connector
         $query = $this->search($searchBy, $search);
         $params = $this->defaultFilter;
 
-        if($this->ownerId !== null) {
-            $params[$this->pemilikSumberDana . '.id_kepemilikan'] = $this->ownerId;            
-        }
-
         if ($sumberDana !== 'all') {
             $params[$this->sumberDana . '.id'] = $sumberDana;
         }
 
         if ($pemilikSumberDana !== 'all') {
             $params['id_pemilik_sumber_dana'] = $pemilikSumberDana;
+            if ($this->ownerId !== null) {
+                $params[$this->pemilikSumberDana . '.id_kepemilikan'] = $this->ownerId;
+            }
         }
 
         if ($jenisTransaksi !== 'all') {
