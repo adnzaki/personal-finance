@@ -29,7 +29,7 @@
           <q-btn
             flat
             label="Lihat Detail"
-            :to="`/statistik/kategori/${store.dateRange}`"
+            @click="goto(`/statistik/kategori/${store.dateRange}`)"
             class="save-btn btn-w100 q-my-md see-more"
             color="primary"
           />
@@ -47,7 +47,7 @@
 </template>
 
 <script setup>
-import { ref, watch, toRefs } from 'vue'
+import { ref, watch, toRefs, inject } from 'vue'
 import { Doughnut } from 'vue-chartjs'
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js'
 import { useStatisticStore } from 'src/stores/statistic-store'
@@ -60,6 +60,8 @@ const options = {
   responsive: true,
   maintainAspectRatio: false,
 }
+
+const goto = inject('goto')
 
 const backgroundColors = ref([
   '#41B883',
