@@ -27,7 +27,7 @@
 
 <script setup>
 import { useRouter } from 'vue-router'
-import updates from 'src/assets/updates/1.0.0-beta.3.md'
+import updates from 'src/assets/updates/1.0.0-beta.4.md'
 
 const router = useRouter()
 
