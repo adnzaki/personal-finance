@@ -27,14 +27,21 @@ class Transaction extends BaseController
         return $this->response->setJSON($response);
     }
 
-    public function getData($sumberDana, $kepemilikan, $jenisTransaksi, $kategori, $tanggal, $limit, $offset, $orderBy, $searchBy, $sort, $search = '')
+    public function getData($sumberDana, $pemilikSumberDana, $jenisTransaksi, $kategori, $tanggal, $idKepemilikan = 'all')
     {
-        if($kepemilikan !== 'all') {
-            $this->model->setOwner($kepemilikan);
+        $limit      = (int)$this->request->getPost('limit');
+        $offset     = (int)$this->request->getPost('offset');
+        $orderBy    = $this->request->getPost('orderBy');
+        $searchBy   = $this->request->getPost('searchBy');
+        $sort       = $this->request->getPost('sort');
+        $search     = $this->request->getPost('search') ?? '';   
+
+        if($idKepemilikan !== 'all') {
+            $this->model->setOwner($idKepemilikan);
         }
         
-        $data = $this->model->getData($sumberDana, $kepemilikan, $jenisTransaksi, $kategori, $tanggal, $limit, $offset, $sort, $searchBy, $search);
-        $totalRows = $this->model->getTotalRows($sumberDana, $kepemilikan, $jenisTransaksi, $kategori, $tanggal, $searchBy, $search);
+        $data = $this->model->getData($sumberDana, $pemilikSumberDana, $jenisTransaksi, $kategori, $tanggal, $limit, $offset, $sort, $searchBy, $search);
+        $totalRows = $this->model->getTotalRows($sumberDana, $pemilikSumberDana, $jenisTransaksi, $kategori, $tanggal, $searchBy, $search);
 
         foreach($data as $d) {
             $nominal = 'Rp. '.number_format($d->nominal);

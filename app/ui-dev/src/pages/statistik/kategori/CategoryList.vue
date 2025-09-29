@@ -67,7 +67,7 @@ const goto = inject('goto')
 localStorage.setItem('back_path', '/statistik')
 
 const viewTransactions = (id) => {
-  transactionStore.filter.ownerId = store.ownerId
+  transactionStore.ownerId = store.ownerId
   goto(`/statistik/kategori/transaksi/${id}/${route.params.dateRange}`)
 }
 store.getAllTransactionByCategory(route.params.dateRange)
