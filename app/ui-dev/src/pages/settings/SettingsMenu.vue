@@ -40,11 +40,8 @@
 </template>
 
 <script setup>
-import { useRouter } from 'vue-router'
+import { inject } from 'vue'
 
-const router = useRouter()
-const goto = (path) => {
-  localStorage.setItem('back_path', router.currentRoute.value.fullPath)
-  router.push(path)
-}
+const goto = inject('goto')
+localStorage.removeItem('back_path')
 </script>

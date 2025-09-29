@@ -46,6 +46,7 @@ import TotalIncomeExpense from './TotalIncomeExpense.vue'
 import BiggestCategoryExpense from './BiggestCategoryExpense.vue'
 import BalanceInfo from './BalanceInfo.vue'
 
+localStorage.removeItem('back_path')
 const store = useStatisticStore()
 
 const cardTitle = ref('Statistik')
