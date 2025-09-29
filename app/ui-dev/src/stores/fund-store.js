@@ -21,6 +21,7 @@ export const useFundStore = defineStore('fund', {
       ownerId: null,
       balance: '0',
     },
+    allOwners: [],
     ownerList: [],
     deletedBalance: [],
   }),
@@ -65,10 +66,13 @@ export const useFundStore = defineStore('fund', {
 
       this.getPemilik()
     },
-    getPemilik() {
+    getPemilik(next = null) {
       api
         .get(`${this.baseUrl}get-pemilik`)
         .then(({ data }) => {
+          this.allOwners = data
+          if (next) next(data)
+
           // filter existing ID first
           const existingIds = new Set(
             this.data.kepemilikan.map((item) => item.id_kepemilikan),
@@ -219,7 +223,7 @@ export const useFundStore = defineStore('fund', {
           errorNotif()
         })
     },
-    getFund() {
+    getFund(next = null) {
       const limit = 25
       paging().state.rows = limit
 
@@ -235,6 +239,9 @@ export const useFundStore = defineStore('fund', {
         autoReset: 500,
         beforeRequest: () => {
           paging().state.token = `Bearer ${Cookies.get(conf.cookieName)}`
+        },
+        afterRequest: () => {
+          if (next) next()
         },
         onError: () => {
           errorNotif()

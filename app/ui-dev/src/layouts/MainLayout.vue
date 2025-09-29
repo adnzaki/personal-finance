@@ -131,8 +131,11 @@ const back = () => {
   router.push(localStorage.getItem('back_path'))
 }
 
-const goto = (path) => {
-  localStorage.setItem('back_path', router.currentRoute.value.fullPath)
+const goto = (path, backPath = null) => {
+  localStorage.setItem(
+    'back_path',
+    backPath ?? router.currentRoute.value.fullPath,
+  )
   router.push(path)
 }
 
