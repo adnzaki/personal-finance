@@ -82,6 +82,11 @@ $routes->group('dashboard', function (RouteCollection $routes) {
     $routes->add('get-transaction-by-category', 'Dashboard::getTransactionByCategory');
 });
 
+$routes->group('report', function (RouteCollection $routes) {
+    $routes->add('general-cash/(:any)', 'Report::generalCashReport/$1');
+    $routes->add('general-cash/(:any)/(:any)', 'Report::generalCashReport/$1/$2');
+});
+
 $routes->add('run-command', 'CommandRunner::runCommand');
 
 $routes->group('test', function (RouteCollection $routes) {

@@ -20,7 +20,7 @@ class Connector
     /**
      * @var string
      */
-    protected $sumberDana = 'tb_sumber_dana';
+    public $sumberDana = 'tb_sumber_dana';
 
     /**
      * @var string
@@ -35,7 +35,7 @@ class Connector
     /**
      * @var string
      */
-    protected $transaksi = 'tb_transaksi';
+    public $transaksi = 'tb_transaksi';
 
     /**
      * @var string

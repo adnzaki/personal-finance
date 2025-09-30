@@ -2,14 +2,18 @@
 
 use App\Models\StatisticModel;
 use App\Models\OwnershipModel;
+use App\Models\SubscriptionModel;
 
 class Statistic extends BaseController
 {
-    private $model;
+    protected $model;
+
+    protected $subscriptionModel;
 
     public function __construct()
     {
         $this->model = new StatisticModel;
+        $this->subscriptionModel = new SubscriptionModel;
     }
 
     public function getOwners()
@@ -84,6 +88,13 @@ class Statistic extends BaseController
 
     public function getTotalIncomeExpense($dateRange, $ownerId = 'all')
     {
+        $totalIncomeExpense = $this->_getTotalIncomeExpense($dateRange, $ownerId);
+
+        return $this->response->setJSON($totalIncomeExpense);
+    }
+
+    protected function _getTotalIncomeExpense($dateRange, $ownerId = 'all')
+    {
         if(strpos($dateRange, '_') !== false) {
             $date = explode('_', $dateRange);
             $date1 = $date[0];
@@ -114,6 +125,6 @@ class Statistic extends BaseController
 
         $transformed['net_income'] = $netIncome < 0 ? plain_number_format($netIncome) : ($netIncome === 0 ? plain_number_format($netIncome) : '+' . plain_number_format($netIncome));
 
-        return $this->response->setJSON($transformed);
+        return $transformed;
     }
 }

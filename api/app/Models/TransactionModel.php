@@ -28,6 +28,11 @@ class TransactionModel extends Connector
         $this->defaultFilter = [$this->transaksi . '.deleted' => 0, $this->sumberDana . '.user_id' => auth()->id()];
     }
 
+    public function overrideDefaultFilter(array $filter): void
+    {
+        $this->defaultFilter = $filter;
+    }
+
     public function setOwner(int $ownerId)
     {
         $this->ownerId = $ownerId;
