@@ -3,6 +3,21 @@
 use CodeIgniter\Shield\Authentication\Authenticators\AccessTokens;
 use App\Models\SubscriptionModel;
 
+if(! function_exists('alphabet_numbering')) {
+
+    /**
+     * Returns the alphabet letter corresponding to the given index.
+     * Example: alphabet_numbering(1) returns 'A', alphabet_numbering(2) returns 'B', etc.
+     * @param int $index The index of the alphabet letter to return.
+     * @return string The alphabet letter corresponding to the given index.
+     */
+    function alphabet_numbering(int $index, $case = 'lower')
+    {
+        $alphabet = range('A', 'Z');
+        return $case === 'lower' ? strtolower($alphabet[$index - 1]) : $alphabet[$index - 1];
+    }
+}
+
 if(! function_exists('valid_subscription')) {
     function valid_subcscription($userId)
     {

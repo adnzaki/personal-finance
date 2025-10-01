@@ -93,7 +93,7 @@ class Statistic extends BaseController
         return $this->response->setJSON($totalIncomeExpense);
     }
 
-    protected function _getTotalIncomeExpense($dateRange, $ownerId = 'all')
+    protected function _getTotalIncomeExpense($dateRange, $ownerId = 'all', $fundId = 'all')
     {
         if(strpos($dateRange, '_') !== false) {
             $date = explode('_', $dateRange);
@@ -104,7 +104,7 @@ class Statistic extends BaseController
             $date2 = $dateRange;
         }
 
-        $response = $this->model->getTotalIncomeExpense($date1, $date2, $ownerId);
+        $response = $this->model->getTotalIncomeExpense($date1, $date2, $ownerId, $fundId);
         $transformed = [
             'total_income' => 0, // Default value
             'total_expense' => 0, // Default value
@@ -122,6 +122,9 @@ class Statistic extends BaseController
         $totalIncome = str_replace(['Rp. ', '.'], '', $transformed['total_income']);
         $totalExpense = str_replace(['Rp. ', '.'], '', $transformed['total_expense']);
         $netIncome = $totalIncome - $totalExpense;
+
+        $transformed['income_raw'] = (int)$totalIncome;
+        $transformed['expense_raw'] = (int)$totalExpense;
 
         $transformed['net_income'] = $netIncome < 0 ? plain_number_format($netIncome) : ($netIncome === 0 ? plain_number_format($netIncome) : '+' . plain_number_format($netIncome));
 

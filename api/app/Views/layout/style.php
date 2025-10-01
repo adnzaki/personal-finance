@@ -4,7 +4,7 @@
     }
 
     @page {
-        margin: 0.5cm 1cm 0.5cm 0;
+        margin: 1cm 1cm 1cm 0;
     }
 
     .font-10 {
@@ -247,9 +247,45 @@
         vertical-align: middle;
     }
 
+    .border-top-2 {
+        border-top-width: 2px !important;
+    }
+
+    .border-bottom-2 {
+        border-bottom-width: 2px !important;
+    }
+
+    .border-right-2 {
+        border-right-width: 2px !important;
+    }
+
+    .border-left-2 {
+        border-left-width: 2px !important;
+    }
+
     table tr th.bordered,
     table tr td.bordered {
         border: 1px solid black;
+    }
+
+    table tr th.left-bordered,
+    table tr td.left-bordered {
+        border-left: 1px solid black;
+    }
+
+    table tr th.right-bordered,
+    table tr td.right-bordered {
+        border-right: 1px solid black;
+    }
+
+    table tr th.top-bordered,
+    table tr td.top-bordered {
+        border-top: 1px solid black;
+    }
+
+    table tr th.bottom-bordered,
+    table tr td.bottom-bordered {
+        border-bottom: 1px solid black;
     }
 
     table tr.bordered {

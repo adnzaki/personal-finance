@@ -63,7 +63,7 @@
 <body>
     <div class="container">
         <h1>Ups 😕</h1>
-        Anda tidak diizinkan mengakses halaman ini.
+        <?= $message ?? 'Anda tidak diizinkan mengakses halaman ini.' ?>
         <!-- <button class="btn" onclick="window.history.back()">Kembali</button> -->
     </div>
 </body>

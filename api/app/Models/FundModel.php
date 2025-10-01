@@ -8,7 +8,7 @@ class FundModel extends Connector
 {
     public $builder;
 
-    private $builder2; // for tb_kepemilikan_sumber_dana
+    public $builder2; // for tb_kepemilikan_sumber_dana
 
     public $ownerId = null;
     
@@ -33,6 +33,11 @@ class FundModel extends Connector
             'fundSource' => $fundSource,
             'ownership' => $ownership
         ];
+    }
+
+    public function overrideDefaultFilter(array $filter): void
+    {
+        $this->basicFilter = $filter;
     }
 
     public function getTotalFund($id)

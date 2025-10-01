@@ -18,6 +18,20 @@ class OwnershipModel extends Connector
         $this->builder2 = $this->db->table($this->pemilikSumberDana);
     }
 
+    public function getFundsByOwner(int $ownerId): array
+    {
+        $query = $this->builder2->select('id_sumber_dana, nama AS nama_sumber_dana, jumlah_dana')
+                      ->join($this->sumberDana, $this->sumberDana . '.id = ' . $this->pemilikSumberDana . '.id_sumber_dana')
+                      ->getWhere(['id_kepemilikan' => $ownerId, "{$this->sumberDana}.deleted" => 0]);
+        
+        return $query->getNumRows() > 0 ? $query->getResult() : [];
+    }
+
+    public function overrideDefaultFilter(array $filter): void
+    {
+        $this->basicFilter = $filter;
+    }
+
     public function getDetail(int $id)
     {
         return $this->builder->getWhere(['id' => $id])->getResult()[0];
