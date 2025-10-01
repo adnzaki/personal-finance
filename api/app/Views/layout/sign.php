@@ -13,7 +13,7 @@
                 foreach ($signs as $sign): ?>
                     <td style="width: <?= 100 / count($signs) ?>%; vertical-align: top;" class="font-11">
                         <?php if ($index === 1 && count($signs) === 3): ?>
-                            <br><br><br><br><br><br><br><br>
+                            <br><br><br><br><br><br><br>
                         <?php endif; ?>
                         <p class="text-center">
                             <?= $sign['title'] ?><br />
