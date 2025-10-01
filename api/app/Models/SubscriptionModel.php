@@ -17,7 +17,7 @@ class SubscriptionModel extends Model
     {
         return $this->where('user_id', $userId)
                     ->where('status', 'active')
-                    ->first();
+                    ->first() !== null;
     }
 
     public function checkActivePeriod($userId)

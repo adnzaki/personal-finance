@@ -1,6 +1,19 @@
 <?php
 
 use CodeIgniter\Shield\Authentication\Authenticators\AccessTokens;
+use App\Models\SubscriptionModel;
+
+if(! function_exists('valid_subscription')) {
+    function valid_subcscription($userId)
+    {
+        $subscriptionModel = new SubscriptionModel;
+        $checkActivation = $subscriptionModel->checkActivation($userId);
+        $checkActivePeriod = $subscriptionModel->checkActivePeriod($userId);
+        $subscription = $subscriptionModel->hasSubscription($userId);
+
+        return $subscription && $checkActivation && $checkActivePeriod;
+    }
+}
 
 if (! function_exists('request')) {
     /**

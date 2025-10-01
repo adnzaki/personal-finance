@@ -21,6 +21,10 @@ class Report extends Statistic
 
     public function generalCashReport($dateRange, $ownerId = 'all')
     {
+        if (! valid_subcscription($this->userId)) {
+            return view('invalid_subscription');
+        }
+
         $this->model->overrideDefaultFilter([
             $this->model->transaksi . '.deleted' => 0, $this->model->sumberDana . '.user_id' => $this->userId
         ]);
