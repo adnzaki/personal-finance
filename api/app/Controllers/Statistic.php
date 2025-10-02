@@ -10,10 +10,13 @@ class Statistic extends BaseController
 
     protected $subscriptionModel;
 
+    protected $ownershipModel;
+
     public function __construct()
     {
         $this->model = new StatisticModel;
         $this->subscriptionModel = new SubscriptionModel;
+        $this->ownershipModel = new OwnershipModel;
     }
 
     public function getOwners()

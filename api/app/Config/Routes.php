@@ -86,6 +86,7 @@ $routes->group('report', function (RouteCollection $routes) {
     $routes->add('general-cash/(:any)', 'Report::generalCashReport/$1');
     $routes->add('general-cash/(:any)/(:any)', 'Report::generalCashReport/$1/$2');
     $routes->add('account-balance-by-owner/(:any)', 'Report::accountBalanceReportByOwner/$1');
+    $routes->add('account-balance-by-fund/(:any)', 'Report::accountBalanceReportByFund/$1');
 });
 
 $routes->add('run-command', 'CommandRunner::runCommand');

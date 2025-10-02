@@ -16,7 +16,7 @@
         foreach ($startBalance as $row): ?>
             <tr>
                 <td class="left-bordered pt-5 pb-5 text-center" style="width: 10%;"><?= $index ?></td>
-                <td class="pt-5 pb-5 pl-5" style="width: 50%;"><?= $row['owner'] ?></td>
+                <td class="pt-5 pb-5 pl-5" style="width: 50%;"><?= $row['fund'] ?></td>
                 <?= $currency ?>
                 <td class="right-bordered pt-5 pb-5 text-right pr-5" style="width: 25%;"><?= plain_number_format($row['balance']) ?></td>
             </tr>
@@ -101,13 +101,13 @@
         foreach ($endBalance as $row): ?>
             <tr>
                 <td class="left-bordered pt-5 pb-5 text-center" style="width: 10%;"><?= $index ?></td>
-                <td class="pt-5 pb-5 right-bordered" style="width: 50%;" colspan="3"><?= $row['owner'] ?></td>
+                <td class="pt-5 pb-5 right-bordered" style="width: 50%;" colspan="3"><?= $row['fund'] ?></td>
             </tr>
             <?php $number = 1;
             foreach ($row['details'] as $key): ?>
                 <tr>
                     <td class="left-bordered"></td>
-                    <td class="pt-5 pb-5"><?= alphabet_numbering($number) . '. ' . $key['fund'] ?></td>
+                    <td class="pt-5 pb-5"><?= alphabet_numbering($number) . '. ' . $key['owner'] ?></td>
                     <?= $currency ?>
                     <td class="right-bordered pt-5 pb-5 text-right pr-5"><?= plain_number_format($key['balance']) ?></td>
                 </tr>

@@ -1,7 +1,5 @@
 <?php namespace App\Controllers;
 
-use App\Models\OwnershipModel;
-
 class Report extends Statistic
 {
     private $userId;
@@ -28,10 +26,12 @@ class Report extends Statistic
                 $this->model->sumberDana . '.deleted' => 0, 
                 $this->model->sumberDana . '.user_id' => $this->userId
             ]);
+
+            $this->ownershipModel->overrideDefaultFilter(['deleted' => 0, 'user_id' => $this->userId]);
         }
     }
 
-    public function accountBalanceReportByOwner($dateRange)
+    public function accountBalanceReportByFund($dateRange)
     {
         if (! valid_subcscription($this->userId)) {
             return view('errors/invalid_subscription');
@@ -41,13 +41,10 @@ class Report extends Statistic
         $title = 'Laporan Saldo dan Neraca';
         $printDate = $this->request->getGet('print_date') ?? date('Y-m-d');
         $signFormat = $this->request->getGet('sign_format');
-
-        $ownershipModel = new OwnershipModel();
-        $ownershipModel->overrideDefaultFilter(['deleted' => 0, 'user_id' => $this->userId]);
-        $owners = $ownershipModel->getData(999, 0);
-        $ownerBalances = [];
+        $fundSource = $this->model->fundModel->getData(999, 0);
         $mutations = [];
         $startBalance = [];
+        $endBalance = [];
 
         $startDate = '';
         $endDate = '';
@@ -61,32 +58,167 @@ class Report extends Statistic
         }
 
         try {
-            foreach($owners as $owner) {
-                $totalFunds = $ownershipModel->getTotalFund($owner->id);
-                $totalBalance = 0;
-                if($totalFunds) {
-                    foreach($totalFunds as $fund) {
-                        $totalBalance += (int)$fund->jumlah_dana;
-                    }
+            foreach($fundSource as $fund) {
+                $startBalanceDetails = [];
+                $endBalanceDetails = [];
+                $ownerMutations = [];
+                $owners = $this->model->fundModel->getDaftarKepemilikan($fund->id);
+                foreach($owners as $owner) {
+                    $getBalanceDetail = $this->model->setFundId($fund->id)->getTotalBalance($dateRange, $owner->id_kepemilikan);
+                    $startBalanceDetails[] = [
+                        'owner'     => $owner->label,
+                        'balance'   => $getBalanceDetail['start_balance_raw'],
+                    ];
+
+                    $endBalanceDetails[] = [
+                        'owner'     => $owner->label,
+                        'balance'   => $getBalanceDetail['end_balance_raw'], 
+                    ];
+
+                    $totalIncomeExpense = $this->_getTotalIncomeExpense($dateRange, $owner->id_kepemilikan, $fund->id);
+                    $ownerMutations[] = [
+                        'id'            => $fund->id,
+                        'name'          => $owner->label,
+                        'income'        => $totalIncomeExpense['income_raw'],
+                        'expense'       => $totalIncomeExpense['expense_raw'],
+                    ];
                 }
 
                 $startBalance[] = [
-                    'owner'     => $owner->kepemilikan,
-                    'balance'   => $this->model->getTotalBalance($dateRange, $owner->id)['start_balance_raw']
+                    'fund'      => $fund->nama,
+                    'balance'   => array_sum(array_column($startBalanceDetails, 'balance')),
+                    'details'   => $startBalanceDetails
                 ];
-    
-                $fundSources = $ownershipModel->getFundsByOwner($owner->id);
-                $ownerBalances[] = [
-                    'id'        => $owner->id,
-                    'owner'     => $owner->kepemilikan,
-                    'balance'   => $totalBalance,
-                    'balance_f' => plain_number_format($totalBalance),
-                    'details'   => $fundSources
+                
+                $totalEndBalance = array_sum(array_column($endBalanceDetails, 'balance'));
+                $endBalance[] = [
+                    'fund'      => $fund->nama,
+                    'balance'   => $totalEndBalance,
+                    'balance_f' => plain_number_format($totalEndBalance),
+                    'details'   => $endBalanceDetails
                 ];
-    
-                // get mutations
+
+                $mutations[] = [
+                    'id'            => $fund->id,
+                    'name'          => $fund->nama,
+                    'owners'        => $ownerMutations
+                ];                
+            }
+
+            $totalEndBalance = plain_number_format(array_sum(array_column($endBalance, 'balance')));
+            $totalStartBalance = plain_number_format(array_sum(array_column($startBalance, 'balance')));
+
+            $mutationsIn = [];
+            $mutationsOut = [];
+            $totalMutationsIn = [];
+            $totalMutationsOut = [];
+
+            foreach ($mutations as $mutation) {
+                $fund = $mutation['name'];
+
+                foreach ($mutation['owners'] as $owner) {
+                    $income = (int)$owner['income'];
+                    $expense = (int)$owner['expense'];
+
+                    // Pemasukan
+                    if ($income > 0) {
+                        $mutationsIn[$fund][] = [
+                            'name' => $owner['name'],
+                            'amount' => plain_number_format($income)
+                        ];
+                        $totalMutationsIn[$fund] = ($totalMutationsIn[$fund] ?? 0) + $income;
+                    }
+
+                    // Pengeluaran
+                    if ($expense > 0) {
+                        $mutationsOut[$fund][] = [
+                            'name' => $owner['name'],
+                            'amount' => plain_number_format($expense)
+                        ];
+                        $totalMutationsOut[$fund] = ($totalMutationsOut[$fund] ?? 0) + $expense;
+                    }
+                }
+            }
+
+            $contentData = [
+                'title'             => $title,
+                'dateRange'         => $dateRange,
+                'startBalance'      => $startBalance,
+                'endBalance'        => $endBalance,
+                'totalStartBalance' => $totalStartBalance,
+                'totalEndBalance'   => $totalEndBalance,
+                'mutations'         => $mutations,
+                'mutationsIn'       => $mutationsIn,
+                'mutationsOut'      => $mutationsOut,
+                'totalMutationsIn'  => $totalMutationsIn,
+                'totalMutationsOut' => $totalMutationsOut,
+                'sumMutationsIn'    => plain_number_format(array_sum($totalMutationsIn)),
+                'sumMutationsOut'   => plain_number_format(array_sum($totalMutationsOut)),
+                'period'            => os_date()->create($startDate, 'd-MM-y') . ' sd. ' . os_date()->create($endDate, 'd-MM-y'),
+                'signs'             => $this->getSigns($this->userId, ['date' => $printDate], $signFormat),
+                'signFormat'        => $signFormat,
+            ];
+
+            $data = [
+                'pageTitle' => $title,
+                'content'   => view('report/neraca_saldo_by_fund', $contentData),
+            ];
+
+            $html = view('layout/main', $data);
+            $pdf->loadHTML($html)->render()->stream('Laporan-Neraca-dan-Saldo-SumberDana.pdf');
+
+            return $this->response->setJSON($contentData);
+        } catch(\Exception $e) {
+            return view('errors/invalid_access', ['message' => 'Terjadi kesalahan pada sistem. <br/> Pesan error: ' . $e]);
+        }
+
+    }
+
+    public function accountBalanceReportByOwner($dateRange)
+    {
+        if (! valid_subcscription($this->userId)) {
+            return view('errors/invalid_subscription');
+        }
+
+        $pdf = new \PDFCreator();
+        $title = 'Laporan Saldo dan Neraca';
+        $printDate = $this->request->getGet('print_date') ?? date('Y-m-d');
+        $signFormat = $this->request->getGet('sign_format');
+
+        $owners = $this->ownershipModel->getData(999, 0);
+        $mutations = [];
+        $startBalance = [];
+        $endBalance = [];
+
+        $startDate = '';
+        $endDate = '';
+        if (strpos($dateRange, '_') !== false) {
+            $date = explode('_', $dateRange);
+            $startDate = $date[0];
+            $endDate = $date[1];
+        } else {
+            $startDate = $dateRange;
+            $endDate = $dateRange;
+        }
+        try {
+            foreach($owners as $owner) {
+                $fundSources = $this->ownershipModel->getFundsByOwner($owner->id);
+
+                $startBalanceDetails = [];
+                $endBalanceDetails = [];
                 $fundMutations = [];
                 foreach($fundSources as $fund) {
+                    $getBalanceDetail = $this->model->setFundId($fund->id_sumber_dana)->getTotalBalance($dateRange, $owner->id);
+                    $startBalanceDetails[] = [
+                        'fund'      => $fund->nama_sumber_dana,
+                        'balance'   => $getBalanceDetail['start_balance_raw'],
+                    ];
+
+                    $endBalanceDetails[] = [
+                        'fund'      => $fund->nama_sumber_dana,
+                        'balance'   => $getBalanceDetail['end_balance_raw']
+                    ];
+
                     $totalIncomeExpense = $this->_getTotalIncomeExpense($dateRange, $owner->id, $fund->id_sumber_dana);
                     $fundMutations[] = [
                         'id'            => $fund->id_sumber_dana,
@@ -95,6 +227,20 @@ class Report extends Statistic
                         'expense'       => $totalIncomeExpense['expense_raw'],
                     ];
                 }
+
+                $startBalance[] = [
+                    'owner'     => $owner->kepemilikan,
+                    'balance'   => array_sum(array_column($startBalanceDetails, 'balance')),
+                    'details'   => $startBalanceDetails
+                ];
+
+                $countEndBalance = array_sum(array_column($endBalanceDetails, 'balance'));
+                $endBalance[] = [
+                    'owner'     => $owner->kepemilikan,
+                    'balance'   => $countEndBalance,
+                    'balance_f' => plain_number_format($countEndBalance),
+                    'details'   => $endBalanceDetails
+                ];
     
                 $mutations[] = [
                     'ownerId'       => $owner->id,
@@ -103,7 +249,7 @@ class Report extends Statistic
                 ];
             }
 
-            $totalAllBalance = plain_number_format(array_sum(array_column($ownerBalances, 'balance')));
+            $totalEndBalance = plain_number_format(array_sum(array_column($endBalance, 'balance')));
             $totalStartBalance = plain_number_format(array_sum(array_column($startBalance, 'balance')));
 
             $mutationsIn = [];
@@ -141,10 +287,10 @@ class Report extends Statistic
             $contentData = [
                 'title'                 => $title,
                 'dateRange'             => $dateRange,
-                'balance'               => $ownerBalances,
                 'startBalance'          => $startBalance,
+                'endBalance'            => $endBalance,
                 'totalStartBalance'     => $totalStartBalance,
-                'totalAllBalance'       => $totalAllBalance,
+                'totalEndBalance'       => $totalEndBalance,
                 'mutationsIn'           => $mutationsIn,
                 'mutationsOut'          => $mutationsOut,
                 'totalMutationsIn'      => $totalMutationsIn,
@@ -165,7 +311,8 @@ class Report extends Statistic
             $html = view('layout/main', $data);
             $pdf->loadHTML($html)->render()->stream('Laporan-Neraca-dan-Saldo.pdf');
 
-            // return $this->response->setJSON($contentData);
+            // for debug purpose, return the content data as json
+            return $this->response->setJSON($contentData);
         } catch (\Exception $e) {
             return view('errors/invalid_access', ['message' => 'Terjadi kesalahan pada sistem. <br/> Pesan error: ' . $e->getMessage()]);
         }

@@ -11,6 +11,8 @@ class FundModel extends Connector
     public $builder2; // for tb_kepemilikan_sumber_dana
 
     public $ownerId = null;
+
+    public $fundId = null;
     
     public function __construct()
     {
@@ -82,23 +84,18 @@ class FundModel extends Connector
             $filter = array_merge($filter, [$this->pemilikSumberDana . '.id_kepemilikan' => $this->ownerId]);
         }
 
-        return $this->search($field, '', 'id, nama, jumlah_dana')
+        if($this->fundId !== null) {
+            $filter = array_merge($filter, [$this->sumberDana . '.id' => $this->fundId]);
+        }
+
+        return $this->search($field, '', 'id, nama, kepemilikan as owner_name, jumlah_dana')
             ->join($this->pemilikSumberDana, $this->sumberDana . '.id = ' . $this->pemilikSumberDana . '.id_sumber_dana')
+            ->join($this->kepemilikan, $this->pemilikSumberDana . '.id_kepemilikan = ' . $this->kepemilikan . '.id')
             ->where($filter)
             ->get()
-            ->getResult();
-        // $query = $this->builder2->selectSum('jumlah_dana')
-        //             ->join('tb_sumber_dana', 'tb_sumber_dana.id = tb_kepemilikan_sumber_dana.id_sumber_dana')
-        //             ->where('tb_sumber_dana.user_id', 1)
-        //             ->where('tb_sumber_dana.deleted', 0)
-        //             ->where('tb_kepemilikan_sumber_dana.deleted', 0)
-        //             ->where('id_kepemilikan', 1)
-        //             ->get();
-
-        // return $query->getRow();
-
-        
+            ->getResult();        
     }
+
     public function getDataForBalance2(int|string $ownerId)
     {
         $params = [
@@ -123,13 +120,20 @@ class FundModel extends Connector
     {
         $filter = $this->basicFilter;
 
-        // if ($this->ownerId !== null) {
-        //     $filter = array_merge($filter, [$this->pemilikSumberDana . '.id_kepemilikan' => $this->ownerId]);
-        // }
+        if ($this->ownerId !== null) {
+            $filter = array_merge($filter, [$this->pemilikSumberDana . '.id_kepemilikan' => $this->ownerId]);
+        }
 
         $query = $this->search('nama', $search)->where($filter);
 
         return $query->countAllResults();
+    }
+
+    public function setFund(int $fundId)
+    {
+        $this->fundId = $fundId;
+
+        return $this;
     }
 
     public function setOwner(int $ownerId)
@@ -160,7 +164,7 @@ class FundModel extends Connector
     public function getDaftarKepemilikan(int $idSumberDana): array
     {
         $query = $this->builder
-                    ->select($this->pemilikSumberDana . '.id as value, kepemilikan as label, jumlah_dana, kepemilikan')
+                    ->select($this->pemilikSumberDana . '.id as value, kepemilikan as label, id_kepemilikan, jumlah_dana, kepemilikan')
                     ->join($this->pemilikSumberDana, $this->sumberDana . '.id = ' . $this->pemilikSumberDana . '.id_sumber_dana')
                     ->join($this->kepemilikan, $this->pemilikSumberDana . '.id_kepemilikan = ' . $this->kepemilikan . '.id')
                     ->where($this->sumberDana . '.id', $idSumberDana)
