@@ -89,6 +89,11 @@ $routes->group('report', function (RouteCollection $routes) {
     $routes->add('account-balance-by-fund/(:any)', 'Report::accountBalanceReportByFund/$1');
 });
 
+$routes->group('sign-setting', function (RouteCollection $routes) {
+    $routes->add('get-data', 'SignSetting::getData');
+    $routes->add('save', 'SignSetting::save');
+});
+
 $routes->add('run-command', 'CommandRunner::runCommand');
 
 $routes->group('test', function (RouteCollection $routes) {
