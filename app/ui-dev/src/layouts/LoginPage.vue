@@ -17,7 +17,7 @@
               />
             </div>
             <div class="text-h6 text-center">
-              Login ke <strong>SisaUang</strong>
+              Login <strong>SisaUang</strong>
             </div>
             <div class="q-gutter-lg q-mt-lg">
               <q-input
