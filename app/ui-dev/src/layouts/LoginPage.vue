@@ -11,13 +11,13 @@
           <q-card-section>
             <div class="text-center q-mb-md">
               <q-img
-                src="main-logo.png"
+                src="new-logo.png"
                 alt="SisaUang Logo"
                 style="max-width: 100px; max-height: 100px; margin: auto"
               />
             </div>
             <div class="text-h6 text-center">
-              Login ke <strong>SisaUang</strong>
+              Login <strong>SisaUang</strong>
             </div>
             <div class="q-gutter-lg q-mt-lg">
               <q-input

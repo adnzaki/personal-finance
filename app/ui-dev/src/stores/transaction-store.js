@@ -103,6 +103,7 @@ export const useTransactionStore = defineStore('transaction', {
       const { fundId, ownerId, transactionType, category, date } = this.filter
 
       const params = `${fundId.value}/${ownerId.value}/${transactionType.value}/${category.value}/${date.value}`
+      const owner = this.ownerId === null ? '' : '/' + this.ownerId.value
 
       paging().getData({
         lang: 'indonesia',
@@ -112,8 +113,9 @@ export const useTransactionStore = defineStore('transaction', {
         searchBy: 'deskripsi',
         sort: 'DESC',
         search: '',
-        url: `${conf.apiPublicPath}${this.baseUrl}get-data/${params}`,
+        url: `${conf.apiPublicPath}${this.baseUrl}get-data/${params}${owner}`,
         autoReset: 500,
+        usePost: true,
         beforeRequest: () => {
           paging().state.token = `Bearer ${Cookies.get(conf.cookieName)}`
         },

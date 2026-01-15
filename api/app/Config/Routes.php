@@ -41,8 +41,8 @@ $routes->group('category', function (RouteCollection $routes) {
 });
 
 $routes->group('transaction', function (RouteCollection $routes) {
-    $routes->add('get-data/(:any)/(:any)/(:any)/(:any)/(:any)/(:any)/(:any)/(:any)/(:any)/(:any)', 'Transaction::getData/$1/$2/$3/$4/$5/$6/$7/$8/$9/$10');
-    $routes->add('get-data/(:any)/(:any)/(:any)/(:any)/(:any)/(:any)/(:any)/(:any)/(:any)/(:any)/(:any)', 'Transaction::getData/$1/$2/$3/$4/$5/$6/$7/$8/$9/$10/$11');
+    $routes->add('get-data/(:any)/(:any)/(:any)/(:any)/(:any)', 'Transaction::getData/$1/$2/$3/$4/$5');
+    $routes->add('get-data/(:any)/(:any)/(:any)/(:any)/(:any)/(:any)', 'Transaction::getData/$1/$2/$3/$4/$5/$6');
     $routes->add('get-fund-source', 'Transaction::getFundSource');
     $routes->add('get-target-funds/(:any)', 'Transaction::getTargetFunds/$1');
     $routes->add('get-owner-by-fund-id/(:any)', 'Transaction::getOwnerByFundId/$1');
@@ -58,8 +58,12 @@ $routes->group('statistic', function (RouteCollection $routes) {
     $routes->add('get-total-income-expense/(:any)', 'Statistic::getTotalIncomeExpense/$1');
     $routes->add('get-total-income-expense/(:any)/(:any)', 'Statistic::getTotalIncomeExpense/$1/$2');
     $routes->add('get-biggest-transaction-by-category/(:any)', 'Statistic::getBiggestTransactionByCategory/$1');
+    $routes->add('get-biggest-transaction-by-category/(:any)/(:any)', 'Statistic::getBiggestTransactionByCategory/$1/$2');
     $routes->add('get-all-transaction-by-category/(:any)', 'Statistic::getAllTransactionByCategory/$1');
+    $routes->add('get-all-transaction-by-category/(:any)/(:any)', 'Statistic::getAllTransactionByCategory/$1/$2');
     $routes->add('get-total-balance/(:any)', 'Statistic::getTotalBalance/$1');
+    $routes->add('get-total-balance/(:any)/(:any)', 'Statistic::getTotalBalance/$1/$2');
+    $routes->add('get-owners', 'Statistic::getOwners'); 
 });
 
 $routes->group('user', function (RouteCollection $routes) {
@@ -76,6 +80,18 @@ $routes->group('settings', function (RouteCollection $routes) {
 $routes->group('dashboard', function (RouteCollection $routes) {
     $routes->add('get-biggest-funds', 'Dashboard::getBiggestFunds');
     $routes->add('get-transaction-by-category', 'Dashboard::getTransactionByCategory');
+});
+
+$routes->group('report', function (RouteCollection $routes) {
+    $routes->add('general-cash/(:any)', 'Report::generalCashReport/$1');
+    $routes->add('general-cash/(:any)/(:any)', 'Report::generalCashReport/$1/$2');
+    $routes->add('account-balance-by-owner/(:any)', 'Report::accountBalanceReportByOwner/$1');
+    $routes->add('account-balance-by-fund/(:any)', 'Report::accountBalanceReportByFund/$1');
+});
+
+$routes->group('sign-setting', function (RouteCollection $routes) {
+    $routes->add('get-data', 'SignSetting::getData');
+    $routes->add('save', 'SignSetting::save');
 });
 
 $routes->add('run-command', 'CommandRunner::runCommand');

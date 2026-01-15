@@ -1,24 +1,40 @@
 <?php namespace App\Controllers;
 
 use App\Models\StatisticModel;
+use App\Models\OwnershipModel;
+use App\Models\SubscriptionModel;
 
 class Statistic extends BaseController
 {
-    private $model;
+    protected $model;
+
+    protected $subscriptionModel;
+
+    protected $ownershipModel;
 
     public function __construct()
     {
         $this->model = new StatisticModel;
+        $this->subscriptionModel = new SubscriptionModel;
+        $this->ownershipModel = new OwnershipModel;
     }
 
-    public function getTotalBalance($dateRange)
+    public function getOwners()
     {
-        $balance = $this->model->getTotalBalance($dateRange);
+        $ownerModel = new OwnershipModel;
+        $data = $ownerModel->setAlias('id as value, kepemilikan as label')->getData(1000, 0);
+
+        return $this->response->setJSON($data);
+    }
+
+    public function getTotalBalance($dateRange, $ownerId = 'all')
+    {
+        $balance = $this->model->getTotalBalance($dateRange, $ownerId);
 
         return $this->response->setJSON($balance);
     }
 
-    public function getAllTransactionByCategory($dateRange)
+    public function getAllTransactionByCategory($dateRange, $ownerId = 'all')
     {
         if (strpos($dateRange, '_') !== false) {
             $date = explode('_', $dateRange);
@@ -29,8 +45,8 @@ class Statistic extends BaseController
             $date2 = $dateRange;
         }
 
-        $income = $this->model->getAllTransactionByCategory($date1, $date2, 'income', 1000);
-        $expense = $this->model->getAllTransactionByCategory($date1, $date2, 'expense', 1000);
+        $income = $this->model->getAllTransactionByCategory($date1, $date2, 'income', $ownerId);
+        $expense = $this->model->getAllTransactionByCategory($date1, $date2, 'expense', $ownerId);
 
         return $this->response->setJSON([
             'income' => $income,
@@ -38,7 +54,7 @@ class Statistic extends BaseController
         ]);
     }
 
-    public function getBiggestTransactionByCategory($dateRange)
+    public function getBiggestTransactionByCategory($dateRange, $ownerId = 'all')
     {
         if(strpos($dateRange, '_') !== false) {
             $date = explode('_', $dateRange);
@@ -49,7 +65,7 @@ class Statistic extends BaseController
             $date2 = $dateRange;
         }
 
-        $response = $this->model->getAllTransactionByCategory($date1, $date2, 'expense', 1000);
+        $response = $this->model->getAllTransactionByCategory($date1, $date2, 'expense', $ownerId);
         $sliceResponse = array_slice($response, 0, 5);
         $otherTransactions = array_sum(array_column($response, 'total_transaksi')) - array_sum(array_column($sliceResponse, 'total_transaksi'));
         // now what about the percentage of the other transactions?
@@ -73,7 +89,14 @@ class Statistic extends BaseController
         ]);
     }
 
-    public function getTotalIncomeExpense($dateRange, $fundId = null)
+    public function getTotalIncomeExpense($dateRange, $ownerId = 'all')
+    {
+        $totalIncomeExpense = $this->_getTotalIncomeExpense($dateRange, $ownerId);
+
+        return $this->response->setJSON($totalIncomeExpense);
+    }
+
+    protected function _getTotalIncomeExpense($dateRange, $ownerId = 'all', $fundId = 'all')
     {
         if(strpos($dateRange, '_') !== false) {
             $date = explode('_', $dateRange);
@@ -84,7 +107,7 @@ class Statistic extends BaseController
             $date2 = $dateRange;
         }
 
-        $response = $this->model->getTotalIncomeExpense($date1, $date2);
+        $response = $this->model->getTotalIncomeExpense($date1, $date2, $ownerId, $fundId);
         $transformed = [
             'total_income' => 0, // Default value
             'total_expense' => 0, // Default value
@@ -103,8 +126,11 @@ class Statistic extends BaseController
         $totalExpense = str_replace(['Rp. ', '.'], '', $transformed['total_expense']);
         $netIncome = $totalIncome - $totalExpense;
 
+        $transformed['income_raw'] = (int)$totalIncome;
+        $transformed['expense_raw'] = (int)$totalExpense;
+
         $transformed['net_income'] = $netIncome < 0 ? plain_number_format($netIncome) : ($netIncome === 0 ? plain_number_format($netIncome) : '+' . plain_number_format($netIncome));
 
-        return $this->response->setJSON($transformed);
+        return $transformed;
     }
 }

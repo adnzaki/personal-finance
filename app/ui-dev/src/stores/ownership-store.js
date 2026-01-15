@@ -36,22 +36,12 @@ export const useOwnershipStore = defineStore('ownership', {
           api
             .get(`${this.baseUrl}delete/${id}`)
             .then(({ data }) => {
-              notifyProgress({
-                timeout,
-                message: data.msg,
-                spinner: false,
-              })
+              notifyProgress({ timeout, message: data.msg, spinner: false })
 
               if (data.code === 200) {
-                notifyProgress({
-                  color: 'positive',
-                  icon: 'done',
-                })
+                notifyProgress({ color: 'positive', icon: 'done' })
               } else {
-                notifyProgress({
-                  color: 'negative',
-                  icon: 'close',
-                })
+                notifyProgress({ color: 'negative', icon: 'close' })
               }
               paging().reloadData()
             })
@@ -138,7 +128,7 @@ export const useOwnershipStore = defineStore('ownership', {
         searchBy: 'kepemilikan',
         sort: 'ASC',
         search: '',
-        url: `${conf.apiPublicPath}${this.baseUrl}get-data/`,
+        url: `${conf.apiPublicPath}${this.baseUrl}get-data`,
         autoReset: 500,
         beforeRequest: () => {
           paging().state.token = `Bearer ${Cookies.get(conf.cookieName)}`

@@ -66,7 +66,8 @@ class Autoload extends AutoloadConfig
      * @var array<string, string>
      */
     public $classmap = [
-        'OstiumDate'     => APPPATH . 'Libraries/OstiumDate/OstiumDate.php',
+        'PDFCreator'    => APPPATH . 'Libraries/PDFCreator.php',
+        'OstiumDate'    => APPPATH . 'Libraries/OstiumDate/OstiumDate.php',
     ];
 
     /**

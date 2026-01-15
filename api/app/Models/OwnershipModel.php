@@ -7,6 +7,9 @@ class OwnershipModel extends Connector
     public $builder;
 
     private $builder2; // for tb_kepemilikan_sumber_dana
+
+    private $fieldAlias = '';
+
     public function __construct()
     {
         parent::__construct();
@@ -15,9 +18,30 @@ class OwnershipModel extends Connector
         $this->builder2 = $this->db->table($this->pemilikSumberDana);
     }
 
+    public function getFundsByOwner(int $ownerId): array
+    {
+        $query = $this->builder2->select('id_sumber_dana, nama AS nama_sumber_dana, jumlah_dana')
+                      ->join($this->sumberDana, $this->sumberDana . '.id = ' . $this->pemilikSumberDana . '.id_sumber_dana')
+                      ->getWhere(['id_kepemilikan' => $ownerId, "{$this->sumberDana}.deleted" => 0]);
+        
+        return $query->getNumRows() > 0 ? $query->getResult() : [];
+    }
+
+    public function overrideDefaultFilter(array $filter): void
+    {
+        $this->basicFilter = $filter;
+    }
+
     public function getDetail(int $id)
     {
         return $this->builder->getWhere(['id' => $id])->getResult()[0];
+    }
+
+    public function setAlias($alias)
+    {
+        $this->fieldAlias = $alias;
+
+        return $this;
     }
 
     public function getTotalFund($id)
@@ -64,7 +88,12 @@ class OwnershipModel extends Connector
 
     private function search(string $searchBy, string $search)
     {
-        $select = $this->builder->select('id, kepemilikan, modified');
+        $field = 'id, kepemilikan, modified';
+        if(! empty($this->fieldAlias)) {
+            $field = $this->fieldAlias;
+        }
+
+        $select = $this->builder->select($field);
         if(! empty($search)) {
             $select->like($searchBy, $search);           
         }

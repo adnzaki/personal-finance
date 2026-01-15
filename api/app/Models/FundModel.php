@@ -8,7 +8,11 @@ class FundModel extends Connector
 {
     public $builder;
 
-    private $builder2; // for tb_kepemilikan_sumber_dana
+    public $builder2; // for tb_kepemilikan_sumber_dana
+
+    public $ownerId = null;
+
+    public $fundId = null;
     
     public function __construct()
     {
@@ -16,6 +20,7 @@ class FundModel extends Connector
 
         $this->builder = $this->db->table($this->sumberDana);
         $this->builder2 = $this->db->table($this->pemilikSumberDana);
+        $this->basicFilter = [$this->sumberDana . '.deleted' => 0, $this->sumberDana . '.user_id' => auth()->id()];
     }
 
     public function getDetail(int $id)
@@ -32,9 +37,19 @@ class FundModel extends Connector
         ];
     }
 
+    public function overrideDefaultFilter(array $filter): void
+    {
+        $this->basicFilter = $filter;
+    }
+
     public function getTotalFund($id)
     {
-        $query = $this->builder2->select('jumlah_dana')->getWhere(['id_sumber_dana' => $id, 'deleted' => 0]);
+        $filter = ['id_sumber_dana' => $id, 'deleted' => 0];
+        if($this->ownerId !== null) {
+            array_merge($filter, ['id_kepemilikan' => $this->ownerId]);
+        }
+        
+        $query = $this->builder2->select('jumlah_dana')->getWhere($filter);
         
         return $query->getNumRows() > 0 ? $query->getResult() : null;
     }
@@ -43,19 +58,89 @@ class FundModel extends Connector
     {
         $query = $this->builder->select('id, nama, jumlah_dana')
                                ->join($this->pemilikSumberDana, $this->sumberDana . '.id = ' . $this->pemilikSumberDana . '.id_sumber_dana')
-                               ->where([$this->pemilikSumberDana . '.deleted' => 0, 'user_id' => auth()->id()])
+                               ->where([$this->pemilikSumberDana . '.deleted' => 0, $this->sumberDana . '.user_id' => auth()->id()])
                                ->orderBy('jumlah_dana', 'DESC')
                                ->limit(3);
 
         return $query->get()->getResult();
     }
 
-    public function getData(int $limit, int $offset, string $sort = 'ASC', string $search = ''): array
+    public function getData(int $limit, int $offset, string $search = ''): array
     {
         $field = 'nama';
-        $query = $this->search($field, $search)->where($this->basicFilter)->orderBy($field, $sort)->limit($limit, $offset);
 
-        return $query->get()->getResult();
+        return $this->search($field, $search)
+                    ->where($this->basicFilter)
+                    ->get($limit, $offset, false)
+                    ->getResult();
+    }
+
+    public function getDataForBalance()
+    {
+        $field = 'nama';
+        $filter = $this->basicFilter;
+
+        if ($this->ownerId !== null) {
+            $filter = array_merge($filter, [$this->pemilikSumberDana . '.id_kepemilikan' => $this->ownerId]);
+        }
+
+        if($this->fundId !== null) {
+            $filter = array_merge($filter, [$this->sumberDana . '.id' => $this->fundId]);
+        }
+
+        return $this->search($field, '', 'id, nama, kepemilikan as owner_name, jumlah_dana')
+            ->join($this->pemilikSumberDana, $this->sumberDana . '.id = ' . $this->pemilikSumberDana . '.id_sumber_dana')
+            ->join($this->kepemilikan, $this->pemilikSumberDana . '.id_kepemilikan = ' . $this->kepemilikan . '.id')
+            ->where($filter)
+            ->get()
+            ->getResult();        
+    }
+
+    public function getDataForBalance2(int|string $ownerId)
+    {
+        $params = [
+            $this->sumberDana . '.user_id' => auth()->id(),
+            $this->sumberDana . '.deleted' => 0,
+            $this->pemilikSumberDana . '.deleted' => 0
+        ];
+
+        if($ownerId !== 'all') {
+            $params[$this->pemilikSumberDana . '.id_kepemilikan'] = $ownerId;
+        }
+
+        $query = $this->builder2->selectSum('jumlah_dana')
+            ->join('tb_sumber_dana', 'tb_sumber_dana.id = tb_kepemilikan_sumber_dana.id_sumber_dana')
+            ->where($params)
+            ->get();
+
+        return $query->getRow();
+    }
+
+    public function getTotalRows(string $search = ''): int
+    {
+        $filter = $this->basicFilter;
+
+        if ($this->ownerId !== null) {
+            $filter = array_merge($filter, [$this->pemilikSumberDana . '.id_kepemilikan' => $this->ownerId]);
+        }
+
+        $query = $this->search('nama', $search)->where($filter);
+
+        return $query->countAllResults();
+    }
+
+    public function setFund(int $fundId)
+    {
+        $this->fundId = $fundId;
+
+        return $this;
+    }
+
+    public function setOwner(int $ownerId)
+    {
+        $this->ownerId = $ownerId;
+
+        return $this;
     }
 
     public function getPemilik(): array
@@ -79,21 +164,13 @@ class FundModel extends Connector
     public function getDaftarKepemilikan(int $idSumberDana): array
     {
         $query = $this->builder
-                    ->select($this->pemilikSumberDana . '.id as value, kepemilikan as label, jumlah_dana, kepemilikan')
+                    ->select($this->pemilikSumberDana . '.id as value, kepemilikan as label, id_kepemilikan, jumlah_dana, kepemilikan')
                     ->join($this->pemilikSumberDana, $this->sumberDana . '.id = ' . $this->pemilikSumberDana . '.id_sumber_dana')
                     ->join($this->kepemilikan, $this->pemilikSumberDana . '.id_kepemilikan = ' . $this->kepemilikan . '.id')
                     ->where($this->sumberDana . '.id', $idSumberDana)
                     ->where($this->pemilikSumberDana . '.deleted', 0);
         
         return $query->get()->getResult();
-    }
-    
-
-    public function getTotalRows(string $search = ''): int
-    {
-        $query = $this->search('nama', $search)->where($this->basicFilter);
-        
-        return $query->countAllResults();
     }
 
     public function insert(array $data): int
@@ -126,9 +203,14 @@ class FundModel extends Connector
         return $this->builder->update(['deleted' => 1], ['id' => $id]);
     }
 
-    private function search(string $searchBy, string $search)
+    private function search(string $searchBy, string $search, string $customField = '')
     {
-        $select = $this->builder->select('id, nama, modified');
+        $field = 'id, nama';
+        if(! empty($customField)) {
+            $field = $customField;
+        }
+
+        $select = $this->builder->select($this->sumberDana . '.' . $field);
         if(! empty($search)) {
             $select->like($searchBy, $search);           
         }

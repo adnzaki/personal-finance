@@ -9,6 +9,7 @@ use CodeIgniter\Filters\Honeypot;
 use CodeIgniter\Filters\InvalidChars;
 use CodeIgniter\Filters\SecureHeaders;
 use App\Filters\AllowCors;
+use App\Filters\Subscriptions;
 
 class Filters extends BaseConfig
 {
@@ -26,6 +27,7 @@ class Filters extends BaseConfig
         'invalidchars'  => InvalidChars::class,
         'secureheaders' => SecureHeaders::class,
         'cors'          => AllowCors::class,
+        'subscriptions' => Subscriptions::class,
         'forcehttps'    => \CodeIgniter\Filters\ForceHTTPS::class,
         'pagecache'     => \CodeIgniter\Filters\PageCache::class,
         'performance'   => \CodeIgniter\Filters\PerformanceMetrics::class,
@@ -48,7 +50,8 @@ class Filters extends BaseConfig
                     'validate-page', 
                     'logout-user', 
                     'delete-default-cookie', 
-                    'signup'
+                    'signup',
+                    'report/*',
                 ],
             ],
         ],
@@ -83,5 +86,7 @@ class Filters extends BaseConfig
      *
      * @var array<string, array<string, list<string>>>
      */
-    public array $filters = [];
+    public array $filters = [
+        // 'subscriptions' => ['before' => ['report/*']],
+    ];
 }

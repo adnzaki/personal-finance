@@ -22,7 +22,7 @@
                   class="back-button"
                   rounded
                   icon="arrow_back"
-                  @click="$router.back()"
+                  @click="back"
                   v-if="$q.screen.lt.sm && mobileSubRoute($route.path)"
                 />
                 <div
@@ -115,16 +115,31 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, provide } from 'vue'
 import { useQuasar } from 'quasar'
 import MenuItem from 'src/components/MenuItem.vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import ChangeLog from 'pages/changelog/MainView.vue'
 
 const $q = useQuasar()
 const route = useRoute()
+const router = useRouter()
 
 const activeMobileMenu = ref('dashboard')
+
+const back = () => {
+  router.push(localStorage.getItem('back_path'))
+}
+
+const goto = (path, backPath = null) => {
+  localStorage.setItem(
+    'back_path',
+    backPath ?? router.currentRoute.value.fullPath,
+  )
+  router.push(path)
+}
+
+provide('goto', goto)
 
 const activeClass = (menu) =>
   menu === activeMobileMenu.value ? 'text-primary' : ''
