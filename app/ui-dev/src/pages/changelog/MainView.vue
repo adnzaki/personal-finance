@@ -28,20 +28,19 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, inject } from 'vue'
 import { useQuasar } from 'quasar'
-import { useRouter } from 'vue-router'
 import { dialogSize } from 'src/composables/screen'
 import ModalContent from './ModalContent.vue'
 // import changelog from 'src/composables/changelog'
 
 const $q = useQuasar()
-const router = useRouter()
 const show = ref(false)
+const goto = inject('goto')
 
 const showChangelog = () => {
   if ($q.screen.lt.sm) {
-    router.push('/changelog')
+    goto('/changelog')
   } else {
     show.value = true
   }
