@@ -105,7 +105,7 @@ class TransactionModel extends Connector
         }
     }
 
-    public function save($data, $id)
+    public function save(array $data, ?int $id)
     {
         // Get the fund source details for the given source fund ID
         $fundOwnerId = (int)$data['id_pemilik_sumber_dana'];
@@ -113,6 +113,8 @@ class TransactionModel extends Connector
         $params = ['id' => $fundOwnerId];
 
         $transactionData = [];
+        $destinationFundId = null;
+        $destinationBalance = 0;
 
         if(array_key_exists('pemilik_dana_tujuan', $data)) {
             $destinationFundId = (int)$data['pemilik_dana_tujuan'];
@@ -120,7 +122,7 @@ class TransactionModel extends Connector
         }
 
         $data['deskripsi'] = ucfirst($data['deskripsi']);
-        $amount = (int) $data['nominal'];
+        $amount = (int) $data['nominal'];        
 
         if ($id === null) {
             if ($data['jenis_transaksi'] === 'transfer') {
@@ -176,6 +178,8 @@ class TransactionModel extends Connector
             // then return the balance of the previous owner that used by previous transaction
             if($previousFundOwner !== $fundOwnerId) {
                 $newAmount = $amount;
+                // Ensure $newOwnerBalance is defined in all code paths
+                $newOwnerBalance = $previousOwnerBalance;
                 if($data['jenis_transaksi'] === 'income' && $previousTransaction->jenis_transaksi === 'income') {
                     $newOwnerBalance = $previousOwnerBalance - $previousAmount;
                 } elseif($data['jenis_transaksi'] === 'expense' && $previousTransaction->jenis_transaksi === 'expense') {

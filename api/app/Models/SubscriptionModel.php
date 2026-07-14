@@ -13,14 +13,14 @@ class SubscriptionModel extends Model
     protected $createdField = 'created_at';
     protected $updatedField = 'updated_at';
 
-    public function checkActivation($userId)
+    public function checkActivation(int $userId)
     {
         return $this->where('user_id', $userId)
                     ->where('status', 'active')
                     ->first() !== null;
     }
 
-    public function checkActivePeriod($userId)
+    public function checkActivePeriod(int $userId)
     {
         $subscription = $this->where('user_id', $userId)
                              ->where('status', 'active')
@@ -36,12 +36,12 @@ class SubscriptionModel extends Model
         return false;
     }
 
-    public function hasSubscription($userId)
+    public function hasSubscription(int $userId)
     {
         return $this->where('user_id', $userId)->first() !== null;
     }
 
-    public function getSubscriptionByUserId($userId)
+    public function getSubscriptionByUserId(int $userId)
     {
         return $this->where('user_id', $userId)->first();
     }
