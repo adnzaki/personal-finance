@@ -10,7 +10,7 @@
           <RangeType v-if="!hideDateFilter" />
           <DateFilter
             v-if="
-              $q.screen.lt.md &&
+              $q.screen.lt.lg &&
               !hideDateFilter &&
               store.range.value === 'custom'
             "
