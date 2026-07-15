@@ -7,10 +7,10 @@
 </template>
 
 <script setup>
-import { wrapperPadding } from 'src/composables/screen'
+import { wrapperPadding } from '@/composables/screen'
 import EditFormContent from './EditFormContent.vue'
 import { onBeforeRouteLeave } from 'vue-router'
-import { useCategoryStore } from 'src/stores/category-store'
+import { useCategoryStore } from '@/stores/category-store'
 
 const store = useCategoryStore()
 

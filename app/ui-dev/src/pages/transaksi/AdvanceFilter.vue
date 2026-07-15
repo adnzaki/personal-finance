@@ -114,8 +114,8 @@
 
 <script setup>
 import { ref } from 'vue'
-import { useTransactionStore } from 'stores/transaction-store'
-import { dialogSize, maximizedDialog } from 'src/composables/screen'
+import { useTransactionStore } from '@/stores/transaction-store'
+import { dialogSize, maximizedDialog } from '@/composables/screen'
 
 const store = useTransactionStore()
 const disableCategory = ref(false)

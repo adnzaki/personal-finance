@@ -36,7 +36,7 @@
 
 <script setup>
 import { ref, inject } from 'vue'
-import { dashboardWrapperPadding } from 'src/composables/screen'
+import { dashboardWrapperPadding } from '@/composables/screen'
 
 const goto = inject('goto')
 const title = ref('Anda belum memiliki pemilik dana')

@@ -1,7 +1,7 @@
 import conf from '../../sisauang.config'
 import axios from 'axios'
 import { Cookies, LoadingBar } from 'quasar'
-import { storage } from 'src/composables/utils'
+import { storage } from '@/composables/utils'
 
 export const api = axios.create({ baseURL: conf.apiPublicPath })
 export const msgPrefix = '[SisaUang] '

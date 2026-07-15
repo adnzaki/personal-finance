@@ -66,12 +66,12 @@
 </template>
 
 <script setup>
-import { dashboardWrapperPadding } from 'src/composables/screen'
+import { dashboardWrapperPadding } from '@/composables/screen'
 import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
-import { conf, api } from 'src/router/http'
-import { useLoginStore } from 'src/stores/login-store'
+import { conf, api } from '@/router/http'
+import { useLoginStore } from '@/stores/login-store'
 
 const $q = useQuasar()
 const router = useRouter()

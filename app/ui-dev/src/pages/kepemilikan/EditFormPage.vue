@@ -7,10 +7,10 @@
 </template>
 
 <script setup>
-import { wrapperPadding } from 'src/composables/screen'
+import { wrapperPadding } from '@/composables/screen'
 import EditFormContent from './EditFormContent.vue'
 import { onBeforeRouteLeave } from 'vue-router'
-import { useOwnershipStore } from 'src/stores/ownership-store'
+import { useOwnershipStore } from '@/stores/ownership-store'
 
 const store = useOwnershipStore()
 

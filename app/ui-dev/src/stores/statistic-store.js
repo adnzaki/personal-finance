@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia'
-import { api } from 'src/router/http'
+import { api } from '@/router/http'
 import { date, Screen } from 'quasar'
 // import { usePagingStore as paging } from 'ss-paging-vue'
-import { indonesiaDate } from 'src/composables/utils'
+import { indonesiaDate } from '@/composables/utils'
 
 export const useStatisticStore = defineStore('statistic', {
   state: () => ({

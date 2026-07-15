@@ -17,7 +17,7 @@
 
 <script setup>
 import { computed } from 'vue'
-import { wrapperPadding } from 'src/composables/screen'
+import { wrapperPadding } from '@/composables/screen'
 import ChangePassword from './ChangePassword.vue'
 import LogoutMobile from './LogoutMobile.vue'
 import SettingsMenu from './SettingsMenu.vue'

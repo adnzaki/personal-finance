@@ -41,7 +41,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { usePagingStore } from 'ss-paging-vue'
-import { useFundStore } from 'stores/fund-store'
+import { useFundStore } from '@/stores/fund-store'
 import { useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'
 

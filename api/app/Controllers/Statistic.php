@@ -6,11 +6,11 @@ use App\Models\SubscriptionModel;
 
 class Statistic extends BaseController
 {
-    protected $model;
+    protected StatisticModel $model;
 
-    protected $subscriptionModel;
+    protected SubscriptionModel $subscriptionModel;
 
-    protected $ownershipModel;
+    protected OwnershipModel $ownershipModel;
 
     public function __construct()
     {
@@ -27,14 +27,14 @@ class Statistic extends BaseController
         return $this->response->setJSON($data);
     }
 
-    public function getTotalBalance($dateRange, $ownerId = 'all')
+    public function getTotalBalance(string $dateRange, $ownerId = 'all')
     {
         $balance = $this->model->getTotalBalance($dateRange, $ownerId);
 
         return $this->response->setJSON($balance);
     }
 
-    public function getAllTransactionByCategory($dateRange, $ownerId = 'all')
+    public function getAllTransactionByCategory(string $dateRange, $ownerId = 'all')
     {
         if (strpos($dateRange, '_') !== false) {
             $date = explode('_', $dateRange);
@@ -54,7 +54,7 @@ class Statistic extends BaseController
         ]);
     }
 
-    public function getBiggestTransactionByCategory($dateRange, $ownerId = 'all')
+    public function getBiggestTransactionByCategory(string $dateRange, $ownerId = 'all')
     {
         if(strpos($dateRange, '_') !== false) {
             $date = explode('_', $dateRange);
@@ -89,14 +89,14 @@ class Statistic extends BaseController
         ]);
     }
 
-    public function getTotalIncomeExpense($dateRange, $ownerId = 'all')
+    public function getTotalIncomeExpense(string $dateRange, $ownerId = 'all')
     {
         $totalIncomeExpense = $this->_getTotalIncomeExpense($dateRange, $ownerId);
 
         return $this->response->setJSON($totalIncomeExpense);
     }
 
-    protected function _getTotalIncomeExpense($dateRange, $ownerId = 'all', $fundId = 'all')
+    protected function _getTotalIncomeExpense(string $dateRange, $ownerId = 'all', $fundId = 'all')
     {
         if(strpos($dateRange, '_') !== false) {
             $date = explode('_', $dateRange);

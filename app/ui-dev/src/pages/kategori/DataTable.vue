@@ -37,7 +37,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { usePagingStore } from 'ss-paging-vue'
-import { useCategoryStore } from 'src/stores/category-store'
+import { useCategoryStore } from '@/stores/category-store'
 import { useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
 

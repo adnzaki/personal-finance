@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { conf, api, createFormData } from 'src/router/http'
+import { conf, api, createFormData } from '@/router/http'
 import { Cookies } from 'quasar'
 
 export const useLoginStore = defineStore('login', () => {

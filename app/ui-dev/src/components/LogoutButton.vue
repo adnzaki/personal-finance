@@ -12,7 +12,7 @@
 <script setup>
 import { useQuasar } from 'quasar'
 import { api, conf } from '../router/http'
-import { useLoginStore } from 'src/stores/login-store'
+import { useLoginStore } from '@/stores/login-store'
 
 const $q = useQuasar()
 const store = useLoginStore()

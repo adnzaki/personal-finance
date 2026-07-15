@@ -38,8 +38,8 @@
 <script setup>
 import { computed } from 'vue'
 import { useQuasar } from 'quasar'
-import { conf } from 'src/router/http'
-import { errorNotif } from 'src/composables/notify'
+import { conf } from '@/router/http'
+import { errorNotif } from '@/composables/notify'
 import { usePagingStore } from 'ss-paging-vue'
 
 defineProps({

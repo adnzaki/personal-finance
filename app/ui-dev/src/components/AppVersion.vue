@@ -10,5 +10,5 @@
 </template>
 
 <script setup>
-import { appVersion } from 'boot/app'
+import { appVersion } from '@/boot/app'
 </script>

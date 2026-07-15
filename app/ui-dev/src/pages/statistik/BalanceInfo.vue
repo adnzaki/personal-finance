@@ -46,7 +46,7 @@
 </style>
 
 <script setup>
-import { useStatisticStore } from 'src/stores/statistic-store'
+import { useStatisticStore } from '@/stores/statistic-store'
 
 const store = useStatisticStore()
 </script>

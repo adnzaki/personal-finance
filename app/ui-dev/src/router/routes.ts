@@ -4,7 +4,7 @@ import { RouteRecordRaw } from 'vue-router'
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
-    component: () => import('layouts/MainLayout.vue'),
+    component: () => import('@/layouts/MainLayout.vue'),
     children: [
       {
         path: '',
@@ -12,7 +12,7 @@ const routes: RouteRecordRaw[] = [
       },
       {
         path: 'dashboard',
-        component: () => import('pages/IndexPage.vue'),
+        component: () => import('@/pages/IndexPage.vue'),
         beforeEnter: () => {
           if (localStorage.getItem('force_reload') !== null) {
             localStorage.removeItem('force_reload')
@@ -25,7 +25,7 @@ const routes: RouteRecordRaw[] = [
       },
       {
         path: 'changelog',
-        component: () => import('pages/changelog/MobilePage.vue'),
+        component: () => import('@/pages/changelog/MobilePage.vue'),
         beforeEnter: () => validatePage(),
         name: 'Informasi',
       },
@@ -34,19 +34,19 @@ const routes: RouteRecordRaw[] = [
         children: [
           {
             path: '',
-            component: () => import('pages/kepemilikan/MainView.vue'),
+            component: () => import('@/pages/kepemilikan/MainView.vue'),
             beforeEnter: () => validatePage(),
             name: 'Kepemilikan',
           },
           {
             path: 'add',
-            component: () => import('pages/kepemilikan/AddFormPage.vue'),
+            component: () => import('@/pages/kepemilikan/AddFormPage.vue'),
             beforeEnter: () => validatePage(),
             name: 'Tambah Kepemilikan',
           },
           {
             path: 'edit',
-            component: () => import('pages/kepemilikan/EditFormPage.vue'),
+            component: () => import('@/pages/kepemilikan/EditFormPage.vue'),
             beforeEnter: () => validatePage(),
             name: 'Edit Kepemilikan',
           },
@@ -57,19 +57,19 @@ const routes: RouteRecordRaw[] = [
         children: [
           {
             path: '',
-            component: () => import('pages/sumber-dana/MainView.vue'),
+            component: () => import('@/pages/sumber-dana/MainView.vue'),
             beforeEnter: () => validatePage(),
             name: 'Sumber Dana',
           },
           {
             path: 'add',
-            component: () => import('pages/sumber-dana/AddFormPage.vue'),
+            component: () => import('@/pages/sumber-dana/AddFormPage.vue'),
             beforeEnter: () => validatePage(),
             name: 'Tambah Sumber Dana',
           },
           {
             path: 'edit',
-            component: () => import('pages/sumber-dana/EditFormPage.vue'),
+            component: () => import('@/pages/sumber-dana/EditFormPage.vue'),
             beforeEnter: () => validatePage(),
             name: 'Edit Sumber Dana',
           },
@@ -80,19 +80,19 @@ const routes: RouteRecordRaw[] = [
         children: [
           {
             path: '',
-            component: () => import('pages/transaksi/MainView.vue'),
+            component: () => import('@/pages/transaksi/MainView.vue'),
             beforeEnter: () => validatePage(),
             name: 'Transaksi',
           },
           {
             path: 'add',
-            component: () => import('src/pages/transaksi/FormPage.vue'),
+            component: () => import('@/pages/transaksi/FormPage.vue'),
             beforeEnter: () => validatePage(),
             name: 'Tambah Transaksi',
           },
           {
             path: 'edit',
-            component: () => import('pages/transaksi/FormPage.vue'),
+            component: () => import('@/pages/transaksi/FormPage.vue'),
             beforeEnter: () => validatePage(),
             name: 'Edit Transaksi',
           },
@@ -103,19 +103,19 @@ const routes: RouteRecordRaw[] = [
         children: [
           {
             path: '',
-            component: () => import('pages/kategori/MainView.vue'),
+            component: () => import('@/pages/kategori/MainView.vue'),
             beforeEnter: () => validatePage(),
             name: 'Kategori',
           },
           {
             path: 'add',
-            component: () => import('pages/kategori/AddFormPage.vue'),
+            component: () => import('@/pages/kategori/AddFormPage.vue'),
             beforeEnter: () => validatePage(),
             name: 'Tambah Kategori',
           },
           {
             path: 'edit',
-            component: () => import('pages/kategori/EditFormPage.vue'),
+            component: () => import('@/pages/kategori/EditFormPage.vue'),
             beforeEnter: () => validatePage(),
             name: 'Edit Kategori',
           },
@@ -126,20 +126,20 @@ const routes: RouteRecordRaw[] = [
         children: [
           {
             path: '',
-            component: () => import('pages/statistik/MainView.vue'),
+            component: () => import('@/pages/statistik/MainView.vue'),
             beforeEnter: () => validatePage(),
             name: 'Statistik',
           },
           {
             path: 'kategori/:dateRange',
-            component: () => import('pages/statistik/kategori/MainView.vue'),
+            component: () => import('@/pages/statistik/kategori/MainView.vue'),
             beforeEnter: () => validatePage(),
             name: 'Statistik Kategori',
           },
           {
             path: 'kategori/transaksi/:categoryId/:dateRange',
             component: () =>
-              import('pages/statistik/kategori/TransactionList.vue'),
+              import('@/pages/statistik/kategori/TransactionList.vue'),
             beforeEnter: () => validatePage(),
             name: 'Daftar Transaksi',
           },
@@ -150,13 +150,13 @@ const routes: RouteRecordRaw[] = [
         children: [
           {
             path: '',
-            component: () => import('pages/settings/MainView.vue'),
+            component: () => import('@/pages/settings/MainView.vue'),
             beforeEnter: () => validatePage(),
             name: 'Pengaturan',
           },
           {
             path: 'reset-password',
-            component: () => import('pages/settings/ResetPassword.vue'),
+            component: () => import('@/pages/settings/ResetPassword.vue'),
             beforeEnter: () => validatePage(),
             name: 'Reset Password',
           },
@@ -164,7 +164,7 @@ const routes: RouteRecordRaw[] = [
       },
       {
         path: 'dukungan',
-        component: () => import('pages/support/MainView.vue'),
+        component: () => import('@/pages/support/MainView.vue'),
         beforeEnter: () => validatePage(),
         name: 'Dukungan',
       },
@@ -172,12 +172,12 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: '/login',
-    component: () => import('layouts/LoginPage.vue'),
+    component: () => import('@/layouts/LoginPage.vue'),
     beforeEnter: () => validatePage(true),
   },
   {
     path: '/register',
-    component: () => import('layouts/RegisterPage.vue'),
+    component: () => import('@/layouts/RegisterPage.vue'),
     beforeEnter: () => validatePage('register'),
   },
 
@@ -185,7 +185,7 @@ const routes: RouteRecordRaw[] = [
   // but you can also remove it
   {
     path: '/:catchAll(.*)*',
-    component: () => import('pages/ErrorNotFound.vue'),
+    component: () => import('@/pages/ErrorNotFound.vue'),
   },
 ]
 

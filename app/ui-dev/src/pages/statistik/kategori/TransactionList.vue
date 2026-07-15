@@ -32,10 +32,10 @@
 <script setup>
 import { ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { wrapperPadding, titleSpacing } from 'src/composables/screen'
-import { useTransactionStore } from 'src/stores/transaction-store'
-import DataTable from 'pages/transaksi/DataTable.vue'
-import FormDialog from 'pages/transaksi/FormDialog.vue'
+import { wrapperPadding, titleSpacing } from '@/composables/screen'
+import { useTransactionStore } from '@/stores/transaction-store'
+import DataTable from '@/pages/transaksi/DataTable.vue'
+import FormDialog from '@/pages/transaksi/FormDialog.vue'
 
 const route = useRoute()
 const store = useTransactionStore()

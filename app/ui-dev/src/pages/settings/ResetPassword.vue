@@ -8,7 +8,7 @@
 </template>
 
 <script setup>
-import { wrapperPadding } from 'src/composables/screen'
+import { wrapperPadding } from '@/composables/screen'
 import ChangePassword from './ChangePassword.vue'
 import { useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'

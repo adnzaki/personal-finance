@@ -23,7 +23,7 @@
 </template>
 
 <script setup>
-import { useStatisticStore } from 'src/stores/statistic-store'
+import { useStatisticStore } from '@/stores/statistic-store'
 import { ref } from 'vue'
 
 const store = useStatisticStore()

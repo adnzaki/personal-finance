@@ -28,7 +28,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import support from 'src/assets/support.md'
+import support from '@/assets/support.md'
 
 const trakteerLink = ref('https://trakteer.id/adnan_zaki')
 const label = ref('Dukung SisaUang di Trakteer')

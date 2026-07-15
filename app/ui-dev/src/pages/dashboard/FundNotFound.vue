@@ -36,7 +36,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import { dashboardWrapperPadding } from 'src/composables/screen'
+import { dashboardWrapperPadding } from '@/composables/screen'
 
 const title = ref('Anda belum memiliki sumber dana')
 </script>

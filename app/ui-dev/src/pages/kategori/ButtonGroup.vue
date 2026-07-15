@@ -37,11 +37,11 @@
 </template>
 
 <script setup>
-import { fabPos } from 'src/composables/fab'
+import { fabPos } from '@/composables/fab'
 import { computed } from 'vue'
 import { useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'
-import { useCategoryStore } from 'src/stores/category-store'
+import { useCategoryStore } from '@/stores/category-store'
 
 const $q = useQuasar()
 const router = useRouter()

@@ -19,7 +19,7 @@ if(! function_exists('alphabet_numbering')) {
 }
 
 if(! function_exists('valid_subscription')) {
-    function valid_subcscription($userId)
+    function valid_subcscription(string $userId)
     {
         $subscriptionModel = new SubscriptionModel;
         $checkActivation = $subscriptionModel->checkActivation($userId);
@@ -67,7 +67,7 @@ if (! function_exists('decrypt')) {
     /**
      * Decript IDs that is encrypted with openssl encryption and base64 encoding
      * 
-     * @param string $id The ID to decrypt
+     * @param string $encryptedData The encrypted ID
      * @param string $key The encryption key
      * 
      * @return string|false The encrypted ID or false if it is invalid
@@ -90,14 +90,14 @@ if (! function_exists('decrypt')) {
 
 // buat sebuah fungsi dengan nama idr_number_format
 if (!function_exists('idr_number_format')) {
-    function idr_number_format($number, $decimals = 0)
+    function idr_number_format(float $number, int $decimals = 0)
     {
-        return $number > 0 ? 'Rp. ' . number_format($number, $decimals, ',', '.') : 'Rp. -';
+        return 'Rp. ' . number_format($number, $decimals, ',', '.');
     }
 }
 
 if (!function_exists('plain_number_format')) {
-    function plain_number_format($number, $decimals = 0)
+    function plain_number_format(float $number, int $decimals = 0)
     {
         return $number === 0 ? '-' : number_format($number, $decimals, ',', '.');
     }

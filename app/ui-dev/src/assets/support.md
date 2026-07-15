@@ -10,6 +10,6 @@ Saat ini **SisaUang** berjalan di atas _dedicated server_ milik salah satu insti
 
 Meski begitu, **SisaUang** membutuhkan investasi waktu dan pikiran dalam proses pengembangannya. Dalam keterbatasan itulah, mengembangkan **SisaUang** menjadi semakin sulit meski sudah aman secara infrastruktur.
 
-Untuk itu, kami membuka akses dukungan finansial bagi **SobatUang** yang ingin mendukung keberlangsungan pengembangan **SisaUang**. Dan untuk mengakomodasi hal tersebut, kami menggunakan platform [Trakteer.id](https://trakteer.id) untuk mengumpulkan dana. Dana ini nantinya akan digunakan untuk memberi apresiasi dalam bentuk finansial pada pengembang serta mendukung pengembangan _core library_-nya yaitu [SSPaging](https://lib.actudent.com/ss-paging).
+Untuk itu, kami membuka akses dukungan finansial bagi **SobatUang** yang ingin mendukung keberlangsungan pengembangan **SisaUang**. Dan untuk mengakomodasi hal tersebut, kami menggunakan platform [Trakteer.id](https://trakteer.id) untuk mengumpulkan dana. Dana ini nantinya akan digunakan untuk memberi apresiasi dalam bentuk finansial pada pengembang serta mendukung pengembangan semua _open source library_ milik pengembang yang bisa anda lihat di [sini](https://lib.bitdanbait.web.id/).
 
 Bagi SobatUang yang ingin mendukung kami di Trakteer.id, silakan klik menu di bawah ini. Atas dukungan SobatUang, kami ucapkan terimakasih yang sebesar-besarnya.

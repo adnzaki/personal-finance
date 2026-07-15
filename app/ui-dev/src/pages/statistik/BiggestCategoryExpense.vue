@@ -50,7 +50,7 @@
 import { ref, watch, toRefs, inject } from 'vue'
 import { Doughnut } from 'vue-chartjs'
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js'
-import { useStatisticStore } from 'src/stores/statistic-store'
+import { useStatisticStore } from '@/stores/statistic-store'
 import BiggestCategoryList from './BiggestCategoryList.vue'
 
 const store = useStatisticStore()

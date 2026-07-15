@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { api, bearerToken } from 'src/router/http'
+import { api, bearerToken } from '@/router/http'
 
 export const useDashboardStore = defineStore('dashboard', {
   state: () => ({

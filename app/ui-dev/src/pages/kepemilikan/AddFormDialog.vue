@@ -13,8 +13,8 @@
 </template>
 
 <script setup>
-import { useOwnershipStore } from 'stores/ownership-store'
-import { dialogSize } from 'src/composables/screen'
+import { useOwnershipStore } from '@/stores/ownership-store'
+import { dialogSize } from '@/composables/screen'
 import AddFormContent from './AddFormContent.vue'
 
 const store = useOwnershipStore()

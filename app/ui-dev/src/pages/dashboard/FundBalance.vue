@@ -41,7 +41,7 @@
   </div>
 </template>
 <script setup>
-import { useDashboardStore } from 'src/stores/dashboard-store'
+import { useDashboardStore } from '@/stores/dashboard-store'
 
 const store = useDashboardStore()
 const cardColors = ['red-5', 'pink-5', 'purple-5']

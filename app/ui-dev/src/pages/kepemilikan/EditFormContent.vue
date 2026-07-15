@@ -35,7 +35,7 @@
   </div>
 </template>
 <script setup>
-import { useOwnershipStore } from 'stores/ownership-store'
+import { useOwnershipStore } from '@/stores/ownership-store'
 import { useRouter } from 'vue-router'
 
 const props = defineProps({

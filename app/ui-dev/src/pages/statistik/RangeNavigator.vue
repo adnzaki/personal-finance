@@ -44,7 +44,7 @@
 </style>
 
 <script setup>
-import { useStatisticStore } from 'src/stores/statistic-store'
+import { useStatisticStore } from '@/stores/statistic-store'
 import { date, useQuasar } from 'quasar'
 import { ref, computed } from 'vue'
 

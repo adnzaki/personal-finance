@@ -40,8 +40,8 @@ import TransactionRecap from './dashboard/TransactionRecap.vue'
 import AccountChooser from './dashboard/AccountChooser.vue'
 import OwnerNotFound from './dashboard/OwnerNotFound.vue'
 import FundNotFound from './dashboard/FundNotFound.vue'
-import { useDashboardStore } from 'src/stores/dashboard-store'
-import { useFundStore } from 'src/stores/fund-store'
+import { useDashboardStore } from '@/stores/dashboard-store'
+import { useFundStore } from '@/stores/fund-store'
 import { usePagingStore } from 'ss-paging-vue'
 
 const showFundSuggestion = ref(false)

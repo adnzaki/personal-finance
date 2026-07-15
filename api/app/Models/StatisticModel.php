@@ -9,7 +9,7 @@ class StatisticModel extends TransactionModel
 {
     private $fundId = 'all';
 
-    public function getReportLocation($userId)
+    public function getReportLocation(string $userId)
     {
         return $this->settingBuilder->select('value')
                                     ->where(['key' => 'report_location-user_id_' . $userId, 'deleted' => 0])

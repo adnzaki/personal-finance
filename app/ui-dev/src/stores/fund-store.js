@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia'
-import { api, conf, timeout, createFormData } from 'src/router/http'
+import { api, conf, timeout, createFormData } from '@/router/http'
 import { Notify, Dialog, Cookies } from 'quasar'
 import { usePagingStore as paging } from 'ss-paging-vue'
-import { errorNotif } from 'src/composables/notify'
+import { errorNotif } from '@/composables/notify'
 
 export const useFundStore = defineStore('fund', {
   state: () => ({

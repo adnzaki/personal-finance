@@ -17,8 +17,8 @@
 </template>
 
 <script setup>
-import { useFundStore } from 'src/stores/fund-store'
-import { dialogSize } from 'src/composables/screen'
+import { useFundStore } from '@/stores/fund-store'
+import { dialogSize } from '@/composables/screen'
 import AddFormContent from './AddFormContent.vue'
 
 const store = useFundStore()

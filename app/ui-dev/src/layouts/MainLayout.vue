@@ -117,9 +117,9 @@
 <script setup>
 import { ref, provide } from 'vue'
 import { useQuasar } from 'quasar'
-import MenuItem from 'src/components/MenuItem.vue'
+import MenuItem from '@/components/MenuItem.vue'
 import { useRoute, useRouter } from 'vue-router'
-import ChangeLog from 'pages/changelog/MainView.vue'
+import ChangeLog from '@/pages/changelog/MainView.vue'
 
 const $q = useQuasar()
 const route = useRoute()
