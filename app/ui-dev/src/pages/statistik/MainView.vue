@@ -36,11 +36,11 @@
 
 <script setup>
 import { ref } from 'vue'
-import { wrapperPadding, titleSpacing } from 'src/composables/screen'
+import { wrapperPadding, titleSpacing } from '@/composables/screen'
 import RangeType from './RangeType.vue'
 import DateFilter from './DateFilter.vue'
 import SelectOwner from './SelectOwner.vue'
-import { useStatisticStore } from 'src/stores/statistic-store'
+import { useStatisticStore } from '@/stores/statistic-store'
 import RangeNavigator from './RangeNavigator.vue'
 import TotalIncomeExpense from './TotalIncomeExpense.vue'
 import BiggestCategoryExpense from './BiggestCategoryExpense.vue'

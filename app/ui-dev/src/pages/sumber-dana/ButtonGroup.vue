@@ -29,8 +29,8 @@
 </template>
 
 <script setup>
-import { fabPos } from 'src/composables/fab'
-import { useFundStore } from 'src/stores/fund-store'
+import { fabPos } from '@/composables/fab'
+import { useFundStore } from '@/stores/fund-store'
 import { useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'
 

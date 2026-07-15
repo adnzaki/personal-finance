@@ -30,9 +30,9 @@
 <script setup>
 import { ref, inject } from 'vue'
 import { useQuasar } from 'quasar'
-import { dialogSize } from 'src/composables/screen'
+import { dialogSize } from '@/composables/screen'
 import ModalContent from './ModalContent.vue'
-// import changelog from 'src/composables/changelog'
+// import changelog from '@/composables/changelog'
 
 const $q = useQuasar()
 const show = ref(false)

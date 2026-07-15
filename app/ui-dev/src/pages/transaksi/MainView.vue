@@ -24,8 +24,8 @@
 
 <script setup>
 import { ref } from 'vue'
-import { wrapperPadding, titleSpacing } from 'src/composables/screen.js'
-import { useTransactionStore } from 'src/stores/transaction-store'
+import { wrapperPadding, titleSpacing } from '@/composables/screen.js'
+import { useTransactionStore } from '@/stores/transaction-store'
 import ButtonGroup from './ButtonGroup.vue'
 import DataTable from './DataTable.vue'
 import FormDialog from './FormDialog.vue'

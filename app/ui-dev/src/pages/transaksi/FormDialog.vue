@@ -17,8 +17,8 @@
 </template>
 
 <script setup>
-import { useTransactionStore } from 'stores/transaction-store'
-import { dialogSize } from 'src/composables/screen'
+import { useTransactionStore } from '@/stores/transaction-store'
+import { dialogSize } from '@/composables/screen'
 import FormContent from './FormContent.vue'
 
 const store = useTransactionStore()

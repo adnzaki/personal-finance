@@ -23,7 +23,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import { wrapperPadding, titleSpacing } from 'src/composables/screen'
+import { wrapperPadding, titleSpacing } from '@/composables/screen'
 import ButtonGroup from './ButtonGroup.vue'
 import DataTable from './DataTable.vue'
 import AddFormDialog from './AddFormDialog.vue'

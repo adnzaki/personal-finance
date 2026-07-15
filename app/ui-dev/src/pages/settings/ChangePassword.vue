@@ -65,7 +65,7 @@
 </template>
 
 <script setup>
-import { useSettingStore } from 'src/stores/setting-store'
+import { useSettingStore } from '@/stores/setting-store'
 import { ref } from 'vue'
 
 const store = useSettingStore()

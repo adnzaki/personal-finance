@@ -7,13 +7,13 @@
  * @since     2021
  */
 
-import SearchBox from 'components/SearchBox.vue'
-import DataNavigator from 'components/DataNavigator.vue'
-import LogoutButton from 'components/LogoutButton.vue'
-import DropdownSearch from 'components/DropdownSearch.vue'
-import SaveButton from 'components/SaveButton.vue'
-import DataNavMobile from 'components/DataNavMobile.vue'
-import AppVersion from 'src/components/AppVersion.vue'
+import SearchBox from '@/components/SearchBox.vue'
+import DataNavigator from '@/components/DataNavigator.vue'
+import LogoutButton from '@/components/LogoutButton.vue'
+import DropdownSearch from '@/components/DropdownSearch.vue'
+import SaveButton from '@/components/SaveButton.vue'
+import DataNavMobile from '@/components/DataNavMobile.vue'
+import AppVersion from '@/components/AppVersion.vue'
 
 export default ({ app }) => {
   app.component('search-box', SearchBox)

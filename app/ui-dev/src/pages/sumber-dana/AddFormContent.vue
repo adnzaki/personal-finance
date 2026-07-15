@@ -106,7 +106,7 @@
   </div>
 </template>
 <script setup>
-import { useFundStore } from 'stores/fund-store'
+import { useFundStore } from '@/stores/fund-store'
 import { useRouter } from 'vue-router'
 import { ref, computed } from 'vue'
 import { useQuasar } from 'quasar'

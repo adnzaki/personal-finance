@@ -7,8 +7,8 @@
 </template>
 
 <script setup>
-import { wrapperPadding } from 'src/composables/screen'
-import { useFundStore } from 'src/stores/fund-store'
+import { wrapperPadding } from '@/composables/screen'
+import { useFundStore } from '@/stores/fund-store'
 import EditFormContent from './EditFormContent.vue'
 import { onBeforeRouteLeave } from 'vue-router'
 

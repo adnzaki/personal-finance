@@ -42,7 +42,7 @@
 </template>
 
 <script setup>
-import { dashboardWrapperPadding } from 'src/composables/screen'
+import { dashboardWrapperPadding } from '@/composables/screen'
 
 defineProps({
   data: {

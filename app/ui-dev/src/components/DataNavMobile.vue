@@ -51,10 +51,10 @@
 
 <script setup>
 import { useQuasar } from 'quasar'
-import { conf } from 'src/router/http'
+import { conf } from '@/router/http'
 import { computed, toRefs } from 'vue'
 import { usePagingStore } from 'ss-paging-vue'
-import { errorNotif } from 'src/composables/notify'
+import { errorNotif } from '@/composables/notify'
 
 const $q = useQuasar()
 const store = usePagingStore()

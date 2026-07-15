@@ -29,8 +29,8 @@
 </template>
 
 <script setup>
-import { fabPos } from 'src/composables/fab'
-import { useOwnershipStore } from 'stores/ownership-store'
+import { fabPos } from '@/composables/fab'
+import { useOwnershipStore } from '@/stores/ownership-store'
 import { useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'
 

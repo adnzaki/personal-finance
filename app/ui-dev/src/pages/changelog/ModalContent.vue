@@ -1,8 +1,15 @@
 <template>
   <div>
     <q-card-section class="scroll card-section">
-      <q-markdown :src="updates" />
-      <p>Yuk, bantu dukung SisaUang untuk tetap berjalan dan terus berkembang. Silakan kunjungi halaman <a href="javascript:void" @click="goto('/dukungan', '/changelog')">Dukungan</a> untuk info lebih lanjut.</p>
+      <q-markdown no-heading-anchor-links :src="updates" />
+      <p>
+        Yuk, bantu dukung SisaUang untuk tetap berjalan dan terus berkembang.
+        Silakan kunjungi halaman
+        <a href="javascript:void" @click="goto('/dukungan', '/changelog')"
+          >Dukungan</a
+        >
+        untuk info lebih lanjut.
+      </p>
     </q-card-section>
 
     <q-separator class="mobile-hide" />
@@ -27,7 +34,7 @@
 </style>
 
 <script setup>
-import updates from 'src/assets/updates/1.0.0-rc.1.md'
+import updates from '@/assets/updates/1.0.0-rc.1.md'
 import { inject } from 'vue'
 
 const goto = inject('goto')

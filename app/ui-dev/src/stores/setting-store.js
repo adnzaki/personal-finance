@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { api, timeout, createFormData } from 'src/router/http'
+import { api, timeout, createFormData } from '@/router/http'
 import { Notify } from 'quasar'
 
 export const useSettingStore = defineStore('setting', {

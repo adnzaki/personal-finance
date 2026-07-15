@@ -7,6 +7,6 @@
 </template>
 
 <script setup>
-import { wrapperPadding } from 'src/composables/screen'
+import { wrapperPadding } from '@/composables/screen'
 import PageContent from './PageContent.vue'
 </script>

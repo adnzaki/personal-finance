@@ -171,8 +171,8 @@
 import { ref } from 'vue'
 import { useRouter, onBeforeRouteLeave } from 'vue-router'
 import { date, useQuasar } from 'quasar'
-import { useTransactionStore } from 'stores/transaction-store'
-import { indonesiaDate, validateNumber } from 'src/composables/utils'
+import { useTransactionStore } from '@/stores/transaction-store'
+import { indonesiaDate, validateNumber } from '@/composables/utils'
 import { formatNumeral } from 'z-cleave-zen'
 
 const props = defineProps({

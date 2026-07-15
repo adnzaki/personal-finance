@@ -50,8 +50,8 @@
 <script setup>
 import { ref } from 'vue'
 import { date } from 'quasar'
-import { indonesiaDate } from 'src/composables/utils'
-import { useTransactionStore } from 'src/stores/transaction-store'
+import { indonesiaDate } from '@/composables/utils'
+import { useTransactionStore } from '@/stores/transaction-store'
 
 const store = useTransactionStore()
 const datePicker = ref(null)

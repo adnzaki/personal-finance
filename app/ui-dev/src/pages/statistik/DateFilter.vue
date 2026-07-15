@@ -34,7 +34,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import { useStatisticStore } from 'src/stores/statistic-store'
+import { useStatisticStore } from '@/stores/statistic-store'
 
 const store = useStatisticStore()
 const datePicker = ref(null)

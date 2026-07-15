@@ -13,8 +13,8 @@
 </template>
 
 <script setup>
-import { useCategoryStore } from 'stores/category-store'
-import { dialogSize } from 'src/composables/screen'
+import { useCategoryStore } from '@/stores/category-store'
+import { dialogSize } from '@/composables/screen'
 import AddFormContent from './AddFormContent.vue'
 
 const store = useCategoryStore()

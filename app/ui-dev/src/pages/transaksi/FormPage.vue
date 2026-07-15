@@ -7,10 +7,10 @@
 </template>
 
 <script setup>
-import { wrapperPadding } from 'src/composables/screen'
+import { wrapperPadding } from '@/composables/screen'
 import FormContent from './FormContent.vue'
 import { onBeforeRouteLeave } from 'vue-router'
-import { useTransactionStore } from 'src/stores/transaction-store'
+import { useTransactionStore } from '@/stores/transaction-store'
 
 const store = useTransactionStore()
 

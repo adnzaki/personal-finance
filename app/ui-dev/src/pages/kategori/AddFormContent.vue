@@ -49,7 +49,7 @@
   </div>
 </template>
 <script setup>
-import { useCategoryStore } from 'stores/category-store'
+import { useCategoryStore } from '@/stores/category-store'
 import { useRouter } from 'vue-router'
 
 const props = defineProps({

@@ -110,11 +110,11 @@
   </div>
 </template>
 <script setup>
-import { useFundStore } from 'stores/fund-store'
+import { useFundStore } from '@/stores/fund-store'
 import { useRouter } from 'vue-router'
 import { ref, computed } from 'vue'
 import { useQuasar } from 'quasar'
-import { formatDecimal } from 'src/composables/utils'
+import { formatDecimal } from '@/composables/utils'
 
 const props = defineProps({
   mobile: {

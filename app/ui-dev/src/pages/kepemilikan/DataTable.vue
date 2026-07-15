@@ -31,7 +31,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { usePagingStore } from 'ss-paging-vue'
-import { useOwnershipStore } from 'stores/ownership-store'
+import { useOwnershipStore } from '@/stores/ownership-store'
 import { useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'
 

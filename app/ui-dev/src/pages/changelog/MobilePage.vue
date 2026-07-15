@@ -7,7 +7,7 @@
 </template>
 
 <script setup>
-import { wrapperPadding } from 'src/composables/screen'
+import { wrapperPadding } from '@/composables/screen'
 import ModalContent from './ModalContent.vue'
 
 if (localStorage.getItem('back_path') === '/changelog') {

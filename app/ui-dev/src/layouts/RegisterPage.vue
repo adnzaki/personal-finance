@@ -86,7 +86,7 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { conf, api, createFormData, timeout } from 'src/router/http'
+import { conf, api, createFormData, timeout } from '@/router/http'
 import { useQuasar } from 'quasar'
 import { useRouter, onBeforeRouteLeave } from 'vue-router'
 

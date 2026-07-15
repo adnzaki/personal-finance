@@ -52,7 +52,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { usePagingStore } from 'ss-paging-vue'
-import { useTransactionStore } from 'stores/transaction-store'
+import { useTransactionStore } from '@/stores/transaction-store'
 import { useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
 

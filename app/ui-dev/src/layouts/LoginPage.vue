@@ -98,9 +98,9 @@
 <script setup>
 import { computed } from 'vue'
 import { onBeforeRouteLeave } from 'vue-router'
-import { conf } from 'src/router/http'
+import { conf } from '@/router/http'
 import { useQuasar } from 'quasar'
-import { useLoginStore } from 'src/stores/login-store'
+import { useLoginStore } from '@/stores/login-store'
 
 const $q = useQuasar()
 const store = useLoginStore()

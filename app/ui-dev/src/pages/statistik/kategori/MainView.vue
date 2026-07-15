@@ -45,7 +45,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import { wrapperPadding, titleSpacing } from 'src/composables/screen'
+import { wrapperPadding, titleSpacing } from '@/composables/screen'
 import CategoryList from './CategoryList.vue'
 // import RangeNavigator from '../RangeNavigator.vue'
 // import RangeType from '../RangeType.vue'

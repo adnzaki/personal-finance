@@ -56,8 +56,8 @@
 <script setup>
 import { computed, inject } from 'vue'
 import { useRoute } from 'vue-router'
-import { useStatisticStore } from 'src/stores/statistic-store'
-import { useTransactionStore } from 'src/stores/transaction-store'
+import { useStatisticStore } from '@/stores/statistic-store'
+import { useTransactionStore } from '@/stores/transaction-store'
 
 const store = useStatisticStore()
 const transactionStore = useTransactionStore()
