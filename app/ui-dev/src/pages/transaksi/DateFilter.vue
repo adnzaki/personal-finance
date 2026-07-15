@@ -13,6 +13,7 @@
       outlined
       v-model="dateStr"
       class="rounded-field date-filter"
+      style="margin-left: 10px !important;"
       dense
       readonly
     >
