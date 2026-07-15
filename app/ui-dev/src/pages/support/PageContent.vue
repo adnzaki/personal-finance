@@ -4,6 +4,7 @@
       <q-markdown
         :src="support"
         :class="[$q.screen.lt.sm ? 'q-pb-lg q-mb-md' : '']"
+        no-heading-anchor-links
       />
 
       <q-btn
