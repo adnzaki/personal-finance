@@ -5,7 +5,8 @@
   "orientation": "portrait",
   "background_color": "#ffffff",
   "theme_color": "#d13079",
-  "display_override": ["fullscreen", "minimal-ui"],
+  "display_override": ["minimal-ui"],
+  "display": "standalone",
   "icons": [
     {
       "src": "icons/icon-128x128.png",
