@@ -22,6 +22,8 @@ export const useTransactionStore = defineStore('transaction', {
     owners: [],
     categories: [],
     categoryName: '',
+    showCategory: true,
+    showCategoryMask: false,
     fundId: null,
     ownerId: null,
     destinationFundId: null,
@@ -377,24 +379,30 @@ export const useTransactionStore = defineStore('transaction', {
           errorNotif()
         })
     },
-    getCategories(categoryId = null) {
+    getCategories() {
       const transactionType = this.filterMode
         ? this.filter.transactionType.value
         : this.data.jenis_transaksi
+      this.showCategory = false
+      this.showCategoryMask = true
       api
         .get(`${this.baseUrl}get-categories/${transactionType}`)
         .then(({ data }) => {
           if (!this.filterMode) {
             this.categories = data
             if (data.length > 0 && !this.filterMode) {
-              if (categoryId === null) {
-                this.data.id_kategori = data[0].id
-              } else {
-                this.data.id_kategori = categoryId
-              }
+              this.data.id_kategori = data[0].id
+              this.categoryName = data[0].category_name
             }
           } else {
             this.filter.categories = data
+          }
+
+          if(this.data.jenis_transaksi === 'transfer') {
+            this.showCategory = false
+          } else {
+            this.showCategory = true
+            this.showCategoryMask = false
           }
         })
         .catch(() => {

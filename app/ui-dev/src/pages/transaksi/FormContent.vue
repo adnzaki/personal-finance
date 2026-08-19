@@ -107,7 +107,7 @@
           :options-value="{ label: 'category_name', value: 'id' }"
           load-on-route
           custom-class="rounded-field"
-          v-if="showCategory && store.transactionId === null"
+          v-if="store.showCategory && store.transactionId === null"
         />
 
         <!-- For Edit Transaction -->
@@ -122,9 +122,20 @@
           :options-value="{ label: 'category_name', value: 'id' }"
           load-on-route
           custom-class="rounded-field"
-          v-if="showCategory && store.transactionId !== null"
+          v-if="store.showCategory && store.transactionId !== null"
         />
 
+        <dropdown-search
+          label="Kategori"
+          :list="[]"
+          :default="{
+            label: '',
+            value: null,
+          }"
+          load-on-route
+          custom-class="rounded-field"
+          v-if="store.showCategoryMask"
+        />
         <!-- For Transfer Transaction -->
         <q-input
           outlined
@@ -134,7 +145,7 @@
           label="Biaya Admin"
           @update:model-value="onBeaAdminInput"
           :rules="[(val) => validateNumber(val, true, true) || 'Biaya Admin Tidak Valid']"
-          v-if="!showCategory"
+          v-if="!store.showCategory && store.data.jenis_transaksi === 'transfer'"
         />
         <q-select
           filled
@@ -143,7 +154,7 @@
           label="Sumber Dana Tujuan"
           class="rounded-field q-mt-sm"
           @update:model-value="onTargetFundSelected"
-          v-if="!showCategory"
+          v-if="!store.showCategory && store.data.jenis_transaksi === 'transfer'"
         />
 
         <q-select
@@ -153,7 +164,7 @@
           label="Pemilik"
           class="rounded-field q-mt-md"
           @update:model-value="onTargetOwnerSelected"
-          v-if="!showCategory"
+          v-if="!store.showCategory && store.data.jenis_transaksi === 'transfer'"
         />
       </q-form>
     </q-card-section>
@@ -196,19 +207,13 @@ const props = defineProps({
 const store = useTransactionStore()
 const router = useRouter()
 const $q = useQuasar()
-const showCategory = ref(true)
 
 const onTransactionTypeChanged = (v) => {
   if (v === 'transfer') {
-    showCategory.value = false
+    store.showCategory = false
   } else {
-    showCategory.value = true
     store.data.jenis_transaksi = v
-    if (store.transactionId === null) {
-      store.getCategories()
-    } else {
-      store.getCategories(store.data.id_kategori)
-    }
+    store.getCategories()
   }
 }
 
@@ -281,7 +286,7 @@ const onFundSelected = (v) => {
 
 const save = () => {
   store.save(() => {
-    showCategory.value = true
+    store.showCategory = true
     if(parseInt(store.data.has_bea_admin) === 1) {
       store.save(() => {
         closeForm()
