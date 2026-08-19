@@ -62,7 +62,7 @@ class TransactionModel extends Connector
 
     public function getDetail($id) 
     {
-        $field = "$this->transaksi.id as id_transaksi, $this->sumberDana.id as id_sumber_dana, nama as sumber_dana, id_pemilik_sumber_dana, category_name, sumber_dana_tujuan, pemilik_dana_tujuan, jenis_transaksi, tgl_transaksi, deskripsi, nominal, id_kategori";
+        $field = "$this->transaksi.id as id_transaksi, $this->sumberDana.id as id_sumber_dana, nama as sumber_dana, id_pemilik_sumber_dana, category_name, sumber_dana_tujuan, pemilik_dana_tujuan, jenis_transaksi, tgl_transaksi, deskripsi, nominal, has_bea_admin, parent_id, id_kategori";
         $query = $this->builder->select($field)
             ->join($this->pemilikSumberDana, $this->pemilikSumberDana . '.id = ' . $this->transaksi . '.id_pemilik_sumber_dana')
             ->join($this->sumberDana, $this->sumberDana . '.id = ' . $this->pemilikSumberDana . '.id_sumber_dana')
@@ -71,6 +71,11 @@ class TransactionModel extends Connector
             ->getWhere(["$this->transaksi.id" => $id])->getResult()[0];
 
         return $query;
+    }
+
+    public function getAdminFee(int $transactionId)
+    {
+        return $this->builder->getWhere(['parent_id' => $transactionId, 'deleted' => 0])->getResult()[0] ?? null;
     }
 
     public function getDestinationTransferName($ownerId)
@@ -85,7 +90,7 @@ class TransactionModel extends Connector
         return $query->getNumRows() > 0 ? $query->getResult()[0] : (object)['sumber_dana' => '', 'kepemilikan' => ''];
     }
 
-    public function deleteTransaction($id)
+    public function deleteTransaction(int $id)
     {
         $this->builder->update(['deleted' => 1], ['id' => $id]);
         $transactionDetail = $this->getDetail($id);
@@ -101,6 +106,12 @@ class TransactionModel extends Connector
         } else if($transactionDetail->jenis_transaksi === 'income') {
             $this->fundOwner->update(['jumlah_dana' => $ownerBalance - $amount], ['id' => $ownerId]);
         } else {
+            // remove parent_id so it will not belong to main transaction
+            if ($transactionDetail->parent_id !== null || $transactionDetail->parent_id !== 0) {
+                $this->builder->update(['has_bea_admin' => 0], ['id' => $transactionDetail->parent_id]);
+                $this->builder->update(['parent_id' => null], ['id' => $id]);
+            }
+
             $this->fundOwner->update(['jumlah_dana' => $ownerBalance + $amount], ['id' => $ownerId]);
         }
     }
@@ -122,45 +133,51 @@ class TransactionModel extends Connector
         }
 
         $data['deskripsi'] = ucfirst($data['deskripsi']);
-        $amount = (int) $data['nominal'];        
+        $amount = (int) $data['nominal'];
 
         if ($id === null) {
+            // 1. Lakukan insert transaksi utama lebih dulu agar dapat ID-nya
+            if ($data['jenis_transaksi'] === 'transfer') {
+                $data['id_kategori'] = $this->categoryBuilder->getWhere(['deleted' => 0, 'category_type' => 'transfer'])->getResult()[0]->id;
+            }
+
+            $this->builder->insert($data);
+            $insertID = $this->db->insertID(); // ID berhasil didapatkan!
+
+            // 2. Eksekusi logika berdasarkan jenis transaksi
             if ($data['jenis_transaksi'] === 'transfer') {
 
                 $this->db->transStart();
-                
-                // Update the target fund by increasing its amount with the transaction nominal
-                $this->fundOwner->update(['jumlah_dana' => $destinationBalance + $amount], ['id' => $destinationFundId]);
-                $note = 'Event: [Insert]. Log Untuk: [Saldo Tujuan]. Jenis transaksi: [' . $data['jenis_transaksi'] . ']. ID Transaksi belum tersedia.';
-                $this->addBalanceLogs($destinationFundId, $destinationBalance, $destinationBalance + $amount, $amount, $id, $note);
 
-                // Update the source fund by decreasing its amount with the transaction nominal
+                // Update saldo tujuan & tambah log dengan $insertID
+                $this->fundOwner->update(['jumlah_dana' => $destinationBalance + $amount], ['id' => $destinationFundId]);
+                $note = 'Event: [Insert]. Log Untuk: [Saldo Tujuan]. Jenis transaksi: [' . $data['jenis_transaksi'] . ']. ID Transaksi: ' . $insertID;
+                $this->addBalanceLogs($destinationFundId, $destinationBalance, $destinationBalance + $amount, $amount, $insertID, $note);
+
+                // Update saldo asal & tambah log dengan $insertID
                 $this->fundOwner->update(['jumlah_dana' => $currentBalance - $amount], $params);
-                $note = 'Event: [Insert]. Log Untuk: [Saldo Asal]. Jenis transaksi: [' . $data['jenis_transaksi'] . ']. ID Transaksi belum tersedia.';
-                $this->addBalanceLogs($fundOwnerId, $currentBalance, $currentBalance - $amount, $amount, $id, $note);
+                $note = 'Event: [Insert]. Log Untuk: [Saldo Asal]. Jenis transaksi: [' . $data['jenis_transaksi'] . ']. ID Transaksi: ' . $insertID;
+                $this->addBalanceLogs($fundOwnerId, $currentBalance, $currentBalance - $amount, $amount, $insertID, $note);
 
                 $this->db->transComplete();
-
-                // override category for transfer type
-                $data['id_kategori'] = $this->categoryBuilder->getWhere(['deleted' => 0, 'category_type' => 'transfer'])->getResult()[0]->id;
             } else if ($data['jenis_transaksi'] === 'income') {
                 $this->fundOwner->update(['jumlah_dana' => $currentBalance + $amount], $params);
             } else if ($data['jenis_transaksi'] === 'expense') {
-                $this->fundOwner->update(['jumlah_dana' => $currentBalance - $amount], $params);  
+                $this->fundOwner->update(['jumlah_dana' => $currentBalance - $amount], $params);
             }
 
-            $transactionData[] = [
+            $transactionData = [
+                'id' => $insertID, // kamu juga bisa menyimpan ID-nya ke array jika dibutuhkan
                 'amount' => $amount,
                 'balance' => $currentBalance,
                 'newBalance' => $currentBalance - $amount,
             ];
 
-            $insertID = $this->builder->insert($data); 
-            if($data['jenis_transaksi'] !== 'transfer') {
+            if ($data['jenis_transaksi'] !== 'transfer') {
                 $note = 'Event: [Insert]' . ' Jenis transaksi: [' . $data['jenis_transaksi'] . ']';
                 $newBalance = $data['jenis_transaksi'] === 'income' ? $currentBalance + $amount : $currentBalance - $amount;
                 $this->addBalanceLogs($fundOwnerId, $currentBalance, $newBalance, $amount, $insertID, $note);
-            }     
+            }
         } else {
             $previousTransaction = $this->getDetail($id);
             
@@ -247,7 +264,8 @@ class TransactionModel extends Connector
                 $this->addBalanceLogs($fundOwnerId, $currentBalance, $newBalance, $amount, $id, $note);
             }  
 
-            $transactionData[] = [
+            $transactionData = [
+                'id' => $id,
                 'previousTransaction' => $previousTransaction,
                 'updatedTransaction' => $data,
                 'checkSource' => [
@@ -413,7 +431,7 @@ class TransactionModel extends Connector
 
     private function search(string $searchBy, string $search)
     {
-        $field = "{$this->transaksi}.id, $this->sumberDana.id as id_sumber_dana, $this->sumberDana.nama as sumber_dana, id_pemilik_sumber_dana, kepemilikan as nama_pemilik, pemilik_dana_tujuan, jenis_transaksi, tgl_transaksi, deskripsi, nominal, id_kategori, category_name, $this->transaksi.modified";
+        $field = "{$this->transaksi}.id, $this->sumberDana.id as id_sumber_dana, $this->sumberDana.nama as sumber_dana, id_pemilik_sumber_dana, kepemilikan as nama_pemilik, pemilik_dana_tujuan, jenis_transaksi, tgl_transaksi, deskripsi, nominal, has_bea_admin, parent_id, id_kategori, category_name, $this->transaksi.modified";
         $select = $this->builder->select($field)
                                 ->join($this->pemilikSumberDana, $this->pemilikSumberDana . '.id = ' . $this->transaksi . '.id_pemilik_sumber_dana')
                                 ->join($this->sumberDana, $this->sumberDana . '.id = ' . $this->pemilikSumberDana . '.id_sumber_dana')

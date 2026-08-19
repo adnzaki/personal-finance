@@ -124,6 +124,18 @@
           custom-class="rounded-field"
           v-if="showCategory && store.transactionId !== null"
         />
+
+        <!-- For Transfer Transaction -->
+        <q-input
+          outlined
+          v-model="store.beaAdminData.nominal"
+          class="rounded-field"
+          input-class="nominal"
+          label="Biaya Admin"
+          @update:model-value="onBeaAdminInput"
+          :rules="[(val) => validateNumber(val, true, true) || 'Biaya Admin Tidak Valid']"
+          v-if="!showCategory"
+        />
         <q-select
           filled
           v-model="store.destinationFundId"
@@ -238,6 +250,10 @@ const onInput = (v) => {
   store.data.nominal = formatNumeral(v, { allowArithmetic: true })
 }
 
+const onBeaAdminInput = (v) => {
+  store.beaAdminData.nominal = formatNumeral(v, { allowArithmetic: true })
+}
+
 const onCategorySelected = (v) => {
   store.data.id_kategori = v.value
 }
@@ -265,8 +281,16 @@ const onFundSelected = (v) => {
 
 const save = () => {
   store.save(() => {
-    closeForm()
     showCategory.value = true
+    if(parseInt(store.data.has_bea_admin) === 1) {
+      store.save(() => {
+        closeForm()
+        console.log('Form harusnya udah tertutup ini')
+      }, true)
+    } else {
+      store.data.has_bea_admin = 0
+      closeForm()
+    }
   })
 }
 
@@ -278,5 +302,6 @@ const closeForm = () => {
   }
 
   store.resetForm()
+  store.resetBeaAdmin()
 }
 </script>

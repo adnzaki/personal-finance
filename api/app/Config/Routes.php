@@ -52,6 +52,7 @@ $routes->group('transaction', function (RouteCollection $routes) {
     $routes->add('save/(:any)', 'Transaction::save/$1');    
     $routes->add('detail/(:any)', 'Transaction::getDetail/$1');
     $routes->add('delete/(:any)', 'Transaction::delete/$1');
+    $routes->add('get-bea-admin-category', 'Transaction::getBeaAdminCategory');
 });
 
 $routes->group('statistic', function (RouteCollection $routes) {
