@@ -2,13 +2,15 @@
 
 namespace App\Models;
 
+use CodeIgniter\Database\BaseBuilder;
+
 class CategoryModel extends Connector
 {
-    private $builder;
+    private BaseBuilder $builder;
 
-    public $defaultUserCategory;
+    public ?int $defaultUserCategory;
 
-    public $defaultCategorySettingKey;
+    public string $defaultCategorySettingKey;
 
     public function __construct()
     {
@@ -19,6 +21,14 @@ class CategoryModel extends Connector
         $this->basicFilter = array_merge($this->basicFilter, ['category_type !=' => 'transfer']);
 
         $this->defaultCategorySettingKey = 'hide_default_category-user_id_' . auth()->id();
+    }
+
+    public function getBeaAdminCategory(): int
+    {
+        $search = $this->builder->select('id')
+                            ->where(['category_name' => 'Biaya Admin', 'user_id' => $this->defaultUserCategory])
+                            ->get();
+        return $search->getResult()[0]->id;
     }
 
     public function updateDefaultCategoryVisibility(int $value): void

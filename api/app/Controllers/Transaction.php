@@ -8,26 +8,33 @@ use App\Models\CategoryModel;
 
 class Transaction extends BaseController
 {
-    private $model;
+    private TransactionModel $model;
 
     public function __construct()
     {
         $this->model = new TransactionModel;
     }
 
-    public function getDetail($id)
+    public function getDetail(int $id)
     {
         $response = $this->model->getDetail($id);
         $response->nominal = number_format($response->nominal);
         $response->id_pemilik_sumber_dana = (int)$response->id_pemilik_sumber_dana;
         if($response->jenis_transaksi === 'transfer') {
             $response->nama_tujuan_transfer = $this->model->getDestinationTransferName($response->pemilik_dana_tujuan);
+            if((int)$response->has_bea_admin === 1) {
+                $getAdminFee = $this->model->getAdminFee($response->id_transaksi);
+                if($getAdminFee !== null) {
+                    $response->bea_admin = $this->model->getDetail($getAdminFee->id);
+                    $response->bea_admin->nominal = number_format($response->bea_admin->nominal);
+                }
+            }
         }
 
         return $this->response->setJSON($response);
     }
 
-    public function getData($sumberDana, $pemilikSumberDana, $jenisTransaksi, $kategori, $tanggal, $idKepemilikan = 'all')
+    public function getData(string $sumberDana, string $pemilikSumberDana, string $jenisTransaksi, string $kategori, string $tanggal, string $idKepemilikan = 'all')
     {
         $limit      = (int)$this->request->getPost('limit');
         $offset     = (int)$this->request->getPost('offset');
@@ -52,6 +59,12 @@ class Transaction extends BaseController
             } else if($d->jenis_transaksi === 'transfer') {
                 $d->nominal = $nominal;
                 $d->sumber_dana .= ' → '.$this->model->getDestinationTransferName($d->pemilik_dana_tujuan)->sumber_dana;
+                if((int)$d->has_bea_admin === 1) {
+                    $getAdminFee = $this->model->getAdminFee($d->id);
+                    if($getAdminFee !== null) {
+                        $d->bea_admin = $this->model->getDetail($getAdminFee->id);
+                    }
+                }
             }
             
             $transactionDate = explode(' ', $d->tgl_transaksi)[0];
@@ -66,13 +79,28 @@ class Transaction extends BaseController
         ]);
     }
 
-    public function delete($id)
+    public function delete(string $id)
     {
         $this->model->deleteTransaction($id);
+
+        $findAdminFee = $this->model->getAdminFee($id);
+        if($findAdminFee !== null) {
+            $this->model->deleteTransaction($findAdminFee->id);
+        }
         
         return $this->response->setJSON([
             'code' => 200,
             'msg' => 'Transaksi berhasil dihapus',
+        ]);
+    }
+
+    public function getBeaAdminCategory()
+    {
+        $categoryModel = new CategoryModel();
+        $beaAdminCategoryId = $categoryModel->getBeaAdminCategory();
+        return $this->response->setJSON([
+            'code' => 200,
+            'id' => $beaAdminCategoryId
         ]);
     }
 
@@ -81,6 +109,8 @@ class Transaction extends BaseController
         $transactionType = $this->request->getPost('jenis_transaksi');
         $validation = $this->validation($transactionType);
         $data = $this->request->getPost(array_keys($validation->rules));
+        $data['has_bea_admin'] = (int)$this->request->getPost('has_bea_admin');
+        $data['parent_id'] = $this->request->getPost('parent_id') !== '' ? (int)$this->request->getPost('parent_id') : null;
         if (! $this->validateData($data, $validation->rules, $validation->messages)) {
             return $this->response->setJSON([
                 'code'  => 500,
@@ -88,15 +118,22 @@ class Transaction extends BaseController
             ]);
         } else {
             $save = $this->model->save($data, $id);
+            if($id !== null && $data['has_bea_admin'] === 0) {
+                $findAdminFee = $this->model->getAdminFee($id);
+                if($findAdminFee !== null) {
+                    $this->model->deleteTransaction($findAdminFee->id);
+                }
+            }
             return $this->response->setJSON([
                 'code' => 200,
                 'msg' => 'Transaksi berhasil disimpan',
-                'data' => $save
+                'data' => $save,
+                'request' => $data
             ]);
         }
     }
 
-    private function validation($transactionType)
+    private function validation(string $transactionType)
     {
         $rules = [
             'id_pemilik_sumber_dana'    => ['label' => 'pemilik dana', 'rules' => 'required'],
@@ -127,7 +164,7 @@ class Transaction extends BaseController
         return (object) ['rules' => $rules, 'messages' => $messages];
     }
 
-    public function getCategories($type)
+    public function getCategories(string $type)
     {
         $model = new CategoryModel;
         $type = $type === 'all' ? null : $type;
@@ -135,7 +172,7 @@ class Transaction extends BaseController
         return $this->response->setJSON($categories);
     }
 
-    public function getOwnerByFundId($fundId, $selected = null)
+    public function getOwnerByFundId(string $fundId, ?string $selected = null)
     {
         $data = $this->model->getOwnerByFundId($fundId);
         $response = [
@@ -146,7 +183,7 @@ class Transaction extends BaseController
         return $this->response->setJSON($response);
     }
 
-    public function getTargetFunds($id)
+    public function getTargetFunds(string $id)
     {
         return $this->response->setJSON($this->model->getFundSource($id));
     }

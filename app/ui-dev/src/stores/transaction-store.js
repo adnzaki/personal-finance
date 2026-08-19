@@ -15,12 +15,15 @@ export const useTransactionStore = defineStore('transaction', {
     formType: '',
     formTitle: 'Tambah Transaksi',
     transactionId: null,
+    beaAdminId: null,
     fundSource: [],
     targetFunds: [],
     targetOwners: [],
     owners: [],
     categories: [],
     categoryName: '',
+    showCategory: true,
+    showCategoryMask: false,
     fundId: null,
     ownerId: null,
     destinationFundId: null,
@@ -40,9 +43,19 @@ export const useTransactionStore = defineStore('transaction', {
       tgl_transaksi: '',
       deskripsi: '',
       nominal: 0,
+      has_bea_admin: 0,
       id_kategori: '',
       sumber_dana_tujuan: '',
       pemilik_dana_tujuan: '',
+    },
+    beaAdminData: {
+      id_pemilik_sumber_dana: '',
+      jenis_transaksi: 'expense',
+      tgl_transaksi: '',
+      deskripsi: '',
+      nominal: 0,
+      id_kategori: '',
+      parent_id: null,
     },
     showFilter: false,
     filterMode: false, // whether advance filter active or not
@@ -77,6 +90,19 @@ export const useTransactionStore = defineStore('transaction', {
             this.destinationOwnerId = {
               label: nama_tujuan_transfer.kepemilikan,
               value: data.pemilik_dana_tujuan,
+            }
+
+            if(data.bea_admin !== undefined) {
+              this.beaAdminData.id_pemilik_sumber_dana = data.bea_admin.id_pemilik_sumber_dana
+              this.beaAdminData.tgl_transaksi = data.bea_admin.tgl_transaksi
+              this.beaAdminData.deskripsi = `Biaya Admin ${data.bea_admin.deskripsi}`
+              this.beaAdminData.nominal = data.bea_admin.nominal
+              this.beaAdminData.id_kategori = data.bea_admin.id_kategori
+              this.beaAdminData.parent_id = this.transactionId
+
+              this.beaAdminId = data.bea_admin.id_transaksi
+            } else {
+              this.resetBeaAdmin()
             }
           }
 
@@ -172,27 +198,72 @@ export const useTransactionStore = defineStore('transaction', {
           // console.log('Cancel')
         })
     },
-    save(afterSuccess) {
-      const endpoint =
+    isBeaAdmin() {
+      return this.beaAdminData.nominal !== '0' && this.beaAdminData.nominal !== '' && this.beaAdminData.nominal !== 0
+    },
+    save(afterSuccess, beaAdmin = false) {
+      let endpoint =
         this.transactionId !== null
           ? `${this.baseUrl}save/${this.transactionId}`
           : `${this.baseUrl}save`
 
-      const notifyProgress = Notify.create({
-        group: false,
-        spinner: true,
-        message: 'Menyimpan transaksi...',
-        color: 'info',
-        position: 'top',
-        timeout: 0,
-      })
+      if(beaAdmin) {
+        endpoint =
+          this.beaAdminId !== null
+            ? `${this.baseUrl}save/${this.beaAdminId}`
+            : `${this.baseUrl}save`
+      }
+
+      if (this.isBeaAdmin() && !beaAdmin) {
+        this.beaAdminData.id_pemilik_sumber_dana = this.data.id_pemilik_sumber_dana
+        this.beaAdminData.tgl_transaksi = this.data.tgl_transaksi
+        this.beaAdminData.deskripsi = `Biaya Admin ${this.data.deskripsi}`
+        this.data.has_bea_admin = 1
+
+        api
+          .get(`${this.baseUrl}get-bea-admin-category`)
+          .then(({ data }) => {
+            this.beaAdminData.id_kategori = data.id
+            console.log('beaAdmin category', this.beaAdminData.id_kategori)
+          })
+          .catch(() => {
+            errorNotif()
+          })
+      } else {
+        this.data.has_bea_admin = 0
+      }
+
+      let notifyProgress = () => {}
+
+      if(!beaAdmin) {
+        notifyProgress = Notify.create({
+          group: false,
+          spinner: true,
+          message: 'Menyimpan transaksi...',
+          color: 'info',
+          position: 'top',
+          timeout: 0,
+        })
+      }
 
       this.data.nominal = this.data.nominal.toString()
       this.data.nominal = this.data.nominal.replace(/,/g, '')
       this.data.nominal = evaluate(this.data.nominal)
 
+      if(beaAdmin) {
+        this.beaAdminData.nominal = this.beaAdminData.nominal.toString()
+        this.beaAdminData.nominal = this.beaAdminData.nominal.replace(/,/g, '')
+        this.beaAdminData.nominal = evaluate(this.beaAdminData.nominal)
+      }
+
+      if(this.data.jenis_transaksi !== 'transfer') {
+        this.data.has_bea_admin = 0
+      }
+
+      const postData = beaAdmin ? this.beaAdminData : this.data
+
       api
-        .post(endpoint, this.data, {
+        .post(endpoint, postData, {
           transformRequest: [
             (data) => {
               return createFormData(data)
@@ -209,12 +280,16 @@ export const useTransactionStore = defineStore('transaction', {
               spinner: false,
             })
           } else {
-            notifyProgress({
-              message: data.msg,
-              color: 'positive',
-              icon: 'done',
-              spinner: false,
-            })
+            if(!beaAdmin) {
+              notifyProgress({
+                message: data.msg,
+                color: 'positive',
+                icon: 'done',
+                spinner: false,
+              })
+
+              this.beaAdminData.parent_id = data.data.id
+            }
 
             // next action from the component
             afterSuccess()
@@ -225,9 +300,22 @@ export const useTransactionStore = defineStore('transaction', {
           errorNotif()
         })
     },
+    resetBeaAdmin() {
+      this.beaAdminData = {
+        id_pemilik_sumber_dana: '',
+        jenis_transaksi: 'expense',
+        tgl_transaksi: '',
+        deskripsi: '',
+        nominal: 0,
+        id_kategori: '',
+        parent_id: null,
+      }
+    },
     resetForm(fromEditPage = false) {
       // ensure that the form is reset to "Add" mode
       this.transactionId = null
+
+      this.beaAdminId = null
 
       this.fundId = null
       this.ownerId = null
@@ -241,15 +329,14 @@ export const useTransactionStore = defineStore('transaction', {
         paging().reloadData()
       }
 
-      this.data = {
-        id_pemilik_sumber_dana: '',
-        jenis_transaksi: 'expense',
-        tgl_transaksi: '',
-        deskripsi: '',
-        nominal: 0,
-        id_kategori: '',
-        sumber_dana_tujuan: '',
-      }
+      this.data.id_pemilik_sumber_dana = ''
+      this.data.jenis_transaksi = 'expense'
+      this.data.tgl_transaksi = ''
+      this.data.deskripsi = ''
+      this.data.nominal = 0
+      this.data.id_kategori = ''
+      this.data.sumber_dana_tujuan = ''
+      this.data.pemilik_dana_tujuan = ''
     },
     getTargetFunds(from, skipDefault = false, targetFundId = null) {
       api
@@ -292,24 +379,30 @@ export const useTransactionStore = defineStore('transaction', {
           errorNotif()
         })
     },
-    getCategories(categoryId = null) {
+    getCategories() {
       const transactionType = this.filterMode
         ? this.filter.transactionType.value
         : this.data.jenis_transaksi
+      this.showCategory = false
+      this.showCategoryMask = true
       api
         .get(`${this.baseUrl}get-categories/${transactionType}`)
         .then(({ data }) => {
           if (!this.filterMode) {
             this.categories = data
             if (data.length > 0 && !this.filterMode) {
-              if (categoryId === null) {
-                this.data.id_kategori = data[0].id
-              } else {
-                this.data.id_kategori = categoryId
-              }
+              this.data.id_kategori = data[0].id
+              this.categoryName = data[0].category_name
             }
           } else {
             this.filter.categories = data
+          }
+
+          if(this.data.jenis_transaksi === 'transfer') {
+            this.showCategory = false
+          } else {
+            this.showCategory = true
+            this.showCategoryMask = false
           }
         })
         .catch(() => {
