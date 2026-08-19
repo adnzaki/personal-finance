@@ -125,6 +125,7 @@
           v-if="store.showCategory && store.transactionId !== null"
         />
 
+        <!-- Category Mask -->
         <dropdown-search
           label="Kategori"
           :list="[]"
@@ -134,7 +135,7 @@
           }"
           load-on-route
           custom-class="rounded-field"
-          v-if="store.showCategoryMask"
+          v-if="store.showCategoryMask && store.data.jenis_transaksi === 'transfer'"
         />
         <!-- For Transfer Transaction -->
         <q-input
@@ -278,7 +279,7 @@ const onOwnerSelected = (v) => {
 
 const onFundSelected = (v) => {
   store.getOwnerByFundSource(v.value)
-  store.getTargetFunds(v.value)
+  store.getTargetFunds()
   if (store.transactionId === null) {
     store.getCategories()
   }

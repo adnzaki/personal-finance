@@ -80,7 +80,7 @@ export const useTransactionStore = defineStore('transaction', {
           this.fundId = { label: sumber_dana, value: id_sumber_dana }
 
           if (data.jenis_transaksi === 'transfer') {
-            this.getTargetFunds(id_sumber_dana, true, data.sumber_dana_tujuan)
+            this.getTargetFunds(true, data.sumber_dana_tujuan)
 
             this.destinationFundId = {
               label: nama_tujuan_transfer.sumber_dana,
@@ -338,9 +338,9 @@ export const useTransactionStore = defineStore('transaction', {
       this.data.sumber_dana_tujuan = ''
       this.data.pemilik_dana_tujuan = ''
     },
-    getTargetFunds(from, skipDefault = false, targetFundId = null) {
+    getTargetFunds(skipDefault = false, targetFundId = null) {
       api
-        .get(`${this.baseUrl}get-target-funds/${from}`)
+        .get(`${this.baseUrl}get-target-funds`)
         .then(({ data }) => {
           this.targetFunds = data
           if (data.length > 0) {
@@ -400,6 +400,7 @@ export const useTransactionStore = defineStore('transaction', {
 
           if(this.data.jenis_transaksi === 'transfer') {
             this.showCategory = false
+            this.showCategoryMask = false
           } else {
             this.showCategory = true
             this.showCategoryMask = false

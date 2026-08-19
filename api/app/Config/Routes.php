@@ -44,7 +44,7 @@ $routes->group('transaction', function (RouteCollection $routes) {
     $routes->add('get-data/(:any)/(:any)/(:any)/(:any)/(:any)', 'Transaction::getData/$1/$2/$3/$4/$5');
     $routes->add('get-data/(:any)/(:any)/(:any)/(:any)/(:any)/(:any)', 'Transaction::getData/$1/$2/$3/$4/$5/$6');
     $routes->add('get-fund-source', 'Transaction::getFundSource');
-    $routes->add('get-target-funds/(:any)', 'Transaction::getTargetFunds/$1');
+    $routes->add('get-target-funds', 'Transaction::getTargetFunds');
     $routes->add('get-owner-by-fund-id/(:any)', 'Transaction::getOwnerByFundId/$1');
     $routes->add('get-owner-by-fund-id/(:any)/(:any)', 'Transaction::getOwnerByFundId/$1/$2');
     $routes->add('get-categories/(:alpha)', 'Transaction::getCategories/$1');

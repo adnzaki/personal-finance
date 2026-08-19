@@ -183,9 +183,9 @@ class Transaction extends BaseController
         return $this->response->setJSON($response);
     }
 
-    public function getTargetFunds(string $id)
+    public function getTargetFunds()
     {
-        return $this->response->setJSON($this->model->getFundSource($id));
+        return $this->response->setJSON($this->model->getFundSource());
     }
 
     public function getFundSource()
