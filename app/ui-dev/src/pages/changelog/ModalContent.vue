@@ -34,7 +34,7 @@
 </style>
 
 <script setup>
-import updates from '@/assets/updates/1.0.0-rc.1.md'
+import updates from '@/assets/updates/1.0.0-rc.2.md'
 import { inject } from 'vue'
 
 const goto = inject('goto')
