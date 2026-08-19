@@ -318,12 +318,9 @@ class TransactionModel extends Connector
         return $this->fundModel->getDaftarKepemilikan($fundId);
     }
 
-    public function getFundSource(?int $id = null): array
+    public function getFundSource(): array
     {
         $query = $this->fundModel->builder->select('id as value, nama as label')->where($this->basicFilter);
-        if ($id !== null) {
-            $query->where(['id !=' => $id]);
-        }
 
         return $query->get()->getResult();
     }
