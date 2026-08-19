@@ -400,6 +400,7 @@ export const useTransactionStore = defineStore('transaction', {
 
           if(this.data.jenis_transaksi === 'transfer') {
             this.showCategory = false
+            this.showCategoryMask = false
           } else {
             this.showCategory = true
             this.showCategoryMask = false

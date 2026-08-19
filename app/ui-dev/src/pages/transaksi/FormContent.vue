@@ -125,6 +125,7 @@
           v-if="store.showCategory && store.transactionId !== null"
         />
 
+        <!-- Category Mask -->
         <dropdown-search
           label="Kategori"
           :list="[]"
