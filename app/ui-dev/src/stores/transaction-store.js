@@ -92,8 +92,9 @@ export const useTransactionStore = defineStore('transaction', {
               value: data.pemilik_dana_tujuan,
             }
 
-            if(data.bea_admin !== undefined) {
-              this.beaAdminData.id_pemilik_sumber_dana = data.bea_admin.id_pemilik_sumber_dana
+            if (data.bea_admin !== undefined) {
+              this.beaAdminData.id_pemilik_sumber_dana =
+                data.bea_admin.id_pemilik_sumber_dana
               this.beaAdminData.tgl_transaksi = data.bea_admin.tgl_transaksi
               this.beaAdminData.deskripsi = `Biaya Admin ${data.bea_admin.deskripsi}`
               this.beaAdminData.nominal = data.bea_admin.nominal
@@ -199,7 +200,11 @@ export const useTransactionStore = defineStore('transaction', {
         })
     },
     isBeaAdmin() {
-      return this.beaAdminData.nominal !== '0' && this.beaAdminData.nominal !== '' && this.beaAdminData.nominal !== 0
+      return (
+        this.beaAdminData.nominal !== '0' &&
+        this.beaAdminData.nominal !== '' &&
+        this.beaAdminData.nominal !== 0
+      )
     },
     save(afterSuccess, beaAdmin = false) {
       let endpoint =
@@ -207,7 +212,7 @@ export const useTransactionStore = defineStore('transaction', {
           ? `${this.baseUrl}save/${this.transactionId}`
           : `${this.baseUrl}save`
 
-      if(beaAdmin) {
+      if (beaAdmin) {
         endpoint =
           this.beaAdminId !== null
             ? `${this.baseUrl}save/${this.beaAdminId}`
@@ -215,7 +220,8 @@ export const useTransactionStore = defineStore('transaction', {
       }
 
       if (this.isBeaAdmin() && !beaAdmin) {
-        this.beaAdminData.id_pemilik_sumber_dana = this.data.id_pemilik_sumber_dana
+        this.beaAdminData.id_pemilik_sumber_dana =
+          this.data.id_pemilik_sumber_dana
         this.beaAdminData.tgl_transaksi = this.data.tgl_transaksi
         this.beaAdminData.deskripsi = `Biaya Admin ${this.data.deskripsi}`
         this.data.has_bea_admin = 1
@@ -235,7 +241,7 @@ export const useTransactionStore = defineStore('transaction', {
 
       let notifyProgress = () => {}
 
-      if(!beaAdmin) {
+      if (!beaAdmin) {
         notifyProgress = Notify.create({
           group: false,
           spinner: true,
@@ -250,13 +256,13 @@ export const useTransactionStore = defineStore('transaction', {
       this.data.nominal = this.data.nominal.replace(/,/g, '')
       this.data.nominal = evaluate(this.data.nominal)
 
-      if(beaAdmin) {
+      if (beaAdmin) {
         this.beaAdminData.nominal = this.beaAdminData.nominal.toString()
         this.beaAdminData.nominal = this.beaAdminData.nominal.replace(/,/g, '')
         this.beaAdminData.nominal = evaluate(this.beaAdminData.nominal)
       }
 
-      if(this.data.jenis_transaksi !== 'transfer') {
+      if (this.data.jenis_transaksi !== 'transfer') {
         this.data.has_bea_admin = 0
       }
 
@@ -280,7 +286,7 @@ export const useTransactionStore = defineStore('transaction', {
               spinner: false,
             })
           } else {
-            if(!beaAdmin) {
+            if (!beaAdmin) {
               notifyProgress({
                 message: data.msg,
                 color: 'positive',
@@ -379,32 +385,39 @@ export const useTransactionStore = defineStore('transaction', {
           errorNotif()
         })
     },
-    getCategories() {
+    getCategories(categoryId = null) {
       const transactionType = this.filterMode
         ? this.filter.transactionType.value
         : this.data.jenis_transaksi
       this.showCategory = false
-      this.showCategoryMask = true
+
+      if(this.data.jenis_transaksi !== 'transfer') {
+        this.showCategoryMask = true
+      }
       api
         .get(`${this.baseUrl}get-categories/${transactionType}`)
         .then(({ data }) => {
           if (!this.filterMode) {
             this.categories = data
             if (data.length > 0 && !this.filterMode) {
-              this.data.id_kategori = data[0].id
-              this.categoryName = data[0].category_name
+              if (categoryId === null) {
+                this.data.id_kategori = data[0].id
+                this.categoryName = data[0].category_name
+              } else {
+                this.data.id_kategori = categoryId
+              }
             }
           } else {
             this.filter.categories = data
           }
 
-          if(this.data.jenis_transaksi === 'transfer') {
+          if (this.data.jenis_transaksi === 'transfer') {
             this.showCategory = false
-            this.showCategoryMask = false
           } else {
             this.showCategory = true
-            this.showCategoryMask = false
           }
+
+          this.showCategoryMask = false
         })
         .catch(() => {
           errorNotif()

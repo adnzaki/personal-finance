@@ -135,7 +135,7 @@
           }"
           load-on-route
           custom-class="rounded-field"
-          v-if="store.showCategoryMask && store.data.jenis_transaksi === 'transfer'"
+          v-if="store.showCategoryMask"
         />
         <!-- For Transfer Transaction -->
         <q-input
