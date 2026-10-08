@@ -58,7 +58,7 @@
       class="save-btn q-mb-md"
       :label="btnLabel"
       v-if="$q.screen.gt.xs"
-      @click="store.updatePassword()"
+      disable
     />
   </q-card-actions>
   <save-btn @click="store.updatePassword()" />

@@ -23,17 +23,17 @@ class Category extends BaseController
 
     public function delete($id)
     {
-        if ($this->model->delete($id)) {
-            return $this->response->setJSON([
-                'code' => 200,
-                'msg' => 'Kategori berhasil dihapus',
-            ]);
-        } else {
-            return $this->response->setJSON([
-                'code' => 500,
-                'msg' => 'Terjadi kesalahan saat menghapus kategori',
-            ]);
-        }
+        // if ($this->model->delete($id)) {
+        //     return $this->response->setJSON([
+        //         'code' => 200,
+        //         'msg' => 'Kategori berhasil dihapus',
+        //     ]);
+        // } else {
+        //     return $this->response->setJSON([
+        //         'code' => 500,
+        //         'msg' => 'Terjadi kesalahan saat menghapus kategori',
+        //     ]);
+        // }
     }
 
     public function save($id = null)
@@ -48,16 +48,16 @@ class Category extends BaseController
             ]);
         } else {
             if ($id === null) {
-                $this->model = $this->model->insert(array_merge($data, ['user_id' => auth()->id()]));
+                // $this->model = $this->model->insert(array_merge($data, ['user_id' => auth()->id()]));
                 $message = 'Berhasil menambahkan data kategori';
             } else {
-                $this->model = $this->model->update($data, $id);
+                // $this->model = $this->model->update($data, $id);
                 $message = 'Kategori berhasil diperbarui';
             }
 
             return $this->response->setJSON([
                 'code'      => 200,
-                'msg'       => $message,
+                'msg'       => 'Maaf, penambahan dan perubahan kategori saat ini telah ditutup dan akan segera dialihkan ke versi baru.',
             ]);
         }
     }

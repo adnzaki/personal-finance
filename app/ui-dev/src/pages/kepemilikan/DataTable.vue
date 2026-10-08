@@ -17,7 +17,7 @@
               flat
               color="primary"
               icon="r_delete_outline"
-              @click="store.deleteOwnership(item.id)"
+              disable
             />
           </q-item-section>
         </q-item>

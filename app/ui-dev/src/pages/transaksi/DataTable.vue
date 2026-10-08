@@ -38,7 +38,7 @@
               flat
               color="primary"
               icon="r_delete_outline"
-              @click="store.deleteTransaction(item.id)"
+              disable
             />
           </q-item-section>
         </q-item>
