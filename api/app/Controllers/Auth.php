@@ -41,11 +41,11 @@ class Auth extends BaseController
                         'password' => $data['newPassword']
                     ];
     
-                    $userModel->update($fillUser);
+                    //$userModel->update($fillUser);
     
                     return $this->response->setJSON([
                         'code'  => 200,
-                        'msg'   => 'Password berhasil diubah',
+                        'msg'   => 'Fitur ubah password saat ini telah ditutup dan akan segera dialihkan ke versi baru.',
                     ]);
                 } else {
                     return $this->response->setJSON([

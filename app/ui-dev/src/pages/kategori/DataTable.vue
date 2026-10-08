@@ -22,8 +22,7 @@
               flat
               color="primary"
               icon="r_delete_outline"
-              @click="store.deleteCategory(item.id)"
-              :disable="disable(item.is_default)"
+              disable
             />
           </q-item-section>
         </q-item>

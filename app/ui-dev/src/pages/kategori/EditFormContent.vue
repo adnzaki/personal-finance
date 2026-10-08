@@ -43,6 +43,7 @@
         class="save-btn"
         color="primary"
         v-if="$q.screen.gt.xs"
+        disable
       />
     </q-card-actions>
     <save-btn @click="save" />

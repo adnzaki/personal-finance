@@ -40,11 +40,10 @@
 import { fabPos } from '@/composables/fab'
 import { computed } from 'vue'
 import { useQuasar } from 'quasar'
-import { useRouter } from 'vue-router'
 import { useCategoryStore } from '@/stores/category-store'
+import { flashAlert } from '@/composables/notify'
 
 const $q = useQuasar()
-const router = useRouter()
 const store = useCategoryStore()
 
 const visibleIcon = computed(() => {
@@ -65,10 +64,11 @@ const toggleDefault = () => {
 }
 
 const showForm = () => {
-  if ($q.screen.lt.sm) {
-    router.push('/kategori/add')
-  } else {
-    store.showAddForm = true
-  }
+  // if ($q.screen.lt.sm) {
+  //   router.push('/kategori/add')
+  // } else {
+  //   store.showAddForm = true
+  // }
+  flashAlert('Maaf, tambah, edit dan hapus data telah ditutup dan akan segera dialihkan ke versi baru.', 'negative')
 }
 </script>

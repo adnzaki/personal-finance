@@ -36,17 +36,17 @@ class Ownership extends BaseController
 
     public function delete($id)
     {
-        if($this->model->delete($id)) {
-            return $this->response->setJSON([
-                'code' => 200,
-                'msg' => 'Data berhasil dihapus',
-            ]);
-        } else {
-            return $this->response->setJSON([
-                'code' => 500,
-                'msg' => 'Terjadi kesalahan saat menghapus data',
-            ]);
-        }            
+        // if($this->model->delete($id)) {
+        //     return $this->response->setJSON([
+        //         'code' => 200,
+        //         'msg' => 'Data berhasil dihapus',
+        //     ]);
+        // } else {
+        //     return $this->response->setJSON([
+        //         'code' => 500,
+        //         'msg' => 'Terjadi kesalahan saat menghapus data',
+        //     ]);
+        // }            
     }
     
 
@@ -69,16 +69,16 @@ class Ownership extends BaseController
             ]);
         } else {
             if($id === null) {
-                $this->model = $this->model->insert(array_merge($data, ['user_id' => auth()->id()]));
+                // $this->model = $this->model->insert(array_merge($data, ['user_id' => auth()->id()]));
                 $message = 'Berhasil menambahkan data kepemilikan';
             } else {
-                $this->model = $this->model->update($data, $id);
+                // $this->model = $this->model->update($data, $id);
                 $message = 'Data kepemilikan berhasil diperbarui';
             }
 
             return $this->response->setJSON([
                 'code'      => 200,
-                'msg'       => $message,
+                'msg'       => 'Maaf, penambahan dan perubahan kepemilikan saat ini telah ditutup dan akan segera dialihkan ke versi baru.',
             ]);
         }
     }

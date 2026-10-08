@@ -30,26 +30,28 @@
 
 <script setup>
 import { fabPos } from '@/composables/fab'
-import { useTransactionStore } from '@/stores/transaction-store'
-import { useQuasar } from 'quasar'
-import { useRouter } from 'vue-router'
+// import { useTransactionStore } from '@/stores/transaction-store'
+// import { useQuasar } from 'quasar'
+// import { useRouter } from 'vue-router'
+import { flashAlert } from '@/composables/notify'
 
-const $q = useQuasar()
-const router = useRouter()
-const store = useTransactionStore()
+// const $q = useQuasar()
+// const router = useRouter()
+// const store = useTransactionStore()
 
 const showForm = () => {
-  if (store.filterMode) {
-    store.filterMode = false
-    store.resetForm()
-  }
+  // if (store.filterMode) {
+  //   store.filterMode = false
+  //   store.resetForm()
+  // }
 
-  if ($q.screen.lt.sm) {
-    router.push('/transaksi/add')
-  } else {
-    store.showForm = true
-  }
+  // if ($q.screen.lt.sm) {
+  //   router.push('/transaksi/add')
+  // } else {
+  //   store.showForm = true
+  // }
 
-  store.formType = 'add'
+  // store.formType = 'add'
+  flashAlert('Maaf, tambah, edit dan hapus data telah ditutup dan akan segera dialihkan ke versi baru.', 'negative')
 }
 </script>

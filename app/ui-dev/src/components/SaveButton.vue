@@ -11,6 +11,7 @@
       class="mobile-save-btn"
       :style="normalCase ? style : ''"
       color="primary"
+      disable
     />
   </q-page-sticky>
 </template>

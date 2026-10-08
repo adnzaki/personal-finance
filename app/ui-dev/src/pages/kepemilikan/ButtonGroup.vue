@@ -30,19 +30,10 @@
 
 <script setup>
 import { fabPos } from '@/composables/fab'
-import { useOwnershipStore } from '@/stores/ownership-store'
-import { useQuasar } from 'quasar'
-import { useRouter } from 'vue-router'
+import { flashAlert } from '@/composables/notify'
 
-const $q = useQuasar()
-const router = useRouter()
-const store = useOwnershipStore()
 
 const showForm = () => {
-  if ($q.screen.lt.sm) {
-    router.push('/kepemilikan/add')
-  } else {
-    store.showAddForm = true
-  }
+  flashAlert('Maaf, tambah, edit dan hapus data telah ditutup dan akan segera dialihkan ke versi baru.', 'negative')
 }
 </script>

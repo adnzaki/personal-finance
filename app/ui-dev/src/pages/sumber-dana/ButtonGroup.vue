@@ -30,19 +30,16 @@
 
 <script setup>
 import { fabPos } from '@/composables/fab'
-import { useFundStore } from '@/stores/fund-store'
-import { useQuasar } from 'quasar'
-import { useRouter } from 'vue-router'
+// import { useFundStore } from '@/stores/fund-store'
+// import { useQuasar } from 'quasar'
+// import { useRouter } from 'vue-router'
+import { flashAlert } from '@/composables/notify'
 
-const $q = useQuasar()
-const router = useRouter()
-const store = useFundStore()
+// const $q = useQuasar()
+// const router = useRouter()
+// const store = useFundStore()
 
 const showForm = () => {
-  if ($q.screen.lt.sm) {
-    router.push('/sumber-dana/add')
-  } else {
-    store.showAddForm = true
-  }
+  flashAlert('Maaf, tambah, edit dan hapus data telah ditutup dan akan segera dialihkan ke versi baru.', 'negative')
 }
 </script>

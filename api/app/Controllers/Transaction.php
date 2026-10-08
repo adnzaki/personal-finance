@@ -81,16 +81,16 @@ class Transaction extends BaseController
 
     public function delete(string $id)
     {
-        $this->model->deleteTransaction($id);
+        // $this->model->deleteTransaction($id);
 
-        $findAdminFee = $this->model->getAdminFee($id);
-        if($findAdminFee !== null) {
-            $this->model->deleteTransaction($findAdminFee->id);
-        }
+        // $findAdminFee = $this->model->getAdminFee($id);
+        // if($findAdminFee !== null) {
+        //     $this->model->deleteTransaction($findAdminFee->id);
+        // }
         
         return $this->response->setJSON([
             'code' => 200,
-            'msg' => 'Transaksi berhasil dihapus',
+            'msg' => 'Penghapusan transaksi telah ditutup dan akan segera dialihkan ke versi baru.',
         ]);
     }
 
@@ -117,7 +117,7 @@ class Transaction extends BaseController
                 'msg'   => $this->validator->getErrors(),
             ]);
         } else {
-            $save = $this->model->save($data, $id);
+            //$save = $this->model->save($data, $id);
             if($id !== null && $data['has_bea_admin'] === 0) {
                 $findAdminFee = $this->model->getAdminFee($id);
                 if($findAdminFee !== null) {
@@ -126,8 +126,8 @@ class Transaction extends BaseController
             }
             return $this->response->setJSON([
                 'code' => 200,
-                'msg' => 'Transaksi berhasil disimpan',
-                'data' => $save,
+                'msg' => 'Maaf, transaksi saat ini telah ditutup dan akan segera dialihkan ke versi baru.',
+                'data' => [],
                 'request' => $data
             ]);
         }
